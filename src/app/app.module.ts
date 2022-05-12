@@ -7,9 +7,11 @@ import { HeaderComponent } from './header/header.component';
 
 import { MatIconModule } from '@angular/material/icon';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { MainComponent } from './main/main.component';
+import { FooterComponent } from './footer/footer.component';
 
 @NgModule({
-  declarations: [AppComponent, HeaderComponent],
+  declarations: [AppComponent, HeaderComponent, MainComponent, FooterComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
