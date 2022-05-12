@@ -1,0 +1,32 @@
+.main {
+  width: 100%;
+  height: max-content;
+  padding: 10px;
+  box-sizing: border-box;
+}
+
+.main__title {
+  font-size: 24px;
+  color:burlywood;
+  text-align: center;
+}
+
+.articles {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  box-sizing: border-box;
+  width: 100%;
+  list-style: none;
+  padding: 0;
+  margin: 10px auto;
+}
+
+.articles__item {
+  box-sizing: border-box;
+  width: 100%;
+  max-height: 250px;
+  box-shadow: 0 0 2px 0 black;
+  border-radius: 10px;
+  padding: 10px;
+}
