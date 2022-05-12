@@ -1,0 +1,39 @@
+.sidebar {
+  position: fixed;
+  top: 0;
+  right: 0;
+  width: 100%;
+  max-width: 520px;
+  height: 100%;
+  background-color: rgb(253, 253, 253);
+}
+
+.sidebar__nav {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 15px;
+  margin: 120px auto 0;
+  max-width: 80%;
+}
+
+.sidebar__link {
+  text-decoration: none;
+  color:burlywood;
+  font-size: 20px;
+}
+
+.sidebar__link_person {
+  position: absolute;
+  bottom: 30px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sidebar__close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  color: burlywood;
+}

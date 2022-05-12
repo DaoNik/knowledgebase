@@ -9,9 +9,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MainComponent } from './main/main.component';
 import { FooterComponent } from './footer/footer.component';
+import { SidebarComponent } from './sidebar/sidebar.component';
 
 @NgModule({
-  declarations: [AppComponent, HeaderComponent, MainComponent, FooterComponent],
+  declarations: [AppComponent, HeaderComponent, MainComponent, FooterComponent, SidebarComponent],
   imports: [
     BrowserModule,
     AppRoutingModule,
