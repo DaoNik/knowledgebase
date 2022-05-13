@@ -2,6 +2,10 @@ import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { map, Observable, startWith } from 'rxjs';
 
+interface IFilter {
+  title: string,
+  status: boolean
+}
 @Component({
   selector: 'app-search',
   templateUrl: './search.component.html',
@@ -9,13 +13,27 @@ import { map, Observable, startWith } from 'rxjs';
 })
 export class SearchComponent implements OnInit {
   searchQuery = new FormControl();
-  options: string[] = ['One', 'Two', 'Three'];
-  filteredOptions!: Observable<string[]>;
+  results: string[] = ['One', 'Two', 'Three'];
+  filterOptions: IFilter[] = [
+    {
+      title: 'Доставка',
+      status: false
+    },
+    {
+      title: 'Аккаунт',
+      status: false
+    },
+    {
+      title: 'Получение товара',
+      status: false
+    }
+  ]
+  filteredResults!: Observable<string[]>;
 
   constructor() { }
 
   ngOnInit(): void {
-    this.filteredOptions = this.searchQuery.valueChanges.pipe(
+    this.filteredResults = this.searchQuery.valueChanges.pipe(
       startWith(''),
       map(value => this._filter(value)),
     );
@@ -23,10 +41,12 @@ export class SearchComponent implements OnInit {
 
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
-    return this.options.filter(option => option.toLowerCase().includes(filterValue));
+    return this.results.filter(result => result.toLowerCase().includes(filterValue));
   }
 
   search() {
-    console.log(`searching for ${this.searchQuery.value}`)
+    const filterTags = this.filterOptions.filter(item => { return item.status })
+                                  .map(item => { return item.title });
+    console.log(`searching for ${this.searchQuery.value} in ${filterTags}`)
   }
 }

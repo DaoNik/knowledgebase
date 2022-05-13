@@ -8,6 +8,8 @@ import { HeaderComponent } from './header/header.component';
 
 import { MatIconModule } from '@angular/material/icon';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MainComponent } from './main/main.component';
 import { FooterComponent } from './footer/footer.component';
@@ -32,6 +34,8 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
     BrowserAnimationsModule,
     MatIconModule,
     MatAutocompleteModule,
+    MatMenuModule,
+    MatCheckboxModule,
     AngularEditorModule,
     ReactiveFormsModule,
     FormsModule,
