@@ -7,7 +7,7 @@ import {
 } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
-import { map, Observable, startWith, Subject, take, tap } from 'rxjs';
+import { map, Observable, startWith, Subject } from 'rxjs';
 
 @Component({
   selector: 'app-create-article',
@@ -32,6 +32,7 @@ export class CreateArticleComponent implements OnInit {
   public authorsCtrl = new FormControl('', Validators.required);
   public ctrl$ = new Subject<string>();
   public filteredChips$!: Observable<string[]>;
+  public chipsLoaded = false;
   public editorConfig: AngularEditorConfig = {
     editable: true,
     outline: false,
@@ -111,6 +112,8 @@ export class CreateArticleComponent implements OnInit {
         chipsCtrl = this.respondentsCtrl;
         chips = this.respondents;
       }
+
+      this.chipsLoaded = true;
 
       this.filteredChips$ = chipsCtrl.valueChanges.pipe(
         startWith(null),
