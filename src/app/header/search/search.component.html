@@ -6,6 +6,7 @@
            matInput
 		   placeholder='Введите вашу проблему'
 		   class='search__form_input'
+		   (keyup.enter)="search()"
            [formControl]="searchQuery"
            [matAutocomplete]="auto">
     <mat-autocomplete #auto="matAutocomplete">
