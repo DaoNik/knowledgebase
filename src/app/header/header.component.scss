@@ -1,11 +1,42 @@
 .header {
-  background: linear-gradient(to right, #e66465, #9198e5);
+  background: linear-gradient(90deg, #dd57cf,#680f69);
+
   width: 100%;
-  height: 10vh;
+  height: 80px;
+
   display: flex;
   align-items: center;
+
   padding: 10px;
   box-sizing: border-box;
+
+  text-align: center;
+  vertical-align: middle;
+}
+
+.header__text {
+  display: inline-block;
+
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 50px;
+  font-weight: 600;
+  color: #fff;
+
+  width: 275px;
+
+  margin-left: 25px;
+  z-index: 2;
+  
+  @media (max-width: 890px) {
+    font-size: 40px;
+  }
+  @media (max-width: 560px) {
+    margin-left: 0;
+    font-size: 30px;
+  }
+  @media (max-width: 500px) {
+    display: none;
+  }
 }
 
 .header__nav {
@@ -24,19 +55,29 @@
 .header__form {
   width: 80%;
   position: relative;
+  z-index: 2;
 }
 
 .header__search {
   width: 100%;
   padding: 0 10px;
   box-sizing: border-box;
-  border-radius: 10px;
+  border-radius: 25px;
   border: none;
-  height: 30px;
+  height: 50px;
 }
 
 .header__btn-search {
   position: absolute;
-  top: 3px;
-  right: 3px;
+  top: 8px;
+  right: 20px;
+  font-size: 35px;
+
+  @media (max-width: 350px) {
+    display: none;
+  }
+}
+
+.sidebar {
+  margin-right: 35px;
 }

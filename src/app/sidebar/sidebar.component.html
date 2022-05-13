@@ -1,18 +1,19 @@
-<aside class='sidebar'>
-  <h3 class='visually-hidden'>
-    Панель навигации
-  </h3>
-  <mat-icon class='sidebar__close'>close</mat-icon>
-  <nav class='sidebar__nav'>
-    <a class='sidebar__link' href=''>Главная</a>
-    <a class='sidebar__link' href="">Склад</a>
-    <a class='sidebar__link' href="">Пункты выдачи</a>
-    <a class='sidebar__link' href="">Клиентская сторона</a>
-    <a class='sidebar__link' href="">Серверная сторона</a>
-    <a class='sidebar__link' href="">Логистика</a>
-    <a class='sidebar__link sidebar__link_person'>
-      <mat-icon>perm_identity</mat-icon>
-      Личный кабинет
-    </a>
-  </nav>
-</aside>
+<div class="hamburger-sidebar">
+  <input id="sidebar__toggle" type="checkbox" />
+  <label class="sidebar__btn" for="sidebar__toggle">
+      <span></span>
+  </label>
+    <ul class="sidebar__box">
+      <div class="header__active-sidebar"></div>
+      <li><a class="sidebar__item" href="#">Главная</a></li>
+      <li><a class="sidebar__item" href="#">Склад</a></li>
+      <li><a class="sidebar__item" href="#">Пункты выдачи</a></li>
+      <li><a class="sidebar__item" href="#">Клиентская сторона</a></li>
+      <li><a class="sidebar__item" href="#">Серверная сторона</a></li>
+      <li><a class="sidebar__item" href="#">Логистика</a></li>
+      <!-- <a class='sidebar__link sidebar__link_person'>
+        <mat-icon>perm_identity</mat-icon>
+        Личный кабинет
+      </a> -->
+    </ul>
+</div>
