@@ -45,22 +45,18 @@
                 1000 символов</small>
         </div>
 
-        <!-- <div class="create-article__field">
-            <label class="create-article__label" for="category">Категория</label>
-            <select class="create-article__input" id="category" formControlName="category">
-                <option *ngFor="let category of categories">{{category}}</option>
-            </select>
-        </div> -->
-
         <div class="create-article__field">
             <label class="create-article__label" for="tags" id="tags">Категория</label>
-            <input class="create-article__input" placeholder="Выберите категорию"
+            <input class="create-article__input" placeholder="Выберите категорию" (click)="ctrl$.next('category')"
                 [formControl]="$any(form.get('category'))" [matAutocomplete]="auto">
             <mat-autocomplete autoActiveFirstOption #auto="matAutocomplete">
-                <mat-option *ngFor="let category of categories" [value]="category">
+                <mat-option *ngFor="let category of filteredChips$ | async" [value]="category">
                     {{category}}
                 </mat-option>
             </mat-autocomplete>
+            <small class="create-article__error" *ngIf="(form.get('category')?.getError('minlength') ||
+                form.get('category')?.getError('required')) && form.get('category')?.touched">Выберите
+                категорию</small>
         </div>
 
         <div class="create-article__field">
@@ -76,13 +72,17 @@
             </div>
             <mat-chip-list #chipTagsList>
                 <input class="create-article__input" #tagsInput placeholder="Выберите теги" [matAutocomplete]="tagsAuto"
-                    [formControl]="tagsCtrl" [matChipInputFor]="chipTagsList">
+                    (click)="ctrl$.next('tags')" [formControl]="tagsCtrl" [matChipInputFor]="chipTagsList">
             </mat-chip-list>
             <mat-autocomplete #tagsAuto="matAutocomplete" (optionSelected)="selectChip($event, 'tags')">
-                <mat-option *ngFor="let tag of tags" [value]="tag">
+                <mat-option *ngFor="let tag of filteredChips$ | async" [value]="tag">
                     {{tag}}
                 </mat-option>
             </mat-autocomplete>
+            <small class="create-article__error"
+                *ngIf="(tagsCtrl.getError('required') && tagsCtrl.touched) && !form.get('tags')?.value.length">Выберите
+                хотя
+                бы один тег</small>
         </div>
 
         <div class="create-article__field">
@@ -98,14 +98,17 @@
             </div>
             <mat-chip-list #chipRespondentsList>
                 <input class="create-article__input" #respondentsInput placeholder="Выберите ответственных"
-                    [matAutocomplete]="respondentsAuto" [formControl]="respondentsCtrl"
-                    [matChipInputFor]="chipRespondentsList">
+                    (click)="ctrl$.next('respondents')" [matAutocomplete]="respondentsAuto"
+                    [formControl]="respondentsCtrl" [matChipInputFor]="chipRespondentsList">
             </mat-chip-list>
             <mat-autocomplete #respondentsAuto="matAutocomplete" (optionSelected)="selectChip($event, 'respondents')">
-                <mat-option *ngFor="let respondent of respondents" [value]="respondent">
+                <mat-option *ngFor="let respondent of filteredChips$ | async" [value]="respondent">
                     {{respondent}}
                 </mat-option>
             </mat-autocomplete>
+            <small class="create-article__error"
+                *ngIf="(respondentsCtrl.getError('required') && respondentsCtrl.touched) && !form.get('respondents')?.value.length">Выберите
+                хотя бы одного ответственного</small>
         </div>
 
         <div class="create-article__field">
@@ -121,13 +124,17 @@
             </div>
             <mat-chip-list #chipAuthorsList>
                 <input class="create-article__input" #authorsInput placeholder="Выберите авторов"
-                    [matAutocomplete]="authorsAuto" [formControl]="authorsCtrl" [matChipInputFor]="chipAuthorsList">
+                    (click)="ctrl$.next('authors')" [matAutocomplete]="authorsAuto" [formControl]="authorsCtrl"
+                    [matChipInputFor]="chipAuthorsList">
             </mat-chip-list>
             <mat-autocomplete #authorsAuto="matAutocomplete" (optionSelected)="selectChip($event, 'authors')">
-                <mat-option *ngFor="let author of authors" [value]="author">
+                <mat-option *ngFor="let author of filteredChips$ | async" [value]="author">
                     {{author}}
                 </mat-option>
             </mat-autocomplete>
+            <small class="create-article__error"
+                *ngIf="(authorsCtrl.getError('required') && authorsCtrl.touched) && !form.get('authors')?.value.length">Выберите
+                хотя бы одного автора</small>
         </div>
 
         <button mat-flat-button color="primary" (click)="createArticle()" [disabled]="form.invalid">Создать</button>

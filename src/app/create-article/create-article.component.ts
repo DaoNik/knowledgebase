@@ -7,6 +7,7 @@ import {
 } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
+import { map, Observable, startWith, Subject, take, tap } from 'rxjs';
 
 @Component({
   selector: 'app-create-article',
@@ -23,12 +24,14 @@ export class CreateArticleComponent implements OnInit {
 
   public form!: FormGroup;
   public authors = ['Энни', 'Baboolean'];
-  public respondents = ['Иван Иванов', 'Dedoolean'];
+  public respondents = ['Качок', 'Dedoolean'];
   public categories = ['JS', 'TS', 'Go'];
-  public tags = ['Мут', 'Длинная', 'Короткая'];
-  public respondentsCtrl = new FormControl();
-  public tagsCtrl = new FormControl();
-  public authorsCtrl = new FormControl();
+  public tags = ['Длинная', 'Короткая'];
+  public respondentsCtrl = new FormControl('', Validators.required);
+  public tagsCtrl = new FormControl('', Validators.required);
+  public authorsCtrl = new FormControl('', Validators.required);
+  public ctrl$ = new Subject<string>();
+  public filteredChips$!: Observable<string[]>;
   public editorConfig: AngularEditorConfig = {
     editable: true,
     outline: false,
@@ -51,6 +54,7 @@ export class CreateArticleComponent implements OnInit {
 
   ngOnInit(): void {
     this.createForm();
+    this.filterChips();
   }
 
   createForm(): void {
@@ -86,6 +90,38 @@ export class CreateArticleComponent implements OnInit {
         Validators.minLength(1),
       ]),
       tags: new FormControl([], [Validators.required, Validators.minLength(1)]),
+    });
+  }
+
+  filterChips(): void {
+    this.ctrl$.subscribe((ctrl) => {
+      let chipsCtrl: FormControl;
+      let chips: string[];
+
+      if (ctrl === 'tags') {
+        chipsCtrl = this.tagsCtrl;
+        chips = this.tags;
+      } else if (ctrl === 'authors') {
+        chipsCtrl = this.authorsCtrl;
+        chips = this.authors;
+      } else if (ctrl === 'category') {
+        chipsCtrl = this.form.get('category') as FormControl;
+        chips = this.categories;
+      } else {
+        chipsCtrl = this.respondentsCtrl;
+        chips = this.respondents;
+      }
+
+      this.filteredChips$ = chipsCtrl.valueChanges.pipe(
+        startWith(null),
+        map((inputValue: string | null) =>
+          inputValue
+            ? chips.filter((value) =>
+                value.toLowerCase().includes(inputValue.toLowerCase())
+              )
+            : chips
+        )
+      );
     });
   }
 
