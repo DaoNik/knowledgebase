@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -13,6 +14,7 @@ import { FooterComponent } from './footer/footer.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { CreateArticleComponent } from './create-article/create-article.component';
 import { AngularEditorModule } from '@kolkov/angular-editor';
+import { ArticleComponent } from './article/article.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +24,7 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
     FooterComponent,
     SidebarComponent,
     CreateArticleComponent,
+    ArticleComponent,
   ],
   imports: [
     BrowserModule,
@@ -31,6 +34,7 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
     AngularEditorModule,
     ReactiveFormsModule,
     FormsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent],
