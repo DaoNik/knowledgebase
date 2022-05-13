@@ -62,10 +62,12 @@ export class SearchComponent implements OnInit {
     const filterValue = value.toLowerCase();
     const filterTags = this.filterOptions.filter(item => { return item.status })
                                   .map(item => { return item.title });
-    if (this.foundArticles) return this.foundArticles.filter(result => 
-                                   result.title.toLowerCase().includes(filterValue) && 
-                                   filterTags.includes(result.category));
-    else return this.foundArticles
+
+    return this.foundArticles ? 
+           this.foundArticles.filter(result => 
+                result.title.toLowerCase().includes(filterValue) && 
+                filterTags.includes(result.category)) :
+           this.foundArticles
   }
 
   search() {
