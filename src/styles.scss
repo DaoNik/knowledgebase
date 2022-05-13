@@ -1,3 +1,5 @@
+@import url('./normalize.scss');
+
 html, body { height:100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600&display=swap');
@@ -18,3 +20,11 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   clip: rect(0 0 0 0);
   overflow: hidden;
 }
+
+.mat-dialog-container {
+  background-color: #fff;
+  border-radius: 15px !important;
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
