@@ -3,8 +3,8 @@
         <h1 name="title">{{article.title}}</h1>
         <h2 name="category">Категория: {{article.category}}</h2>
         <div class="article__header__dates">
-            <p><b>Дата создания:</b> {{article.dateCreate}}</p>
-            <p><b>Дата обновления:</b> {{article.dateUpdate}}</p>
+            <p><b>Дата создания:</b> {{article.dateCreate | date:'dd/MM/yyyy HH:mm:ss'}}</p>
+            <p><b>Дата обновления:</b> {{article.dateUpdate | date:'dd/MM/yyyy HH:mm:ss'}}</p>
         </div>
         <div class="article__header__team">
             <div class="article__header__team__authors">
@@ -15,7 +15,7 @@
             </div>
             <div class="article__header__team__respondents">
                 <ul>
-                    <h3>Респонденты</h3>
+                    <h3>Отдел</h3>
                     <li *ngFor="let respondent of article.respondents">{{respondent}}</li>
                 </ul>
             </div>
@@ -24,6 +24,6 @@
     <hr>
     <main class="article__main">
         <h3>Описание</h3>
-        <p>{{article.content.text}}</p>
+        <p>{{article.description}}</p>
     </main>
 </section>
