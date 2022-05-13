@@ -1,14 +1,12 @@
-.form__container {
+.form {
   background-color: #fff;
   color: rgba(15, 14, 14, 0.75);
+  padding-bottom: 8px;
+  max-height: 90%;
 
-  p {
-    font-size: 20px;
-  }
-
-  label {
+  .form__label {
     margin: 5px;
-    font-size: 25px;
+    font-size: 22px;
   }
 
   .userName,
@@ -21,39 +19,32 @@
     display: flex;
     justify-content: space-between;
     border-radius: 50%;
-    height: 40px;
   }
 
   .close {
     background: linear-gradient(to right, #e66465, #9198e5);
     border-radius: 50%;
-
-    .mat-icon {
-      font-size: 24px;
-    }
+    width: 40px;
+    height: 40px;
+    box-sizing: border-box;
+    font-size: xx-small;
   }
 
-  textarea,
-  input {
+  .form__message,
+  .form__input {
     border: 2px solid rgba(80, 78, 78, 0.75);
     width: 95%;
     border-radius: 5px;
   }
 
-  input {
+  .form__input {
     height: 30px;
   }
 
   .mat-button {
-    margin-top: 10px;
     background: linear-gradient(to right, #e66465, #9198e5);
+    margin-top: 10px;
     font-size: 22px;
-    padding: 5px 8px;
-  }
-
-  @media (min-width: 768px) {
-    .close {
-      font-size: 32px;
-    }
+    padding: 8px;
   }
 }
