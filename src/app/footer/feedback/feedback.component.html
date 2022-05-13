@@ -1,0 +1,32 @@
+<form class="form__container" [formGroup]="feedback">
+  <div class="form__header">
+    <h2>Feedback</h2>
+    <button class="close" mat-dialog-close><mat-icon>close</mat-icon></button>
+  </div>
+  <p>You can leave your comments here</p>
+  <div class="form__wrapper">
+    <div class="userName">
+      <label for="name"> Имя: </label>
+      <input type="text" formControlName="userName" />
+      <mat-error
+        class="error"
+        *ngIf="feedback.get('userName')?.getError('required')"
+      >
+        Введите ваше имя</mat-error
+      >
+    </div>
+    <div class="userId">
+      <label for="userId"> Код работника: </label>
+      <input type="text" formControlName="userId" />
+      <mat-error
+        class="error"
+        *ngIf="feedback.get('userId')?.getError('required')"
+      >
+        Введите свой код работника</mat-error
+      >
+    </div>
+    <label for="message"> Message (at least 10 characters: </label>
+    <textarea class="message__text" cols="30" rows="10" required></textarea>
+  </div>
+  <button mat-button>Отправить</button>
+</form>

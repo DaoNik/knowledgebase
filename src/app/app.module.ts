@@ -13,6 +13,10 @@ import { FooterComponent } from './footer/footer.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { CreateArticleComponent } from './create-article/create-article.component';
 import { AngularEditorModule } from '@kolkov/angular-editor';
+import { FeedbackComponent } from './footer/feedback/feedback.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatButtonModule } from '@angular/material/button';
 
 @NgModule({
   declarations: [
@@ -22,6 +26,7 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
     FooterComponent,
     SidebarComponent,
     CreateArticleComponent,
+    FeedbackComponent,
   ],
   imports: [
     BrowserModule,
@@ -31,6 +36,9 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
     AngularEditorModule,
     ReactiveFormsModule,
     FormsModule,
+    MatDialogModule,
+    MatFormFieldModule,
+    MatButtonModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
