@@ -18,6 +18,10 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 import { SearchComponent } from './header/search/search.component';
 import { CreateArticleComponent } from './create-article/create-article.component';
 import { AngularEditorModule } from '@kolkov/angular-editor';
+import { FeedbackComponent } from './footer/feedback/feedback.component';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatButtonModule } from '@angular/material/button';
 import { ArticleComponent } from './article/article.component';
 
 @NgModule({
@@ -29,6 +33,7 @@ import { ArticleComponent } from './article/article.component';
     SidebarComponent,
     CreateArticleComponent,
     SearchComponent,
+    FeedbackComponent,
     ArticleComponent,
   ],
   imports: [
@@ -42,7 +47,10 @@ import { ArticleComponent } from './article/article.component';
     AngularEditorModule,
     ReactiveFormsModule,
     FormsModule,
-    HttpClientModule
+    MatDialogModule,
+    MatFormFieldModule,
+    MatButtonModule,
+    HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
