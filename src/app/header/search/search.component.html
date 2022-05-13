@@ -1,0 +1,17 @@
+<form class='search__form'>
+	<!-- <input class='search__form_input' placeholder='Введите вашу проблему' type='text'> -->
+	<input type="text"
+           placeholder="Pick one"
+           aria-label="Number"
+           matInput
+		   placeholder='Введите вашу проблему'
+		   class='search__form_input'
+           [formControl]="searchQuery"
+           [matAutocomplete]="auto">
+    <mat-autocomplete #auto="matAutocomplete">
+      <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+        {{option}}
+      </mat-option>
+    </mat-autocomplete>
+	<mat-icon class='search__form_btn' (click)="search()">search</mat-icon>
+</form>
