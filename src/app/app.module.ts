@@ -7,12 +7,16 @@ import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 
 import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button'
+
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MainComponent } from './main/main.component';
 import { FooterComponent } from './footer/footer.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { CreateArticleComponent } from './create-article/create-article.component';
 import { AngularEditorModule } from '@kolkov/angular-editor';
+
+
 
 @NgModule({
   declarations: [
@@ -28,11 +32,13 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
     AppRoutingModule,
     BrowserAnimationsModule,
     MatIconModule,
+    MatButtonModule,
     AngularEditorModule,
     ReactiveFormsModule,
     FormsModule,
+
   ],
   providers: [],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }
