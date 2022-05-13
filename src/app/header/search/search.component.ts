@@ -19,27 +19,27 @@ export class SearchComponent implements OnInit {
   filterOptions: IFilter[] = [
     {
       title: 'Логистика',
-      status: false
+      status: true
     },
     {
       title: 'Серверная сторона',
-      status: false
+      status: true
     },
     {
       title: 'Базы данных',
-      status: false
+      status: true
     },
     {
       title: 'Клиентская сторона',
-      status: false
+      status: true
     },
     {
       title: 'Склад',
-      status: false
+      status: true
     },
     {
       title: 'Пункты выдачи',
-      status: false
+      status: true
     }
   ]
   filteredResults!: Observable<IArticle[]>;
@@ -62,7 +62,9 @@ export class SearchComponent implements OnInit {
     const filterValue = value.toLowerCase();
     const filterTags = this.filterOptions.filter(item => { return item.status })
                                   .map(item => { return item.title });
-    if (this.foundArticles) return this.foundArticles.filter(result => result.title.toLowerCase().includes(filterValue) && filterTags.includes(result.category));
+    if (this.foundArticles) return this.foundArticles.filter(result => 
+                                   result.title.toLowerCase().includes(filterValue) && 
+                                   filterTags.includes(result.category));
     else return this.foundArticles
   }
 
