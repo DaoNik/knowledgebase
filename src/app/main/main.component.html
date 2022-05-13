@@ -1,11 +1,16 @@
 <main class="main">
-  <h2 class="main__title">Частые вопросы</h2>
+  <h2 class="main__title visually-hidden">Частые вопросы</h2>
   <!-- <app-article></app-article> -->
   <ul class="articles">
     <li class="articles__item" *ngFor="let article of articles">
-      <h3 class="articles__item-title">{{ article.title }}</h3>
-      <p class="articles__item-date">Дата создания: {{ article.dateCreate }}</p>
-      <p class="articles__item-description">{{ article.description }}</p>
+      <a class="articles__item-link">
+        <h3 class="articles__item-title">{{ article.title }}</h3>
+        <p class="articles__item-date">
+          Последнее обновление:
+          {{ article.dateUpdate | date: "dd/MM/yyyy" }}
+        </p>
+        <p class="articles__item-description">{{ article.description }}</p>
+      </a>
     </li>
   </ul>
 </main>

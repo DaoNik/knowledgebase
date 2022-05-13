@@ -3,11 +3,20 @@
   height: max-content;
   padding: 10px;
   box-sizing: border-box;
+
+  @media (min-width: 1024px) {
+    padding: 20px;
+  }
+
+  @media (min-width: 1920px) {
+    padding: 30px;
+  }
 }
 
 .main__title {
   font-size: 24px;
-  color:burlywood;
+  line-height: 30px;
+  color: black;
   text-align: center;
 }
 
@@ -20,17 +29,118 @@
   list-style: none;
   padding: 0;
   margin: 10px auto;
+
+  @media (min-width: 1024px) {
+    gap: 30px;
+  }
+
+  @media (min-width: 1920px) {
+    gap: 40px;
+    padding: 10px;
+  }
 }
 
 .articles__item {
   box-sizing: border-box;
   width: 100%;
-  max-height: 250px;
-  box-shadow: 0 0 2px 0 black;
-  border-radius: 10px;
-  padding: 10px;
+  max-width: 1920px;
+  margin: 0 auto;
+  box-shadow: 0 2px 4px 0 grey;
+}
+
+.articles__item-link {
+  display: block;
+  cursor: pointer;
+  padding: 0 10px;
+
+  @media (min-width: 768px) {
+    padding: 10px 15px;
+  }
+
+  @media (min-width: 1024px) {
+    padding: 15px;
+  }
+
+  @media (min-width: 1920px) {
+    padding: 20px;
+  }
 }
 
 .articles__item-title {
-  
+  font-size: 16px;
+  line-height: 20px;
+  margin: 10px 0;
+
+  @media (min-width: 768px) {
+    font-size: 20px;
+    line-height: 24px;
+    margin: 12px 0;
+  }
+
+  @media (min-width: 1024px) {
+    font-size: 24px;
+    line-height: 28px;
+    margin: 14px 0;
+  }
+
+  @media (min-width: 1920px) {
+    font-size: 28px;
+    line-height: 32px;
+    margin: 16px 0;
+  }
+}
+
+.articles__item-date {
+  color: rgb(0, 0, 0, .5);
+  font-style: italic;
+  margin: 6px 0;
+  font-size: 12px;
+  line-height: 16px;
+
+  @media (min-width: 768px) {
+    font-size: 14px;
+    line-height: 18px;
+    margin: 8px 0;
+  }
+
+  @media (min-width: 1024px) {
+    font-size: 18px;
+    line-height: 22px;
+    margin: 10px 0;
+  }
+
+  @media (min-width: 1920px) {
+    font-size: 22px;
+    line-height: 26px;
+    margin: 12px 0;
+  }
+}
+
+.articles__item-description {
+  display: -webkit-box;
+  margin: 8px 0;
+  -webkit-line-clamp: 3;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+  font-size: 12px;
+  line-height: 16px;
+
+  @media (min-width: 768px) {
+    font-size: 16px;
+    line-height: 20px;
+    -webkit-line-clamp: 4;
+    margin: 10px 0;
+  }
+
+  @media (min-width: 1024px) {
+    font-size: 20px;
+    line-height: 24px;
+    margin: 12px 0;
+  }
+
+  @media (min-width: 1920px) {
+    font-size: 24px;
+    line-height: 28px;
+    margin: 14px 0;
+  }
 }
