@@ -13,6 +13,7 @@ import { FooterComponent } from './footer/footer.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { CreateArticleComponent } from './create-article/create-article.component';
 import { AngularEditorModule } from '@kolkov/angular-editor';
+import { ArticleComponent } from './article/article.component';
 
 @NgModule({
   declarations: [
@@ -22,6 +23,7 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
     FooterComponent,
     SidebarComponent,
     CreateArticleComponent,
+    ArticleComponent,
   ],
   imports: [
     BrowserModule,
