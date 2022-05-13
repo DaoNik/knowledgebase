@@ -1,6 +1,7 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
+import { HttpClientModule } from '@angular/common/http';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
@@ -17,6 +18,7 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 import { SearchComponent } from './header/search/search.component';
 import { CreateArticleComponent } from './create-article/create-article.component';
 import { AngularEditorModule } from '@kolkov/angular-editor';
+import { ArticleComponent } from './article/article.component';
 
 @NgModule({
   declarations: [
@@ -26,7 +28,8 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
     FooterComponent,
     SidebarComponent,
     CreateArticleComponent,
-    SearchComponent
+    SearchComponent,
+    ArticleComponent,
   ],
   imports: [
     BrowserModule,
@@ -39,6 +42,7 @@ import { AngularEditorModule } from '@kolkov/angular-editor';
     AngularEditorModule,
     ReactiveFormsModule,
     FormsModule,
+    HttpClientModule
   ],
   providers: [],
   bootstrap: [AppComponent],
