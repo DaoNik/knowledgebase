@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { map, Observable, startWith } from 'rxjs';
+import { IArticle } from 'src/app/interfaces/article';
+import { SearchService } from './search.service';
 
 interface IFilter {
   title: string,
@@ -16,37 +18,61 @@ export class SearchComponent implements OnInit {
   results: string[] = ['One', 'Two', 'Three'];
   filterOptions: IFilter[] = [
     {
-      title: 'Доставка',
+      title: 'Логистика',
       status: false
     },
     {
-      title: 'Аккаунт',
+      title: 'Серверная сторона',
       status: false
     },
     {
-      title: 'Получение товара',
+      title: 'Базы данных',
+      status: false
+    },
+    {
+      title: 'Клиентская сторона',
+      status: false
+    },
+    {
+      title: 'Склад',
+      status: false
+    },
+    {
+      title: 'Пункты выдачи',
       status: false
     }
   ]
-  filteredResults!: Observable<string[]>;
+  filteredResults!: Observable<IArticle[]>;
+  foundArticles!: IArticle[];
 
-  constructor() { }
+  constructor(
+    private searchService: SearchService
+  ) { }
 
   ngOnInit(): void {
     this.filteredResults = this.searchQuery.valueChanges.pipe(
       startWith(''),
       map(value => this._filter(value)),
     );
+    this.searchService.getArticles()
+    .subscribe((articles: IArticle[]) => this.foundArticles = articles)
   }
 
-  private _filter(value: string): string[] {
+  private _filter(value: string): IArticle[] {
     const filterValue = value.toLowerCase();
-    return this.results.filter(result => result.toLowerCase().includes(filterValue));
+    const filterTags = this.filterOptions.filter(item => { return item.status })
+                                  .map(item => { return item.title });
+    if (this.foundArticles) return this.foundArticles.filter(result => result.title.toLowerCase().includes(filterValue) && filterTags.includes(result.category));
+    else return this.foundArticles
   }
 
   search() {
     const filterTags = this.filterOptions.filter(item => { return item.status })
                                   .map(item => { return item.title });
     console.log(`searching for ${this.searchQuery.value} in ${filterTags}`)
+  }
+
+  goToArticle(article: IArticle) {
+    console.log('going to article ' + article.title + '\nid: ' + article.id)
   }
 }

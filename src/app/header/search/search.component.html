@@ -10,8 +10,8 @@
            [formControl]="searchQuery"
            [matAutocomplete]="auto">
     <mat-autocomplete #auto="matAutocomplete">
-      <mat-option *ngFor="let option of filteredResults | async" [value]="option">
-        {{option}}
+      <mat-option *ngFor="let option of filteredResults | async" [value]="option.title" (click)="goToArticle(option)">
+        {{option.title}}
       </mat-option>
     </mat-autocomplete>
 	<mat-icon class='search__form_btn search-btn' (click)="search()">search</mat-icon>
