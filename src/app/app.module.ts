@@ -8,10 +8,14 @@ import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 
 import { MatIconModule } from '@angular/material/icon';
+import { MatAutocompleteModule } from '@angular/material/autocomplete';
+import { MatMenuModule } from '@angular/material/menu';
+import { MatCheckboxModule } from '@angular/material/checkbox';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MainComponent } from './main/main.component';
 import { FooterComponent } from './footer/footer.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
+import { SearchComponent } from './header/search/search.component';
 import { CreateArticleComponent } from './create-article/create-article.component';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { FeedbackComponent } from './footer/feedback/feedback.component';
@@ -28,6 +32,7 @@ import { ArticleComponent } from './article/article.component';
     FooterComponent,
     SidebarComponent,
     CreateArticleComponent,
+    SearchComponent,
     FeedbackComponent,
     ArticleComponent,
   ],
@@ -36,6 +41,9 @@ import { ArticleComponent } from './article/article.component';
     AppRoutingModule,
     BrowserAnimationsModule,
     MatIconModule,
+    MatAutocompleteModule,
+    MatMenuModule,
+    MatCheckboxModule,
     AngularEditorModule,
     ReactiveFormsModule,
     FormsModule,

@@ -6,37 +6,28 @@
   align-items: center;
   padding: 10px;
   box-sizing: border-box;
+  margin: 0 auto;
+
+  
+  .header__nav {
+    display: flex;
+    // justify-content: space-around;
+    max-width: 500px;
+    margin: 0 auto;
+    align-items: center;
+    width: 100%;
+
+    app-search {
+      width: 100%;
+    }
+  }
+
+  .header__link {
+    color: rgb(250, 250, 250);
+    width: 24px;
+    height: 24px;
+    margin-right: 10px;
+  }
+
 }
 
-.header__nav {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  width: 100%;
-}
-
-.header__link {
-  color: rgb(250, 250, 250);
-  width: 24px;
-  height: 24px;
-}
-
-.header__form {
-  width: 80%;
-  position: relative;
-}
-
-.header__search {
-  width: 100%;
-  padding: 0 10px;
-  box-sizing: border-box;
-  border-radius: 10px;
-  border: none;
-  height: 30px;
-}
-
-.header__btn-search {
-  position: absolute;
-  top: 3px;
-  right: 3px;
-}
