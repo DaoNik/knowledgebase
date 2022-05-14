@@ -1,15 +1,15 @@
 .main {
   width: 100%;
   height: max-content;
-  padding: 10px;
+  padding: 60px 10px 10px;
   box-sizing: border-box;
 
   @media (min-width: 1024px) {
-    padding: 20px;
+    padding: 60px 20px 20px;
   }
 
   @media (min-width: 1920px) {
-    padding: 30px;
+    padding: 60px 30px 30px;
   }
 }
 

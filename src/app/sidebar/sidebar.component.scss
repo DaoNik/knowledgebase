@@ -1,39 +1,208 @@
-.sidebar {
-  position: fixed;
-  top: 0;
-  right: 0;
-  width: 100%;
-  max-width: 520px;
-  height: 100%;
-  background-color: rgb(253, 253, 253);
-}
-
-.sidebar__nav {
+.hamburger-sidebar{
   display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 15px;
-  margin: 120px auto 0;
-  max-width: 80%;
 }
 
-.sidebar__link {
+#sidebar__toggle {
+  opacity: 0;
+  position: absolute;
+}
+.sidebar__btn {
+  display: flex;
+  align-items: center;
+  position: relative;
+  width: 35px;
+  height: 26px;
+  cursor: pointer;
+  z-index: 1;
+}
+
+// Крестик 
+.sidebar__btn > span,
+.sidebar__btn > span::before,
+.sidebar__btn > span::after {
+  display: block;
+  position: absolute;
+  width: 100%;
+  height: 3px;
+  background-color: #fff;
+}
+.sidebar__btn > span::before {
+  content: '';
+  top: -8px;
+}
+.sidebar__btn > span::after {
+  content: '';
+  top: 8px;
+}
+
+// Контейнер
+.sidebar__box {
+  display: block;
+  position: fixed;
+  visibility: hidden;
+
+  box-sizing: border-box;
+
+  top: 0;
+  right: -100%;
+
+  width: 40%;
+  height: 100vh;
+
+  margin: 0 auto;
+  padding: 80px 40px 0;
+
+  list-style: none;
+  text-align: center;
+
+  background: linear-gradient(90deg, #902c8c,#680f69);
+  box-shadow: 1px 0px 6px rgba(0, 0, 0, .3);
+
+  @media (max-width: 1024px) {
+    width: 50%;
+  }
+  @media (max-width: 745px) {
+    width: 70%;
+  }
+  @media (max-width: 600px) {
+    width: 100%;
+  }
+}
+
+.header__line-sidebar {
+  display: block;
+  position: fixed;
+  visibility: hidden;
+
+  top: 0;
+  right: -100%;
+
+  width: 100vw;
+  height: 60px;
+
+  margin: 0;
+  z-index: 2;
+
+  background: linear-gradient(90deg, #dd57cf,#680f69);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.header__opacity-sidebar {
+  // display: block;
+  // position: fixed;
+  // visibility: hidden;
+
+  // top: 0;
+  // opacity: 0;
+  // left: 0;
+
+  // width: calc(100vw - 35% - 80px);
+  // height: 100%;
+
+  // margin: 0;
+  // z-index: 1;
+
+  // background: rgba(0, 0, 0, 0.5);
+
+  position: absolute;
+  top: 60px;
+  left: 0;
+  width: 100%;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+
+  @media (max-width: 600px) {
+    width: 0;
+  }
+}
+
+.header__active-opacity-sidebar {
+  opacity: 1;
+}
+
+// Элементы
+.sidebar__item {
+  display: block;
+  padding: 22px 24px;
+  color: rgb(255, 255, 255);
+
+  font-family: 'Roboto', sans-serif;
+  font-size: 26px;
+  font-weight: 500;
+  line-height: 30px;
+
   text-decoration: none;
-  color:burlywood;
-  font-size: 20px;
+  cursor: pointer;
+
+  @media (max-width: 1024px) {
+    font-size: 24px;
+    line-height: 28px;
+  }
+  @media (max-width: 745px) {
+    font-size: 20px;
+    line-height: 24px;
+
+    padding: 18px 20px;
+  }
+}
+.sidebar__item:hover {
+  background-color: rgba(180, 180, 180, .5);
+}
+
+.sidebar__more__info {
+  border-top: 1px solid rgb(88, 79, 79);
 }
 
 .sidebar__link_person {
-  position: absolute;
-  bottom: 30px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
+  font-size: 30px;
+  font-weight: 500;
+  color: #fff;
 }
 
-.sidebar__close {
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  color: burlywood;
+// Открытие / закрытие
+#sidebar__toggle:checked ~ .sidebar__btn > span {
+  transform: rotate(45deg);
+}
+#sidebar__toggle:checked ~ .sidebar__btn > span::before {
+  top: 0;
+  transform: rotate(0);
+}
+#sidebar__toggle:checked ~ .sidebar__btn > span::after {
+  top: 0;
+  transform: rotate(90deg);
+}
+ 
+// #sidebar__toggle:checked ~ * .header__opacity-sidebar {
+//   visibility: visible;
+//   opacity: 1;
+// }
+#sidebar__toggle:checked ~ .header__line-sidebar, 
+#sidebar__toggle:checked ~ * .header__line-sidebar {
+  visibility: visible;
+  right: 0;
+}
+#sidebar__toggle:checked ~ .sidebar__box, 
+#sidebar__toggle:checked ~ * .sidebar__box {
+  visibility: visible;
+  right: 0;
+}
+
+// Анимация
+.sidebar__btn > span,
+.sidebar__btn > span::before,
+.sidebar__btn > span::after {
+  transition-duration: .4s;
+}
+.sidebar__box {
+  transition-duration: .4s;
+}
+.header__line-sidebar{
+  transition-duration: .4s;
+}
+// .header__opacity-sidebar{
+//   transition-duration: .4s;
+// }
+.sidebar__item {
+  transition-duration: .4s;
 }
