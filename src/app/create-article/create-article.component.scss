@@ -37,6 +37,10 @@
       color: #6c757d;
       opacity: .75;
     }
+
+    &:focus {
+      border: 1px solid #7b1fa2;
+    }
   }
 
   &__textarea {
@@ -54,6 +58,10 @@
     &::placeholder {
       color: #6c757d;
       opacity: .75;
+    }
+
+    &:focus {
+      border: 1px solid #7b1fa2;
     }
   }
 
