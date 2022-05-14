@@ -3,6 +3,10 @@
 html, body { height:100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
+* {
+  box-sizing: border-box;
+}
+
 .root {
   background-color: rgb(253, 253, 253);
 }

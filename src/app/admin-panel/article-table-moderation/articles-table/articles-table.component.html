@@ -1,0 +1,61 @@
+<!--<ul class="article-table">
+  <li class="article-table__item article" *ngFor="let article of articles">
+    <p class="article__no">{{article.id}}</p>
+    <p class="article__name">{{article.header}}</p>
+    <p class="article__tags">{{article.tags}}</p>
+    <p class="article__people">{{article.teamlead}}</p>
+
+    <ul class="article__actions-list">
+      <li class="article__action">Редактировать</li>
+      <li class="article__action">Удалить</li>
+      <li class="article__action">
+        <label for="check">Отметить</label>
+        <input type="checkbox" id="check" class="article__action-check">
+      </li>
+    </ul>
+  </li>
+</ul>-->
+<div class="article-table__wrapper">
+  <table class="article-table">
+    <thead>
+      <tr class="article-table__header">
+        <th class="article__no">№</th>
+        <th class="article__name">Заголовок</th>
+        <th class="article__tags">Теги</th>
+        <th class="article__teamlead">Ответственный</th>
+        <th class="article__actions">Действия</th>
+      </tr>
+    </thead>
+    <tr class="article-table__item article" *ngFor="let article of currentPageArticles">
+      <td class="article__no"><span class="article__cell-name">№</span>{{article.id}}</td>
+      <td class="article__name"><span class="article__cell-name">Заголовок</span>{{article.header}}</td>
+      <td class="article__tags"><span class="article__cell-name">Теги</span>{{article.tags}}</td>
+      <td class="article__teamlead"><span class="article__cell-name">Ответственный</span>{{article.teamlead}}</td>
+      <td class="article__actions">
+        <ul class="article__actions-list">
+          <span class="article__cell-name"></span>
+          <li class="article__action">
+            <mat-icon title="Редaктировать" (click)="editArticle(article.id)">edit</mat-icon>
+          </li>
+          <li class="article__action">
+            <mat-icon title="Удалить" (click)="deleteArticle(article.id)">delete</mat-icon>
+          </li>
+          <li class="article__action">
+            <input type="checkbox" [id]="'check'+article.id" class="article__action-check">
+            <label [for]="'check'+article.id">
+              <mat-icon title="Отметить" (click)="checkArticle(article.id)">check_box</mat-icon>
+            </label>
+          </li>
+        </ul>
+      </td>
+
+    </tr>
+  </table>
+  <ul class="article-table__pagination-list">
+    <li class="article-table__pagination-item" *ngFor="let page of pages">
+      <button color="primary" mat-raised-button class="article-table__pagination-link"
+      (click) = "pageClick(page)">{{page}}</button>
+    </li>
+  </ul>
+</div>
+
