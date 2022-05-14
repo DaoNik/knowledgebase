@@ -1,4 +1,10 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {
+  Component,
+  ElementRef,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -14,7 +20,7 @@ import { map, Observable, startWith, Subject } from 'rxjs';
   templateUrl: './create-article.component.html',
   styleUrls: ['./create-article.component.scss'],
 })
-export class CreateArticleComponent implements OnInit {
+export class CreateArticleComponent implements OnInit, OnDestroy {
   @ViewChild('respondentsInput')
   respondentsInput!: ElementRef<HTMLInputElement>;
   @ViewChild('tagsInput')
@@ -56,6 +62,10 @@ export class CreateArticleComponent implements OnInit {
   ngOnInit(): void {
     this.createForm();
     this.filterChips();
+  }
+
+  ngOnDestroy(): void {
+    this.ctrl$.unsubscribe();
   }
 
   createForm(): void {
@@ -152,31 +162,38 @@ export class CreateArticleComponent implements OnInit {
 
   removeChip(chip: string, ctrl: string): void {
     const control = this.form.get(`${ctrl}`);
+    let chips =
+      ctrl === 'respondents'
+        ? this.respondents
+        : ctrl === 'tags'
+        ? this.tags
+        : this.authors;
+
+    chips.push(chip);
 
     control?.patchValue(
       control?.value.filter((value: string) => value !== chip)
     );
   }
 
-  selectChip(event: MatAutocompleteSelectedEvent, ctrl: string): void {
+  selectChip(
+    event: MatAutocompleteSelectedEvent,
+    ctrl: string,
+    chipInput: HTMLInputElement,
+    chipCtrl: FormControl
+  ): void {
     const control = this.form.get(`${ctrl}`);
-    let chipCtrl: FormControl;
-    let chipInput: ElementRef<HTMLInputElement>;
+    let chips =
+      ctrl === 'respondents'
+        ? this.respondents
+        : ctrl === 'tags'
+        ? this.tags
+        : this.authors;
 
-    if (ctrl === 'respondents') {
-      chipCtrl = this.respondentsCtrl;
-      chipInput = this.respondentsInput;
-    } else if (ctrl === 'tags') {
-      chipCtrl = this.tagsCtrl;
-      chipInput = this.tagsInput;
-    } else {
-      chipCtrl = this.authorsCtrl;
-      chipInput = this.authorsInput;
-    }
-
+    chips.splice(chips.indexOf(event.option.viewValue), 1);
     control?.patchValue([...control?.value, event.option.viewValue]);
 
-    chipInput.nativeElement.value = '';
+    chipInput.value = '';
     chipCtrl.setValue(null);
   }
 }

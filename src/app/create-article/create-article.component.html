@@ -1,4 +1,4 @@
-<section class="create-article">
+<main class="create-article">
     <form class="create-article__form" [formGroup]="form">
 
         <div class="create-article__field">
@@ -77,7 +77,7 @@
                     (click)="ctrl$.next('tags')" [formControl]="tagsCtrl" [matChipInputFor]="chipTagsList">
             </mat-chip-list>
             <mat-autocomplete (closed)="chipsLoaded = false" #tagsAuto="matAutocomplete"
-                (optionSelected)="selectChip($event, 'tags')">
+                (optionSelected)="selectChip($event, 'tags', tagsInput, tagsCtrl)">
                 <ng-container *ngIf="chipsLoaded">
                     <mat-option *ngFor="let tag of filteredChips$ | async" [value]="tag">
                         {{tag}}
@@ -106,7 +106,8 @@
                     (click)="ctrl$.next('respondents')" [matAutocomplete]="respondentsAuto"
                     [formControl]="respondentsCtrl" [matChipInputFor]="chipRespondentsList">
             </mat-chip-list>
-            <mat-autocomplete #respondentsAuto="matAutocomplete" (optionSelected)="selectChip($event, 'respondents')"
+            <mat-autocomplete #respondentsAuto="matAutocomplete"
+                (optionSelected)="selectChip($event, 'respondents', respondentsInput, respondentsCtrl)"
                 (closed)="chipsLoaded = false">
                 <ng-container *ngIf="chipsLoaded">
                     <mat-option *ngFor="let respondent of filteredChips$ | async" [value]="respondent">
@@ -135,7 +136,8 @@
                     (click)="ctrl$.next('authors')" [matAutocomplete]="authorsAuto" [formControl]="authorsCtrl"
                     [matChipInputFor]="chipAuthorsList">
             </mat-chip-list>
-            <mat-autocomplete #authorsAuto="matAutocomplete" (optionSelected)="selectChip($event, 'authors')"
+            <mat-autocomplete #authorsAuto="matAutocomplete"
+                (optionSelected)="selectChip($event, 'authors', authorsInput, authorsCtrl)"
                 (closed)="chipsLoaded = false">
                 <ng-container *ngIf="chipsLoaded">
                     <mat-option *ngFor="let author of filteredChips$ | async" [value]="author">
@@ -150,4 +152,4 @@
 
         <button mat-flat-button color="primary" (click)="createArticle()" [disabled]="form.invalid">Создать</button>
     </form>
-</section>
+</main>
