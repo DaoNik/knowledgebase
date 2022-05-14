@@ -16,7 +16,7 @@
   z-index: 1;
 }
 
-// Крестик 
+// Крестик
 .sidebar__btn > span,
 .sidebar__btn > span::before,
 .sidebar__btn > span::after {
@@ -88,22 +88,6 @@
 }
 
 .header__opacity-sidebar {
-  // display: block;
-  // position: fixed;
-  // visibility: hidden;
-
-  // top: 0;
-  // opacity: 0;
-  // left: 0;
-
-  // width: calc(100vw - 35% - 80px);
-  // height: 100%;
-
-  // margin: 0;
-  // z-index: 1;
-
-  // background: rgba(0, 0, 0, 0.5);
-
   position: absolute;
   top: 60px;
   left: 0;
@@ -111,6 +95,7 @@
   height: 100vh;
   background: rgba(0, 0, 0, 0.5);
   opacity: 0;
+  display: none;
 
   @media (max-width: 600px) {
     width: 0;
@@ -119,6 +104,7 @@
 
 .header__active-opacity-sidebar {
   opacity: 1;
+  display: block;
 }
 
 // Элементы
@@ -172,17 +158,17 @@
   top: 0;
   transform: rotate(90deg);
 }
- 
+
 // #sidebar__toggle:checked ~ * .header__opacity-sidebar {
 //   visibility: visible;
 //   opacity: 1;
 // }
-#sidebar__toggle:checked ~ .header__line-sidebar, 
+#sidebar__toggle:checked ~ .header__line-sidebar,
 #sidebar__toggle:checked ~ * .header__line-sidebar {
   visibility: visible;
   right: 0;
 }
-#sidebar__toggle:checked ~ .sidebar__box, 
+#sidebar__toggle:checked ~ .sidebar__box,
 #sidebar__toggle:checked ~ * .sidebar__box {
   visibility: visible;
   right: 0;
