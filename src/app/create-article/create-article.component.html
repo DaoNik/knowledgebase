@@ -65,7 +65,7 @@
             <label class="create-article__label" for="tags" id="tags">Теги</label>
             <div class="create-article__chips">
                 <mat-chip class="create-article__chip" *ngFor="let tag of form.get('tags')?.value"
-                    (removed)="removeChip(tag, 'tags')">
+                    (removed)="removeChip(tag, 'tags')" color="primary" selected>
                     {{tag}}
                     <button matChipRemove>
                         <mat-icon>cancel</mat-icon>
@@ -94,7 +94,7 @@
             <label class="create-article__label" for="respondents" id="respondents">Ответственные</label>
             <div class="create-article__chips">
                 <mat-chip class="create-article__chip" *ngFor="let respondent of form.get('respondents')?.value"
-                    (removed)="removeChip(respondent, 'respondents')">
+                    (removed)="removeChip(respondent, 'respondents')" color="primary" selected>
                     {{respondent}}
                     <button matChipRemove>
                         <mat-icon>cancel</mat-icon>
@@ -123,7 +123,7 @@
             <label class="create-article__label" for="authors" id="authors">Авторы</label>
             <div class="create-article__chips">
                 <mat-chip class="create-article__chip" *ngFor="let author of form.get('authors')?.value"
-                    (removed)="removeChip(author, 'authors')">
+                    (removed)="removeChip(author, 'authors')" color="primary" selected>
                     {{author}}
                     <button matChipRemove>
                         <mat-icon>cancel</mat-icon>
