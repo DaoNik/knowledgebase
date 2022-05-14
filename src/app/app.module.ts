@@ -19,6 +19,8 @@ import { SidebarComponent } from './sidebar/sidebar.component';
 import { SearchComponent } from './header/search/search.component';
 import { CreateArticleComponent } from './create-article/create-article.component';
 import { AngularEditorModule } from '@kolkov/angular-editor';
+import { MatInputModule } from '@angular/material/input';
+import { MatChipsModule } from '@angular/material/chips';
 import { FeedbackComponent } from './footer/feedback/feedback.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
@@ -53,6 +55,12 @@ import { ArticleComponent } from './article/article.component';
     AngularEditorModule,
     ReactiveFormsModule,
     FormsModule,
+    HttpClientModule,
+    MatFormFieldModule,
+    MatInputModule,
+    MatButtonModule,
+    MatAutocompleteModule,
+    MatChipsModule,
     MatDialogModule,
     MatFormFieldModule,
     HttpClientModule,
