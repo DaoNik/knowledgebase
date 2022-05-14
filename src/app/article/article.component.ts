@@ -13,8 +13,8 @@ export class ArticleComponent implements OnInit {
     title: "Как кинуть Карину в мут?",
     category: "Мут",
     description: "Берешь и перетаскиваешь в мут, что еще думать то?!",
-    dateCreate: "14:54 13.05.2022",
-    dateUpdate: "14:55 13.05.2022",
+    dateCreate: "1652442180701",
+    dateUpdate: "1652442180701",
     authors: ["Yaunberzinsh Alexander", "Taranin Nikita"],
     respondents: ["Taranin Nikita", "Berezhnov Nikita"],
     content: {
