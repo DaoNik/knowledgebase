@@ -1,0 +1,28 @@
+.admin-panel {
+  padding: 10px;
+
+  @media screen and (min-width: 768px) {
+    padding: 20px;
+  }
+}
+
+
+.admin-nav__list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 20px;
+  padding: 0;
+  margin: 0 0 20px;
+  list-style: none;
+}
+
+.admin-nav__link--active {
+  opacity: 0.8;
+}
+
+.admin-content {
+  padding: 10px;
+  border: 2px solid #673ab7;
+
+
+}

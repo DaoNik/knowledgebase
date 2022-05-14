@@ -8,6 +8,7 @@ import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 
 import { MatIconModule } from '@angular/material/icon';
+import { MatButtonModule } from '@angular/material/button'
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -23,8 +24,9 @@ import { MatChipsModule } from '@angular/material/chips';
 import { FeedbackComponent } from './footer/feedback/feedback.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
-import { MatButtonModule } from '@angular/material/button';
 import { ArticleComponent } from './article/article.component';
+
+
 
 @NgModule({
   declarations: [
@@ -43,6 +45,10 @@ import { ArticleComponent } from './article/article.component';
     AppRoutingModule,
     BrowserAnimationsModule,
     MatIconModule,
+    MatButtonModule,
+    AngularEditorModule,
+    ReactiveFormsModule,
+    FormsModule,
     MatAutocompleteModule,
     MatMenuModule,
     MatCheckboxModule,
@@ -57,10 +63,9 @@ import { ArticleComponent } from './article/article.component';
     MatChipsModule,
     MatDialogModule,
     MatFormFieldModule,
-    MatButtonModule,
     HttpClientModule,
   ],
   providers: [],
   bootstrap: [AppComponent],
 })
-export class AppModule {}
+export class AppModule { }
