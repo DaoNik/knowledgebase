@@ -6,12 +6,13 @@ interface adminArticle {
   header: string;
   tags: string[];
   teamlead: string;
-};
+}
 
 const mockArticles: adminArticle[] = [
   {
     id: 'id10',
-    header: 'A 100 способов сделать это...100 способов сделать это...100 способов сделать это...',
+    header:
+      'A 100 способов сделать это...100 способов сделать это...100 способов сделать это...',
     tags: ['тег1', 'тег2', 'тег3'],
     teamlead: 'username',
   },
@@ -50,26 +51,28 @@ const mockArticles: adminArticle[] = [
     header: '100 способов сделать это...',
     tags: ['тег1', 'тег2', 'тег3'],
     teamlead: 'username',
-  }
+  },
 ];
 
 @Component({
   selector: 'app-articles-table',
   templateUrl: './articles-table.component.html',
-  styleUrls: ['./articles-table.component.scss']
+  styleUrls: ['./articles-table.component.scss'],
 })
 export class ArticlesTableComponent implements OnInit {
-
   articles: adminArticle[] = mockArticles;
   articlesOnPage: number = 3;
   pages: number[] = [];
 
-  currentPageArticles: adminArticle[] = this.articles.slice(0, this.articlesOnPage);
+  currentPageArticles: adminArticle[] = this.articles.slice(
+    0,
+    this.articlesOnPage
+  );
   currentPage: number = 1;
 
   checkedArticles: string[] = [];
 
-  constructor(private router: Router) { }
+  constructor(private router: Router) {}
 
   ngOnInit(): void {
     this.countPages();
@@ -77,7 +80,7 @@ export class ArticlesTableComponent implements OnInit {
 
   countPages(): void {
     this.pages = [];
-    for (let i = 0; i < (this.articles.length / this.articlesOnPage); i++) {
+    for (let i = 0; i < this.articles.length / this.articlesOnPage; i++) {
       this.pages.push(i + 1);
     }
   }
@@ -85,16 +88,17 @@ export class ArticlesTableComponent implements OnInit {
   pageClick(page: number): void {
     this.currentPage = page;
     const startArticle: number = (page - 1) * this.articlesOnPage;
-    this.currentPageArticles = this.articles.slice(startArticle, startArticle + this.articlesOnPage);
-  }
-
-  editArticle(articleId: string) {
-    console.log('Эта штука откроет (желательно, в соседней вкладке) редактирование статьи');
-    //this.router.navigateByUrl('тут урл на страницу редактирования');
+    this.currentPageArticles = this.articles.slice(
+      startArticle,
+      startArticle + this.articlesOnPage
+    );
   }
 
   deleteArticle(articleId: string) {
-    this.articles.splice(this.articles.findIndex(article => article.id === articleId), 1);
+    this.articles.splice(
+      this.articles.findIndex((article) => article.id === articleId),
+      1
+    );
     this.pageClick(this.currentPage);
     this.countPages();
     //здесь запросик на удаление статьи
@@ -103,27 +107,34 @@ export class ArticlesTableComponent implements OnInit {
   checkArticle(articleId: string): void {
     if (!this.checkedArticles.includes(articleId)) {
       this.checkedArticles.push(articleId);
-    }
-    else {
+    } else {
       this.checkedArticles.splice(this.checkedArticles.indexOf(articleId), 1);
     }
   }
 
   sortByAlphabet(prev: adminArticle, next: adminArticle): number {
-    return prev.header < next.header ? -1 : (prev.header > next.header) ? 1 : 0;
+    return prev.header < next.header ? -1 : prev.header > next.header ? 1 : 0;
   }
 
   sortByID(prev: adminArticle, next: adminArticle): number {
-    return prev.id < next.id ? -1 : (prev.id > next.id) ? 1 : 0;
+    return prev.id < next.id ? -1 : prev.id > next.id ? 1 : 0;
   }
 
   sortByTeamlead(prev: adminArticle, next: adminArticle): number {
-    return prev.teamlead < next.teamlead ? -1 : (prev.teamlead > next.teamlead) ? 1 : 0;
+    return prev.teamlead < next.teamlead
+      ? -1
+      : prev.teamlead > next.teamlead
+      ? 1
+      : 0;
   }
 
   sortByTags(prev: adminArticle, next: adminArticle): number {
-    if (prev.tags[0] < next.tags[0]) { return -1; }
-    if (prev.tags[0] > next.tags[0]) { return 1; }
+    if (prev.tags[0] < next.tags[0]) {
+      return -1;
+    }
+    if (prev.tags[0] > next.tags[0]) {
+      return 1;
+    }
     return 0;
   }
 
