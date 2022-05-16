@@ -118,21 +118,15 @@ export class ArticlesTableComponent implements OnInit {
   }
 
   sortByAlphabet(prev: adminArticle, next: adminArticle): number {
-    if (prev.header < next.header) { return -1; }
-    if (prev.header > next.header) { return 1; }
-    return 0;
+    return prev.header < next.header ? -1 : (prev.header > next.header) ? 1 : 0;
   }
 
   sortByID(prev: adminArticle, next: adminArticle): number {
-    if (prev.id < next.id) { return -1; }
-    if (prev.id > next.id) { return 1; }
-    return 0;
+    return prev.id < next.id ? -1 : (prev.id > next.id) ? 1 : 0;
   }
 
   sortByTeamlead(prev: adminArticle, next: adminArticle): number {
-    if (prev.teamlead < next.teamlead) { return -1; }
-    if (prev.teamlead > next.teamlead) { return 1; }
-    return 0;
+    return prev.teamlead < next.teamlead ? -1 : (prev.teamlead > next.teamlead) ? 1 : 0;
   }
 
   sortByTags(prev: adminArticle, next: adminArticle): number {
