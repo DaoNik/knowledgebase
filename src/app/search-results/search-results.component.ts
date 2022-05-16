@@ -23,7 +23,6 @@ export class SearchResultsComponent implements OnInit {
         .getArticles()
         .subscribe((articles) => {
           this.articles = articles.filter(item => {
-            console.log(params['categories'].includes(item.category))
             if (item.title.toLowerCase().includes(params['title'].toLowerCase()) && params['categories'].includes(item.category)) return true;
             else return false;
           })

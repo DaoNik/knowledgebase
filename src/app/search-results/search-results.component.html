@@ -1,15 +1,21 @@
 <main class="main">
 	<!-- <app-article></app-article> -->
-	<ul class="articles">
-	  <li class="articles__item" *ngFor="let article of articles; let i = index" (click)="openArticle(article.id)">
-		<a class="articles__item-link">
-		  <h3 class="articles__item-title">{{ article.title }}</h3>
-		  <p class="articles__item-date">
-			Последнее обновление:
-			{{ article.dateUpdate | date: "dd/MM/yyyy" }}
-		  </p>
-		  <p class="articles__item-description">{{ article.description }}</p>
-		</a>
-	  </li>
+	<ul class="articles" *ngIf="articles.length > 0; else noResults">
+		<li class="articles__item" *ngFor="let article of articles; let i = index" (click)="openArticle(article.id)">
+			<a class="articles__item-link">
+			<h3 class="articles__item-title">{{ article.title }}</h3>
+			<p class="articles__item-date">
+				Последнее обновление:
+				{{ article.dateUpdate | date: "dd/MM/yyyy" }}
+			</p>
+			<p class="articles__item-description">{{ article.description }}</p>
+			</a>
+		</li>
 	</ul>
+	
+	<ng-template #noResults>
+		<div class="main__empty-articles-list">
+			Nothing was found
+		</div>
+	</ng-template>
   </main>

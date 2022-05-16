@@ -74,13 +74,10 @@ export class SearchComponent implements OnInit {
   search() {
     const filterTags = this.filterOptions.filter(item => { return item.status })
                                   .map(item => { return item.title });
-
-    console.log(`searching for ${this.searchQuery.value} in ${filterTags}`)
     this.searchService.goToSearchResults(this.searchQuery.value, filterTags)
   }
 
   goToArticle(article: IArticle) {
       this.router.navigate(['article', `${article.id}`]);
-      console.log(article.id)
   }
 }
