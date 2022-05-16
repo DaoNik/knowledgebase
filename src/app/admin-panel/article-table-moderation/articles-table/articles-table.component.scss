@@ -15,7 +15,7 @@ ul {
   }
 }
 
-tr {
+.article-table__row {
   border: 1px solid black;
   padding: 5px;
   @media screen and (min-width: 768px) {
@@ -23,7 +23,12 @@ tr {
   }
 }
 
-th,
+.article-table__header-cell--clickable {
+  cursor: pointer;
+  border: 1px solid #dddddd;
+}
+
+.article-table__header-cell,
 td {
   @media screen and (min-width: 768px) {
     border: 1px solid #dddddd;
@@ -58,7 +63,7 @@ td {
 }
 
 .article__name {
-  width: 80%;
+  width: 70%;
 
   @media screen and (min-width: 768px) {
     width: 50%;
@@ -115,4 +120,10 @@ mat-icon {
 
 .article-table__pagination-link {
   min-width: 0;
+
+  &--active {
+    opacity: 0.8;
+  }
 }
+
+
