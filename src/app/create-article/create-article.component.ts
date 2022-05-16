@@ -1,5 +1,5 @@
 import { CreateArticleService } from './create-article.service';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
   Component,
   ElementRef,
@@ -75,7 +75,8 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
 
   constructor(
     private route: ActivatedRoute,
-    private createArticleService: CreateArticleService
+    private createArticleService: CreateArticleService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -218,8 +219,16 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
       };
 
       this.isEditArticle
-        ? this.createArticleService.editArticle(this.articleId, article)
-        : this.createArticleService.createArticle(article);
+        ? this.createArticleService
+            .editArticle(this.articleId, article)
+            .subscribe((article) =>
+              this.router.navigateByUrl(`/article/${article._id}`)
+            )
+        : this.createArticleService
+            .createArticle(article)
+            .subscribe((article) =>
+              this.router.navigateByUrl(`/article/${article._id}`)
+            );
     }
   }
 
