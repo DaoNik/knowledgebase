@@ -5,6 +5,7 @@ import { adminRoutes } from './admin-panel/admin-panel.module';
 import { ArticleComponent } from './article/article.component';
 import { CreateArticleComponent } from './create-article/create-article.component';
 import { MainComponent } from './main/main.component';
+import { SearchResultsComponent } from './search-results/search-results.component';
 
 const routes: Routes = [
   { path: 'create', component: CreateArticleComponent },
@@ -17,10 +18,10 @@ const routes: Routes = [
     path: 'article/:id',
     component: ArticleComponent,
   },
-  // {
-  //   path: 'articles/:id',
-  //   component: ArticleComponent,
-  // }
+  {
+    path: 'search-result/:title/:categories',
+    component: SearchResultsComponent,
+  }
 ];
 
 @NgModule({

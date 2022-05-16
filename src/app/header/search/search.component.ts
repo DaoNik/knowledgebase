@@ -76,6 +76,7 @@ export class SearchComponent implements OnInit {
                                   .map(item => { return item.title });
 
     console.log(`searching for ${this.searchQuery.value} in ${filterTags}`)
+    this.searchService.goToSearchResults(this.searchQuery.value, filterTags)
   }
 
   goToArticle(article: IArticle) {
