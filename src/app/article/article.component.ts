@@ -25,6 +25,8 @@ export class ArticleComponent implements OnInit {
     tags: []
   }];
 
+  article!: IArticle;
+
   articleId!: number;
 
   constructor(
@@ -33,10 +35,13 @@ export class ArticleComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.articlesServ.getArticles()
-    .subscribe((articles: IArticle[]) => this.articles = articles)
     this.route.params.subscribe((params: Params) => {
-      this.articleId = Number(params["id"]);
+      this.articlesServ.getArticles()
+      .subscribe((articles: IArticle[]) => {
+        articles.filter(item => {
+          if (item.id === Number(params["id"])) this.article = item
+        })
+      })
     })
   }
 
