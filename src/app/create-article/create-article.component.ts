@@ -1,4 +1,5 @@
-import { ActivatedRoute } from '@angular/router';
+import { CreateArticleService } from './create-article.service';
+import { ActivatedRoute, Router } from '@angular/router';
 import {
   Component,
   ElementRef,
@@ -15,6 +16,7 @@ import {
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
 import { map, Observable, startWith, Subject } from 'rxjs';
+import { IArticle } from '../interfaces/article';
 
 @Component({
   selector: 'app-create-article',
@@ -29,12 +31,24 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
   @ViewChild('authorsInput')
   authorsInput!: ElementRef<HTMLInputElement>;
 
+  public article$!: Observable<IArticle>;
+  public articleId!: string;
   public isEditArticle!: boolean;
   public form!: FormGroup;
-  public authors = ['Энни', 'Baboolean'];
-  public respondents = ['Качок', 'Dedoolean'];
-  public categories = ['JS', 'TS', 'Go'];
-  public tags = ['Длинная', 'Короткая'];
+  public authors = ['Саша Сашин', 'Петр Петрович'];
+  public respondents = [
+    'Отдел разработки #1',
+    'Отдел разработки #2',
+    'Отдел разработки #3',
+  ];
+  public categories = [
+    'Склад',
+    'Пункты выдачи',
+    'Клиентская сторона',
+    'Серверная сторона',
+    'Логистика',
+  ];
+  public tags = ['Frontend', 'Backend', 'БД'];
   public respondentsCtrl = new FormControl('', Validators.required);
   public tagsCtrl = new FormControl('', Validators.required);
   public authorsCtrl = new FormControl('', Validators.required);
@@ -59,10 +73,14 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
     toolbarHiddenButtons: [['fontName', 'toggleEditorMode']],
   };
 
-  constructor(private route: ActivatedRoute) {}
+  constructor(
+    private route: ActivatedRoute,
+    private createArticleService: CreateArticleService,
+    private router: Router
+  ) {}
 
   ngOnInit(): void {
-    this.getUrl();
+    this.getArticle();
     this.createForm();
     this.filterChips();
   }
@@ -71,72 +89,81 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
     this.ctrl$.unsubscribe();
   }
 
-  getUrl(): void {
-    this.route.url.subscribe(
-      (url) => (this.isEditArticle = url[0].path === 'edit')
-    );
+  getArticle(): void {
+    this.route.url.subscribe((url) => {
+      this.isEditArticle = url[0].path === 'edit';
+
+      if (this.isEditArticle) {
+        this.articleId = this.route.snapshot.params['id'];
+        this.article$ = this.createArticleService.getArticle(this.articleId);
+      } else {
+        this.article$ = new Observable<IArticle>((subscriber) =>
+          subscriber.next({
+            title: '',
+            description: '',
+            content: '',
+            authors: [],
+            respondents: [],
+            category: '',
+            tags: [],
+          })
+        );
+      }
+    });
   }
 
   createForm(): void {
-    let title = this.isEditArticle ? 'Title' : '';
-    let description = this.isEditArticle ? 'Description' : '';
-    let content = this.isEditArticle ? '<h1>Hello</h1>' : '';
-    let respondents = this.isEditArticle ? ['Качок'] : [];
-    let category = this.isEditArticle ? 'JS' : '';
-    let tags = this.isEditArticle ? ['Длинная', 'Короткая'] : [];
-    let authors = this.isEditArticle ? ['Энни'] : [];
-
-    this.form = new FormGroup({
-      title: new FormControl(title, [
-        Validators.required,
-        Validators.minLength(4),
-        Validators.maxLength(40),
-        this.manySpacesValidator,
-      ]),
-      description: new FormControl(description, [
-        Validators.required,
-        Validators.minLength(4),
-        Validators.maxLength(100),
-        this.manySpacesValidator,
-      ]),
-      content: new FormControl(content, [
-        Validators.required,
-        Validators.minLength(4),
-        this.manySpacesValidator,
-      ]),
-      authors: new FormControl(authors, [
-        Validators.required,
-        Validators.minLength(1),
-      ]),
-      respondents: new FormControl(respondents, [
-        Validators.required,
-        Validators.minLength(1),
-      ]),
-      category: new FormControl(category, [
-        Validators.required,
-        Validators.minLength(1),
-      ]),
-      tags: new FormControl(tags, [
-        Validators.required,
-        Validators.minLength(1),
-      ]),
-    });
-
-    if (this.isEditArticle) {
-      authors.forEach((editAuthor) => {
+    this.article$.subscribe((article) => {
+      article.authors.forEach((editAuthor) => {
         this.authors = this.authors.filter((author) => author !== editAuthor);
       });
 
-      respondents.forEach((editRespondent) => {
-        this.respondents = this.authors.filter(
+      article.respondents.forEach((editRespondent) => {
+        this.respondents = this.respondents.filter(
           (respondent) => respondent !== editRespondent
         );
       });
 
-      tags.forEach((editTag) => {
+      article.tags.forEach((editTag) => {
         this.tags = this.tags.filter((tag) => tag !== editTag);
       });
-    }
+
+      this.form = new FormGroup({
+        title: new FormControl(article.title, [
+          Validators.required,
+          Validators.minLength(4),
+          Validators.maxLength(200),
+          this.manySpacesValidator,
+        ]),
+        description: new FormControl(article.description, [
+          Validators.required,
+          Validators.minLength(10),
+          Validators.maxLength(200),
+          this.manySpacesValidator,
+        ]),
+        content: new FormControl(article.content, [
+          Validators.required,
+          Validators.minLength(4),
+          this.manySpacesValidator,
+        ]),
+        authors: new FormControl(article.authors, [
+          Validators.required,
+          Validators.minLength(1),
+        ]),
+        respondents: new FormControl(article.respondents, [
+          Validators.required,
+          Validators.minLength(1),
+        ]),
+        category: new FormControl(article.category, [
+          Validators.required,
+          Validators.minLength(1),
+        ]),
+        tags: new FormControl(article.tags, [
+          Validators.required,
+          Validators.minLength(1),
+        ]),
+      });
+    });
   }
 
   filterChips(): void {
@@ -181,21 +208,27 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
 
   createArticle(): void {
     if (this.form.valid) {
-      alert(
-        JSON.stringify(
-          {
-            title: this.form.get('title')?.value.trim(),
-            description: this.form.get('description')?.value.trim(),
-            content: this.form.get('content')?.value.trim(),
-            authors: this.form.get('authors')?.value,
-            category: this.form.get('category')?.value,
-            respondents: this.form.get('respondents')?.value,
-            tags: this.form.get('tags')?.value,
-          },
-          null,
-          ' '
-        )
-      );
+      const article: IArticle = {
+        title: this.form.get('title')?.value.trim(),
+        description: this.form.get('description')?.value.trim(),
+        content: this.form.get('content')?.value.trim(),
+        authors: this.form.get('authors')?.value,
+        category: this.form.get('category')?.value,
+        respondents: this.form.get('respondents')?.value,
+        tags: this.form.get('tags')?.value,
+      };
+
+      this.isEditArticle
+        ? this.createArticleService
+            .editArticle(this.articleId, article)
+            .subscribe((article) =>
+              this.router.navigateByUrl(`/article/${article._id}`)
+            )
+        : this.createArticleService
+            .createArticle(article)
+            .subscribe((article) =>
+              this.router.navigateByUrl(`/article/${article._id}`)
+            );
     }
   }
 
