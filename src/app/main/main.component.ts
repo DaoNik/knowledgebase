@@ -12,7 +12,7 @@ export class MainComponent implements OnInit {
   articles: IArticle[] = [];
 
   constructor(
-    private articleService: ArticleService, 
+    private articleService: ArticleService,
     private router: Router
     ) {}
 
@@ -22,7 +22,7 @@ export class MainComponent implements OnInit {
       .subscribe((articles) => (this.articles = articles));
   }
 
-  openArticle(id: number) {
-    this.router.navigate(['article', `${id}`]);
+  openArticle(id: string) {
+    this.router.navigate(['article', id]);
   }
 }

@@ -89,6 +89,6 @@ export class SearchComponent implements OnInit {
   }
 
   goToArticle(article: IArticle) {
-    this.router.navigate(['article', `${article.id}`]);
+    this.router.navigate(['article', `${article._id}`]);
   }
 }

@@ -1,0 +1,55 @@
+<div class="article-table__wrapper">
+    <table *ngIf="pages.length" class="article-table">
+      <thead>
+        <tr class="article-table__header article-table__row">
+          <th class="article__no article-table__header-cell">№</th>
+          <th class="article__id article-table__header-cell--clickable" (click)="sortByFlag('id')">ID</th>
+          <th class="article__name article-table__header-cell--clickable" (click)="sortByFlag('header')">Заголовок</th>
+          <th class="article__tags article-table__header-cell--clickable" (click)="sortByFlag('tags')">Теги</th>
+          <th class="article__teamlead article-table__header-cell--clickable" (click)="sortByFlag('teamlead')">Ответственный</th>
+          <th class="article__actions article-table__header-cell">Действия</th>
+        </tr>
+      </thead>
+      <tr class="article-table__item article article-table__row" *ngFor="let article of currentPageArticles; let i = index">
+        <td class="article__no"><span class="article__cell-name">№</span>{{i+1}}</td>
+        <td class="article__id"><span class="article__cell-name">ID</span>{{article.id}}</td>
+        <td class="article__name"><span class="article__cell-name">Заголовок</span>{{article.header}}</td>
+        <td class="article__tags"><span class="article__cell-name">Теги</span>{{article.tags}}</td>
+        <td class="article__teamlead"><span class="article__cell-name">Ответственный</span>{{article.teamlead}}</td>
+        <td class="article__actions">
+          <ul class="article__actions-list">
+            <span class="article__cell-name"></span>
+            <li class="article__action">
+              <mat-icon title="Редaктировать" (click)="editArticle(article.id)">edit</mat-icon>
+            </li>
+            <li class="article__action">
+              <mat-icon title="Удалить" (click)="deleteArticle(article.id)">delete</mat-icon>
+            </li>
+            <li class="article__action">
+              <input type="checkbox" [id]="'check'+article.id" class="article__action-check">
+              <label [for]="'check'+article.id">
+                <mat-icon title="Отметить" (click)="checkArticle(article.id)">check_box</mat-icon>
+              </label>
+            </li>
+            <li>
+              <button color="primary" mat-raised-button class="article-table__approve">Одобрить</button>
+            </li>
+          </ul>
+        </td>
+      </tr>
+    </table>
+
+
+    <a mat-raised-button color="primary" class="table__delete-selected" (click)="deleteSelected">Удалить выделенное</a>
+
+    <div *ngIf="!pages.length" class="table__text-pages__none">Ожидающих статей нет.</div>
+
+    <ul class="article-table__pagination-list" #pagination>
+      <li class="article-table__pagination-item" *ngFor="let page of pages">
+        <button color="primary" mat-raised-button class="article-table__pagination-link"
+        (click) = "pageClick(page)" [class] = "currentPage === page? 'article-table__pagination-link--active' : ''">{{page}}</button>
+      </li>
+    </ul>
+  </div>
+  
+  
