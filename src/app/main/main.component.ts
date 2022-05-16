@@ -11,10 +11,7 @@ import { IArticle } from '../interfaces/article';
 export class MainComponent implements OnInit {
   articles: IArticle[] = [];
 
-  constructor(
-    private articleService: ArticleService,
-    private router: Router
-    ) {}
+  constructor(private articleService: ArticleService, private router: Router) {}
 
   ngOnInit(): void {
     this.articleService
@@ -23,6 +20,6 @@ export class MainComponent implements OnInit {
   }
 
   openArticle(id: string) {
-    this.router.navigate(['article', id]);
+    this.router.navigateByUrl(`article/${id}`);
   }
 }

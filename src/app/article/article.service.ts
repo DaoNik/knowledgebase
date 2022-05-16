@@ -7,8 +7,6 @@ import { IArticle } from '../interfaces/article';
   providedIn: 'root',
 })
 export class ArticleService {
-  // private url: string = 'http://localhost:4500/mock-articles.json'
-
   constructor(
     private http: HttpClient,
     @Inject('API_URL') private apiUrl: string
@@ -16,5 +14,9 @@ export class ArticleService {
 
   getArticles(): Observable<IArticle[]> {
     return this.http.get<IArticle[]>(this.apiUrl);
+  }
+
+  getArticle(id: string): Observable<IArticle> {
+    return this.http.get<IArticle>(`${this.apiUrl}/${id}`);
   }
 }

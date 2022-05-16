@@ -88,7 +88,7 @@ export class SearchComponent implements OnInit {
     this.searchService.goToSearchResults(this.searchQuery.value, filterTags);
   }
 
-  goToArticle(article: IArticle) {
-    this.router.navigate(['article', `${article._id}`]);
+  goToArticle(id: string) {
+    this.router.navigateByUrl(`article/${id}`);
   }
 }
