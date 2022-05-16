@@ -85,7 +85,6 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
       content: new FormControl('', [
         Validators.required,
         Validators.minLength(4),
-        Validators.maxLength(1000),
         this.manySpacesValidator,
       ]),
       authors: new FormControl(
@@ -147,15 +146,19 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
   createArticle(): void {
     if (this.form.valid) {
       alert(
-        JSON.stringify({
-          title: this.form.get('title')?.value.trim(),
-          description: this.form.get('description')?.value.trim(),
-          content: this.form.get('content')?.value.trim(),
-          authors: this.form.get('authors')?.value,
-          category: this.form.get('category')?.value,
-          respondents: this.form.get('respondents')?.value,
-          tags: this.form.get('tags')?.value,
-        })
+        JSON.stringify(
+          {
+            title: this.form.get('title')?.value.trim(),
+            description: this.form.get('description')?.value.trim(),
+            content: this.form.get('content')?.value.trim(),
+            authors: this.form.get('authors')?.value,
+            category: this.form.get('category')?.value,
+            respondents: this.form.get('respondents')?.value,
+            tags: this.form.get('tags')?.value,
+          },
+          null,
+          ' '
+        )
       );
     }
   }
