@@ -9,15 +9,20 @@ import { MatIconModule } from '@angular/material/icon';
 import { RoleModerationComponent } from './role-moderation/role-moderation.component';
 import { ArticleTableModerationComponent } from './article-table-moderation/article-table-moderation.component';
 import { ArticlesTableComponent } from './article-table-moderation/articles-table/articles-table.component';
+import { CreateArticleComponent } from '../create-article/create-article.component';
 
 export const adminRoutes: Routes = [
   {
-    path: '', component: AdminPanelComponent, children: [
+    path: '',
+    component: AdminPanelComponent,
+    children: [
       { path: '', redirectTo: 'moderate', pathMatch: 'full' },
       { path: 'moderate', component: ArticleTableModerationComponent },
-      { path: 'roles', component: RoleModerationComponent }
-    ]
-  }
+      { path: 'roles', component: RoleModerationComponent },
+      { path: 'create', component: CreateArticleComponent },
+      { path: 'edit/:id', component: CreateArticleComponent },
+    ],
+  },
 ];
 
 @NgModule({
@@ -25,7 +30,7 @@ export const adminRoutes: Routes = [
     AdminPanelComponent,
     RoleModerationComponent,
     ArticleTableModerationComponent,
-    ArticlesTableComponent
+    ArticlesTableComponent,
   ],
   imports: [
     CommonModule,
@@ -33,10 +38,7 @@ export const adminRoutes: Routes = [
     MatButtonModule,
     MatIconModule,
     RouterModule.forChild(adminRoutes),
-
   ],
-  exports: [
-    AdminPanelComponent
-  ]
+  exports: [AdminPanelComponent],
 })
-export class AdminPanelModule { }
+export class AdminPanelModule {}
