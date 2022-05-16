@@ -6,7 +6,7 @@
 	.search__form_input {
 		// margin-left: 20px;
 		width: 100%;
-		// width: 
+		// width:
 		padding: 0 10px;
 		box-sizing: border-box;
 		border-radius: 10px;
@@ -16,7 +16,7 @@
 
 	.search__form_btn {
 		position: absolute;
-		
+
 		height: 27px;
 		width: 32px;
 		padding: 3px 0 0 5px;
@@ -43,7 +43,7 @@
 		&:hover {
 			background-color: rgba(190, 190, 190, 0.3);
 		}
-		
+
 		&:active {
 			background-color: rgba(190, 190, 190, 0.723);
 		}

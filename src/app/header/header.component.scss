@@ -31,9 +31,6 @@
   color: #fff;
   text-decoration: none;
 
-  // width: 275px;
-
-  // margin-left: 25px;
   z-index: 2;
 
   @media (max-width: 890px) {
@@ -49,10 +46,6 @@
 }
 
 .header__nav {
-  // display: flex;
-  // justify-content: space-around;
-  // align-items: center;
-  // width: 100%;
   width: 70%;
 
   z-index: 1;
@@ -72,8 +65,4 @@
 
 .header__search {
   width: 70%;
-}
-
-.sidebar {
-  // margin-right: 35px;
 }
