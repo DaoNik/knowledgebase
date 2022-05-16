@@ -79,4 +79,10 @@
     margin-right: 5px;
     margin-bottom: 5px;
   }
+
+  &__send-btn {
+    &:disabled {
+      background-color: rgb(182, 182, 182);
+    }
+  }
 }
