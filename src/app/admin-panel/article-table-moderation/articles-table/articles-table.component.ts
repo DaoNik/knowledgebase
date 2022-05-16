@@ -60,8 +60,6 @@ const mockArticles: adminArticle[] = [
 })
 export class ArticlesTableComponent implements OnInit {
 
-  @ViewChild ('pagination') pagination!: Element;
-
   articles: adminArticle[] = mockArticles;
   articlesOnPage: number = 3;
   pages: number[] = [];
@@ -75,12 +73,6 @@ export class ArticlesTableComponent implements OnInit {
 
   ngOnInit(): void {
     this.countPages();
-    console.log(this.pagination);
-  }
-
-  ngAfterViewInit() {
-    console.log(this.pagination);
-    console.log(this.pagination.children);
   }
 
   countPages(): void {
