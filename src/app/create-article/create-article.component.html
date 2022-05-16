@@ -152,6 +152,6 @@
         </div>
 
         <button class="create-article__send-btn" mat-flat-button color="primary" (click)="createArticle()"
-            [disabled]="form.invalid">Создать</button>
+            [disabled]="form.invalid">{{isEditArticle ? 'Редактировать' : 'Создать'}}</button>
     </form>
 </main>

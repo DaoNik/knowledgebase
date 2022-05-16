@@ -7,6 +7,7 @@ import { MainComponent } from './main/main.component';
 
 const routes: Routes = [
   { path: 'create', component: CreateArticleComponent },
+  { path: 'edit/:id', component: CreateArticleComponent },
   { path: 'admin', children: [...adminRoutes] },
   {
     path: '',
