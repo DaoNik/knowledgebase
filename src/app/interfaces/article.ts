@@ -1,5 +1,5 @@
 export interface IArticle {
-  id: number;
+  _id?: string;
   title: string;
   description: string;
   dateCreate?: string;

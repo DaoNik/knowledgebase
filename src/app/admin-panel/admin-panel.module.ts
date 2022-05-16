@@ -10,6 +10,8 @@ import { RoleModerationComponent } from './role-moderation/role-moderation.compo
 import { ArticleTableModerationComponent } from './article-table-moderation/article-table-moderation.component';
 import { ArticlesTableComponent } from './article-table-moderation/articles-table/articles-table.component';
 import { CreateArticleComponent } from '../create-article/create-article.component';
+import { ArticleNotListedComponent } from './article-not-listed/article-not-listed.component';
+import { NotListedTableComponent } from './article-not-listed/not-listed-table/not-listed-table.component';
 
 export const adminRoutes: Routes = [
   {
@@ -21,6 +23,7 @@ export const adminRoutes: Routes = [
       { path: 'roles', component: RoleModerationComponent },
       { path: 'create', component: CreateArticleComponent },
       { path: 'edit/:id', component: CreateArticleComponent },
+      { path: 'not-listed', component: ArticleNotListedComponent },
     ],
   },
 ];
@@ -31,6 +34,8 @@ export const adminRoutes: Routes = [
     RoleModerationComponent,
     ArticleTableModerationComponent,
     ArticlesTableComponent,
+    ArticleNotListedComponent,
+    NotListedTableComponent,
   ],
   imports: [
     CommonModule,

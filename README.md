@@ -8,5 +8,3 @@
 
 - Typescript
 - Angular 13
-
-###
