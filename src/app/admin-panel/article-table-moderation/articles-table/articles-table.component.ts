@@ -12,13 +12,13 @@ const mockArticles: adminArticle[] = [
   {
     id: 'id10',
     header: 'A 100 способов сделать это...100 способов сделать это...100 способов сделать это...',
-    tags: ['тег1', 'тег2', 'тег3'],
+    tags: ['тег1', 'тег2'],
     teamlead: 'username',
   },
   {
     id: 'id20',
     header: 'B 100 способов сделать это...',
-    tags: ['тег1', 'тег2', 'тег3'],
+    tags: ['тег1', 'тег3'],
     teamlead: 'username',
   },
   {
@@ -36,19 +36,19 @@ const mockArticles: adminArticle[] = [
   {
     id: 'id50',
     header: '100 способов сделать это...',
-    tags: ['тег1', 'тег2', 'тег3'],
+    tags: ['тег1', 'тег2'],
     teamlead: 'username',
   },
   {
     id: 'id60',
     header: '100 способов сделать это...',
-    tags: ['тег1', 'тег2', 'тег3'],
+    tags: ['тег2', 'тег3'],
     teamlead: 'username',
   },
   {
     id: 'id70',
     header: '100 способов сделать это...',
-    tags: ['тег1', 'тег2', 'тег3'],
+    tags: ['тег1', 'тег2', 'тег4'],
     teamlead: 'username',
   }
 ];
@@ -64,10 +64,12 @@ export class ArticlesTableComponent implements OnInit {
   articlesOnPage: number = 3;
   pages: number[] = [];
 
-  currentPageArticles: adminArticle[] = this.articles.slice(0, this.articlesOnPage);
+  currentArticles: adminArticle[] = this.articles;
+  currentPageArticles: adminArticle[] = this.currentArticles.slice(0, this.articlesOnPage);
   currentPage: number = 1;
 
   checkedArticles: string[] = [];
+  checkedTags: string[] = [];
 
   constructor(private router: Router) { }
 
@@ -77,7 +79,7 @@ export class ArticlesTableComponent implements OnInit {
 
   countPages(): void {
     this.pages = [];
-    for (let i = 0; i < (this.articles.length / this.articlesOnPage); i++) {
+    for (let i = 0; i < (this.currentArticles.length / this.articlesOnPage); i++) {
       this.pages.push(i + 1);
     }
   }
@@ -85,7 +87,7 @@ export class ArticlesTableComponent implements OnInit {
   pageClick(page: number): void {
     this.currentPage = page;
     const startArticle: number = (page - 1) * this.articlesOnPage;
-    this.currentPageArticles = this.articles.slice(startArticle, startArticle + this.articlesOnPage);
+    this.currentPageArticles = this.currentArticles.slice(startArticle, startArticle + this.articlesOnPage);
   }
 
   editArticle(articleId: string) {
@@ -94,7 +96,7 @@ export class ArticlesTableComponent implements OnInit {
   }
 
   deleteArticle(articleId: string) {
-    this.articles.splice(this.articles.findIndex(article => article.id === articleId), 1);
+    this.currentArticles.splice(this.currentArticles.findIndex(article => article.id === articleId), 1);
     this.pageClick(this.currentPage);
     this.countPages();
     //здесь запросик на удаление статьи
@@ -121,27 +123,38 @@ export class ArticlesTableComponent implements OnInit {
     return prev.teamlead < next.teamlead ? -1 : (prev.teamlead > next.teamlead) ? 1 : 0;
   }
 
-  sortByTags(prev: adminArticle, next: adminArticle): number {
-    if (prev.tags[0] < next.tags[0]) { return -1; }
-    if (prev.tags[0] > next.tags[0]) { return 1; }
-    return 0;
-  }
-
   sortByFlag(flag: string): void {
     switch (flag) {
       case 'id':
-        this.articles = this.articles.sort(this.sortByID);
+        this.currentArticles = this.currentArticles.sort(this.sortByID);
         break;
       case 'header':
-        this.articles = this.articles.sort(this.sortByAlphabet);
-        break;
-      case 'tags':
-        this.articles = this.articles.sort(this.sortByTags);
+        this.currentArticles = this.currentArticles.sort(this.sortByAlphabet);
         break;
       case 'teamlead':
-        this.articles = this.articles.sort(this.sortByTeamlead);
+        this.currentArticles = this.currentArticles.sort(this.sortByTeamlead);
         break;
     }
     this.pageClick(this.currentPage);
+  }
+
+  filterByTag(tag: string) {
+    if (!this.checkedTags.includes(tag)) {
+      this.checkedTags.push(tag);
+      let temp: adminArticle[] = [];
+      this.currentArticles.forEach(el => {
+        if (el.tags.includes(tag)) {
+          temp.push(el);
+        }
+      });
+      this.currentArticles = temp;
+    }
+    else {
+      this.checkedTags.splice(this.checkedTags.indexOf(tag), 1);
+      this.currentArticles = this.articles;
+    }
+    this.currentPage = 1;
+    this.pageClick(this.currentPage);
+    this.countPages();
   }
 }

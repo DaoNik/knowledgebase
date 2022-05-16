@@ -103,12 +103,23 @@ mat-icon {
   cursor: pointer;
 }
 
-.article__action input {
-  display: none;
+.article__tags-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 5px;
 }
 
-.article__action input:checked~label mat-icon {
-  color: red;
+.article__tags-item {
+  cursor: pointer;
+}
+
+.article__tags-item--active {
+  color: #673ab7;
+  border: 1px solid #673ab7;
+}
+
+.article__action input {
+  display: none;
 }
 
 .article-table__pagination-list {
