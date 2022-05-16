@@ -29,7 +29,7 @@ export class SearchResultsComponent implements OnInit {
     });
   }
 
-  openArticle(id: number) {
-    this.router.navigate(['article', `${id}`]);
+  openArticle(id: string) {
+    this.router.navigate(['article', id]);
   }
 }
