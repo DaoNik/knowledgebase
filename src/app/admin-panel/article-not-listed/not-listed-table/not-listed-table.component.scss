@@ -1,0 +1,151 @@
+ul {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  
+.article-table {
+  width: 100%;
+  margin: 0 0 10px;
+  padding: 0;
+
+  @media screen and (min-width: 768px) {
+    border: 1px solid #dddddd;
+    border-collapse: collapse;
+  }
+}
+
+.article-table__row {
+  border: 1px solid black;
+  padding: 5px;
+  @media screen and (min-width: 768px) {
+    border: none;
+  }
+}
+
+.article-table__header-cell--clickable {
+  cursor: pointer;
+  border: 1px solid #dddddd;
+}
+
+.article-table__header-cell,
+td {
+  @media screen and (min-width: 768px) {
+    border: 1px solid #dddddd;
+  }
+}
+
+.article-table__header {
+  display: none;
+
+  @media screen and (min-width: 768px) {
+    display: table-row;
+  }
+}
+
+.article {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+
+  @media screen and (min-width: 768px) {
+    display: table-row;
+  }
+}
+
+.article__cell-name {
+  display: block;
+  font-weight: 700;
+
+  @media screen and (min-width: 768px) {
+    display: none;
+  }
+}
+
+.article__name {
+  width: 70%;
+
+  @media screen and (min-width: 768px) {
+    width: 50%;
+  }
+}
+
+.article__tags,
+.article__teamlead {
+  min-width: 30%;
+  max-width: 50%;
+
+  @media screen and (min-width: 768px) {
+    width: auto;
+  }
+}
+
+.article__actions {
+  // display: flex;
+  // align-items: center;
+
+  min-width: 30%;
+  max-width: 100%;
+
+  @media screen and (min-width: 768px) {
+    width: 105px;
+  }
+}
+
+.article__actions-list {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  justify-content: center;
+  margin: 0;
+
+
+}
+
+mat-icon {
+  color: #673ab7;
+  cursor: pointer;
+}
+
+.article__action input {
+  display: none;
+}
+
+.article__action input:checked~label mat-icon {
+  color: red;
+}
+
+.article-table__pagination-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+}
+
+.article-table__pagination-link {
+  min-width: 0;
+
+  &--active {
+    opacity: 0.8;
+  }
+}
+
+.table__text-pages__none {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 25px 0;
+
+  font-size: 22px;
+  font-weight: 500;
+}
+
+.table__delete-selected {
+  display: block;
+  width: 180px;
+  margin: 15px 20px 15px auto;
+}
+
+.article-table__approve {
+  margin: 8px 20px;
+}

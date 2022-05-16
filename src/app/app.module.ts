@@ -25,6 +25,7 @@ import { FeedbackComponent } from './footer/feedback/feedback.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { ArticleComponent } from './article/article.component';
+import { SearchResultsComponent } from './search-results/search-results.component';
 
 const API_URL_PROVIDER: Provider = {
   provide: 'API_URL',
@@ -42,6 +43,7 @@ const API_URL_PROVIDER: Provider = {
     SearchComponent,
     FeedbackComponent,
     ArticleComponent,
+    SearchResultsComponent,
   ],
   imports: [
     BrowserModule,
