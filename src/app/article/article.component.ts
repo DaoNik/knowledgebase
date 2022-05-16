@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Params } from '@angular/router';
 import { IArticle } from '../interfaces/article';
 import { ArticleService } from './article.service';
 
@@ -22,15 +23,21 @@ export class ArticleComponent implements OnInit {
       image: ""
     },
     tags: []
-  }]
+  }];
+
+  articleId!: number;
 
   constructor(
-    private articlesServ: ArticleService
+    private articlesServ: ArticleService,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
     this.articlesServ.getArticles()
     .subscribe((articles: IArticle[]) => this.articles = articles)
+    this.route.params.subscribe((params: Params) => {
+      this.articleId = Number(params["id"]);
+    })
   }
 
 }
