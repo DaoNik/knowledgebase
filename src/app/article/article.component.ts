@@ -11,7 +11,7 @@ import { ArticleService } from './article.service';
 export class ArticleComponent implements OnInit {
   articles: IArticle[] = [
     {
-      id: 1,
+      _id: '1',
       title: 'Как кинуть Карину в мут?',
       category: 'Мут',
       description: 'Берешь и перетаскиваешь в мут, что еще думать то?!',
