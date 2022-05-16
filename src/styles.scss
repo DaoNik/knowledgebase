@@ -28,3 +28,14 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   background-color: #fff;
   border-radius: 15px !important;
 }
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+
+.create-article__editor {
+  .angular-editor-textarea {
+    &:focus{
+      border: 1px solid #7b1fa2 !important;
+    }
+  }
+}

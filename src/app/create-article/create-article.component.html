@@ -32,7 +32,8 @@
 
         <div class="create-article__field">
             <label class="create-article__label" for="content">Текст</label>
-            <angular-editor id="content" formControlName="content" [config]="editorConfig"></angular-editor>
+            <angular-editor class="create-article__editor" id="content" formControlName="content"
+                [config]="editorConfig"></angular-editor>
             <small class="create-article__error"
                 *ngIf="form.get('content')?.getError('required') && form.get('content')?.touched">Поле
                 обязательно для
@@ -150,6 +151,7 @@
                 хотя бы одного автора</small>
         </div>
 
-        <button mat-flat-button color="primary" (click)="createArticle()" [disabled]="form.invalid">Создать</button>
+        <button class="create-article__send-btn" mat-flat-button color="primary" (click)="createArticle()"
+            [disabled]="form.invalid">{{isEditArticle ? 'Редактировать' : 'Создать'}}</button>
     </form>
 </main>

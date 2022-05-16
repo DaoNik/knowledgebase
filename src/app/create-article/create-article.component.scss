@@ -15,7 +15,7 @@
   &__form {
     max-width: 1000px;
     width: 100%;
-    margin: 90px 0 30px;
+    margin: 30px 0;
   }
 
   &__label {
@@ -37,6 +37,10 @@
       color: #6c757d;
       opacity: .75;
     }
+
+    &:focus {
+      border: 1px solid #7b1fa2;
+    }
   }
 
   &__textarea {
@@ -55,6 +59,10 @@
       color: #6c757d;
       opacity: .75;
     }
+
+    &:focus {
+      border: 1px solid #7b1fa2;
+    }
   }
 
   &__error {
@@ -70,5 +78,11 @@
   &__chip {
     margin-right: 5px;
     margin-bottom: 5px;
+  }
+
+  &__send-btn {
+    &:disabled {
+      background-color: rgb(182, 182, 182);
+    }
   }
 }

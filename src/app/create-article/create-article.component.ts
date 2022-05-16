@@ -1,3 +1,4 @@
+import { ActivatedRoute } from '@angular/router';
 import {
   Component,
   ElementRef,
@@ -28,6 +29,7 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
   @ViewChild('authorsInput')
   authorsInput!: ElementRef<HTMLInputElement>;
 
+  public isEditArticle!: boolean;
   public form!: FormGroup;
   public authors = ['Энни', 'Baboolean'];
   public respondents = ['Качок', 'Dedoolean'];
@@ -57,9 +59,10 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
     toolbarHiddenButtons: [['fontName', 'toggleEditorMode']],
   };
 
-  constructor() {}
+  constructor(private route: ActivatedRoute) {}
 
   ngOnInit(): void {
+    this.getUrl();
     this.createForm();
     this.filterChips();
   }
@@ -68,40 +71,72 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
     this.ctrl$.unsubscribe();
   }
 
+  getUrl(): void {
+    this.route.url.subscribe(
+      (url) => (this.isEditArticle = url[0].path === 'edit')
+    );
+  }
+
   createForm(): void {
+    let title = this.isEditArticle ? 'Title' : '';
+    let description = this.isEditArticle ? 'Description' : '';
+    let content = this.isEditArticle ? '<h1>Hello</h1>' : '';
+    let respondents = this.isEditArticle ? ['Качок'] : [];
+    let category = this.isEditArticle ? 'JS' : '';
+    let tags = this.isEditArticle ? ['Длинная', 'Короткая'] : [];
+    let authors = this.isEditArticle ? ['Энни'] : [];
+
     this.form = new FormGroup({
-      title: new FormControl('', [
+      title: new FormControl(title, [
         Validators.required,
         Validators.minLength(4),
         Validators.maxLength(40),
         this.manySpacesValidator,
       ]),
-      description: new FormControl('', [
+      description: new FormControl(description, [
         Validators.required,
         Validators.minLength(4),
         Validators.maxLength(100),
         this.manySpacesValidator,
       ]),
-      content: new FormControl('', [
+      content: new FormControl(content, [
         Validators.required,
         Validators.minLength(4),
-        Validators.maxLength(1000),
         this.manySpacesValidator,
       ]),
-      authors: new FormControl(
-        [],
-        [Validators.required, Validators.minLength(1)]
-      ),
-      respondents: new FormControl(
-        [],
-        [Validators.required, Validators.minLength(1)]
-      ),
-      category: new FormControl('', [
+      authors: new FormControl(authors, [
         Validators.required,
         Validators.minLength(1),
       ]),
-      tags: new FormControl([], [Validators.required, Validators.minLength(1)]),
+      respondents: new FormControl(respondents, [
+        Validators.required,
+        Validators.minLength(1),
+      ]),
+      category: new FormControl(category, [
+        Validators.required,
+        Validators.minLength(1),
+      ]),
+      tags: new FormControl(tags, [
+        Validators.required,
+        Validators.minLength(1),
+      ]),
     });
+
+    if (this.isEditArticle) {
+      authors.forEach((editAuthor) => {
+        this.authors = this.authors.filter((author) => author !== editAuthor);
+      });
+
+      respondents.forEach((editRespondent) => {
+        this.respondents = this.authors.filter(
+          (respondent) => respondent !== editRespondent
+        );
+      });
+
+      tags.forEach((editTag) => {
+        this.tags = this.tags.filter((tag) => tag !== editTag);
+      });
+    }
   }
 
   filterChips(): void {
@@ -147,15 +182,19 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
   createArticle(): void {
     if (this.form.valid) {
       alert(
-        JSON.stringify({
-          title: this.form.get('title')?.value.trim(),
-          description: this.form.get('description')?.value.trim(),
-          content: this.form.get('content')?.value.trim(),
-          authors: this.form.get('authors')?.value,
-          category: this.form.get('category')?.value,
-          respondents: this.form.get('respondents')?.value,
-          tags: this.form.get('tags')?.value,
-        })
+        JSON.stringify(
+          {
+            title: this.form.get('title')?.value.trim(),
+            description: this.form.get('description')?.value.trim(),
+            content: this.form.get('content')?.value.trim(),
+            authors: this.form.get('authors')?.value,
+            category: this.form.get('category')?.value,
+            respondents: this.form.get('respondents')?.value,
+            tags: this.form.get('tags')?.value,
+          },
+          null,
+          ' '
+        )
       );
     }
   }
