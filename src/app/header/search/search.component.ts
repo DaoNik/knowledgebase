@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { Router } from '@angular/router';
 import { map, Observable, startWith } from 'rxjs';
 import { IArticle } from 'src/app/interfaces/article';
 import { SearchService } from './search.service';
@@ -45,7 +46,7 @@ export class SearchComponent implements OnInit {
   filteredResults!: Observable<IArticle[]>;
   foundArticles!: IArticle[];
 
-  constructor(private searchService: SearchService) {}
+  constructor(private searchService: SearchService, private router: Router) {}
 
   ngOnInit(): void {
     this.filteredResults = this.searchQuery.valueChanges.pipe(
@@ -84,10 +85,10 @@ export class SearchComponent implements OnInit {
       .map((item) => {
         return item.title;
       });
-    console.log(`searching for ${this.searchQuery.value} in ${filterTags}`);
+    this.searchService.goToSearchResults(this.searchQuery.value, filterTags);
   }
 
-  goToArticle(article: IArticle) {
-    console.log('going to article ' + article.title + '\nid: ' + article._id);
+  goToArticle(id: string) {
+    this.router.navigate(['article', `${id}`]);
   }
 }

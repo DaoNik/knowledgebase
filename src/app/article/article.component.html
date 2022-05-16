@@ -1,5 +1,5 @@
 <section>
-  <div class="article" *ngIf="article$ | async as article">
+  <div class="article" *ngIf="article$ | async as article; else loading">
     <header class="article__header">
       <h1 name="title">{{ article.title }}</h1>
       <h2 name="category">Категория: {{ article.category }}</h2>
@@ -38,4 +38,5 @@
       <p [innerHtml]="article.content"></p>
     </main>
   </div>
+  <ng-template #loading> Loading </ng-template>
 </section>
