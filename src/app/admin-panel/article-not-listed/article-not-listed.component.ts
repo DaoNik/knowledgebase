@@ -1,4 +1,9 @@
 import { Component, OnInit } from '@angular/core';
+import { Router } from '@angular/router';
+
+const mockTopics: string[] = [
+  'Тема 1', 'Тема 2'
+];
 
 @Component({
   selector: 'app-article-not-listed',
@@ -7,9 +12,17 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ArticleNotListedComponent implements OnInit {
 
-  constructor() { }
+  topics: string[] = mockTopics;
+  currentTopic: string = this.topics[0];
+
+  constructor(private router: Router) { }
 
   ngOnInit(): void {
+  }
+
+  clickTopic(topic: string): void {
+    //здесь запрос на статьи по теме
+    this.currentTopic = topic;
   }
 
 }

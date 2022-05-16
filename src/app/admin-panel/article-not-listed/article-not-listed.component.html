@@ -1,1 +1,12 @@
-<p>article-not-listed works!</p>
+<div class="not__listed-table">
+    <ul class="not__listed-table__nav-list">
+        <li class="not__listed-table__nav-item" *ngFor="let topic of topics">
+        <button mat-raised-button [color]="topic.includes('Еще')? 'basic' : 'primary'" class="not__listed-table__nav-item"
+        (click) = "clickTopic(topic)" [class]="currentTopic === topic? 'not__listed-table__nav-item--active' : ''">{{topic}}</button>
+        </li>
+    </ul>
+    <div class="not__listed-table__top-bar">
+        <div class="not__listed-table__filter">Фильтр</div>
+    </div>
+    <app-not-listed-table></app-not-listed-table>
+</div>

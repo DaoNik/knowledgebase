@@ -10,12 +10,14 @@ import { RoleModerationComponent } from './role-moderation/role-moderation.compo
 import { ArticleTableModerationComponent } from './article-table-moderation/article-table-moderation.component';
 import { ArticlesTableComponent } from './article-table-moderation/articles-table/articles-table.component';
 import { ArticleNotListedComponent } from './article-not-listed/article-not-listed.component';
+import { NotListedTableComponent } from './article-not-listed/not-listed-table/not-listed-table.component';
 
 export const adminRoutes: Routes = [
   {
     path: '', component: AdminPanelComponent, children: [
       { path: '', redirectTo: 'moderate', pathMatch: 'full' },
       { path: 'moderate', component: ArticleTableModerationComponent },
+      { path: 'not-listed', component: ArticleNotListedComponent },
       { path: 'roles', component: RoleModerationComponent }
     ]
   }
@@ -27,7 +29,8 @@ export const adminRoutes: Routes = [
     RoleModerationComponent,
     ArticleTableModerationComponent,
     ArticlesTableComponent,
-    ArticleNotListedComponent
+    ArticleNotListedComponent,
+    NotListedTableComponent
   ],
   imports: [
     CommonModule,

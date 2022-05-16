@@ -1,0 +1,23 @@
+.not__listed-table__header {
+    margin: 0 0 15px;
+}
+
+.not__listed-table__nav-list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin: 0 0 15px;
+    padding: 0;
+    list-style: none;
+}
+
+.not__listed-table__nav-item--active {
+    opacity: 0.8;
+}
+
+.not__listed-table__top-bar {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+  
