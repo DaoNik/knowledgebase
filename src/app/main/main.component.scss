@@ -1,6 +1,6 @@
 .main {
   width: 100%;
-  min-height: calc(90vh);
+  min-height: 90vh;
   padding: 60px 10px 10px;
   box-sizing: border-box;
 
@@ -50,7 +50,6 @@
   box-sizing: border-box;
   width: 100%;
   max-width: 1920px;
-  // margin: 0 auto;
   box-shadow: 0 2px 4px 0 grey;
 
   @media (min-width: 1024px) {
