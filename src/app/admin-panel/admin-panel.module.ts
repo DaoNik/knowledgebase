@@ -9,6 +9,7 @@ import { MatIconModule } from '@angular/material/icon';
 import { RoleModerationComponent } from './role-moderation/role-moderation.component';
 import { ArticleTableModerationComponent } from './article-table-moderation/article-table-moderation.component';
 import { ArticlesTableComponent } from './article-table-moderation/articles-table/articles-table.component';
+import { ArticleNotListedComponent } from './article-not-listed/article-not-listed.component';
 
 export const adminRoutes: Routes = [
   {
@@ -25,7 +26,8 @@ export const adminRoutes: Routes = [
     AdminPanelComponent,
     RoleModerationComponent,
     ArticleTableModerationComponent,
-    ArticlesTableComponent
+    ArticlesTableComponent,
+    ArticleNotListedComponent
   ],
   imports: [
     CommonModule,
