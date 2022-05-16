@@ -11,6 +11,10 @@ const mockAdminPages: AdminFunc[] = [
     route: 'moderate'
   },
   {
+    name: 'В ожидании',
+    route: 'not-listed'
+  },
+  {
     name: 'Назначение ролей',
     route: 'roles'
   },
