@@ -2,7 +2,7 @@
   <h2 class="main__title visually-hidden">Частые вопросы</h2>
   <!-- <app-article></app-article> -->
   <ul class="articles">
-    <li class="articles__item" *ngFor="let article of articles">
+    <li class="articles__item" *ngFor="let article of articles; let i = index" (click)="openArticle(i)">
       <a class="articles__item-link">
         <h3 class="articles__item-title">{{ article.title }}</h3>
         <p class="articles__item-date">
