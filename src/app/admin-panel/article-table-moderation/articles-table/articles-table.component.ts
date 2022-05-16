@@ -1,11 +1,12 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 
 interface adminArticle {
   id: string;
   header: string;
   tags: string[];
-  teamlead: string;
+  teamlead: string[];
 };
 
 const mockArticles: adminArticle[] = [
@@ -13,43 +14,43 @@ const mockArticles: adminArticle[] = [
     id: 'id10',
     header: 'A 100 способов сделать это...100 способов сделать это...100 способов сделать это...',
     tags: ['тег1', 'тег2'],
-    teamlead: 'username',
+    teamlead: ['username', 'username2', 'username3'],
   },
   {
     id: 'id20',
     header: 'B 100 способов сделать это...',
     tags: ['тег1', 'тег3'],
-    teamlead: 'username',
+    teamlead: ['username'],
   },
   {
     id: 'id30',
     header: 'A 100 способов сделать это...',
     tags: ['тег1', 'тег2', 'тег3'],
-    teamlead: 'username',
+    teamlead: ['username'],
   },
   {
     id: 'id40',
     header: '100 способов сделать это...',
     tags: ['тег1', 'тег2', 'тег3'],
-    teamlead: 'username',
+    teamlead: ['username'],
   },
   {
     id: 'id50',
     header: '100 способов сделать это...',
     tags: ['тег1', 'тег2'],
-    teamlead: 'username',
+    teamlead: ['username'],
   },
   {
     id: 'id60',
     header: '100 способов сделать это...',
     tags: ['тег2', 'тег3'],
-    teamlead: 'username',
+    teamlead: ['username', 'username2'],
   },
   {
     id: 'id70',
     header: '100 способов сделать это...',
     tags: ['тег1', 'тег2', 'тег4'],
-    teamlead: 'username',
+    teamlead: ['username'],
   }
 ];
 
@@ -69,7 +70,10 @@ export class ArticlesTableComponent implements OnInit {
   currentPage: number = 1;
 
   checkedArticles: string[] = [];
-  checkedTags: string[] = [];
+  filterTags: string[] = [];
+
+  search: FormControl = new FormControl('');
+  tagInput: FormControl = new FormControl('');
 
   constructor(private router: Router) { }
 
@@ -138,9 +142,18 @@ export class ArticlesTableComponent implements OnInit {
     this.pageClick(this.currentPage);
   }
 
+  resetPage(): void {
+    this.currentPage = 1;
+    this.pageClick(this.currentPage);
+    this.countPages();
+  }
+
   filterByTag(tag: string) {
-    if (!this.checkedTags.includes(tag)) {
-      this.checkedTags.push(tag);
+    let tagInputValue = this.tagInput.value.trim();
+    if (!this.filterTags.includes(tag)) {
+      tagInputValue === '' ? this.tagInput.setValue(tag) : this.tagInput.setValue(this.tagInput.value + ', ' + tag);
+      this.filterTags.push(tag);
+
       let temp: adminArticle[] = [];
       this.currentArticles.forEach(el => {
         if (el.tags.includes(tag)) {
@@ -150,11 +163,35 @@ export class ArticlesTableComponent implements OnInit {
       this.currentArticles = temp;
     }
     else {
-      this.checkedTags.splice(this.checkedTags.indexOf(tag), 1);
+      tagInputValue = tagInputValue.split(', ').splice(tagInputValue.indexOf(tag), tag.length).join(', ');
+      this.tagInput.setValue(tagInputValue);
+      this.filterTags.splice(this.filterTags.indexOf(tag), 1);
       this.currentArticles = this.articles;
+
     }
-    this.currentPage = 1;
-    this.pageClick(this.currentPage);
-    this.countPages();
+    this.resetPage();
+  }
+
+  filterByTeamlead(teamlead: string) {
+    if (!this.filterTags.includes(teamlead)) {
+      this.filterTags.push(teamlead);
+      let temp: adminArticle[] = [];
+      this.currentArticles.forEach(el => {
+        if (el.teamlead.includes(teamlead)) {
+          temp.push(el);
+        }
+      });
+      this.currentArticles = temp;
+    }
+    else {
+      this.filterTags.splice(this.filterTags.indexOf(teamlead), 1);
+      let filters: string[] = this.filterTags;
+      this.filterTags = []
+      this.currentArticles = this.articles;
+      filters.forEach(tag => {
+        this.filterByTeamlead(tag);
+      });
+    }
+    this.resetPage();
   }
 }

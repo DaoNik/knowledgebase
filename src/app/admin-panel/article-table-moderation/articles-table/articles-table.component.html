@@ -1,4 +1,8 @@
 <div class="article-table__wrapper">
+  <form class="article-table__search-wrapper">
+    <input class="article-table__search" type="text" placeholder="Найти..." formControl="search">
+    <input class="article-table__search-tags" type="text" placeholder="Теги..." formControl="tagInput" [value]="tagInput.value">
+  </form>
   <table class="article-table">
     <thead>
       <tr class="article-table__header article-table__row">
@@ -18,10 +22,14 @@
       <td class="article__name"><span class="article__cell-name">Заголовок</span>{{article.header}}</td>
       <td class="article__tags"><span class="article__cell-name">Теги</span>
         <ul class="article__tags-list">
-          <li class="article__tags-item" [class]="checkedTags.includes(tag)? 'article__tags-item--active': ''" *ngFor="let tag of article.tags" (click) = "filterByTag(tag)">{{tag}}</li>
+          <li class="article__tags-item filter-tag" [class]="filterTags.includes(tag)? 'filter-tag--active': ''"
+            *ngFor="let tag of article.tags" (click)="filterByTag(tag)">{{tag}}</li>
         </ul>
       </td>
-      <td class="article__teamlead"><span class="article__cell-name">Ответственный</span>{{article.teamlead}}</td>
+      <td class="article__teamlead"><span class="article__cell-name">Ответственный</span>
+        <p class="filter-tag" *ngFor = "let lead of article.teamlead" [class]="filterTags.includes(lead)? 'filter-tag--active': ''"
+          (click)="filterByTeamlead(lead)">{{lead}}</p>
+      </td>
       <td class="article__actions">
         <ul class="article__actions-list">
           <span class="article__cell-name"></span>
