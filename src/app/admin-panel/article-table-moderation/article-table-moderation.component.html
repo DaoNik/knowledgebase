@@ -3,12 +3,14 @@
   <ul class="article-table__nav-list">
     <li class="article-table__nav-item" *ngFor="let topic of topics">
       <button mat-raised-button [color]="topic.includes('Еще')? 'basic' : 'primary'" class="article-table__nav-item"
-      (click) = "clickTopic(topic)" [class]="currentTopic === topic? 'article-table__nav-item--active' : ''">{{topic}}</button>
+        (click)="clickTopic(topic)"
+        [class]="currentTopic === topic? 'article-table__nav-item--active' : ''">{{topic}}</button>
     </li>
   </ul>
   <div class="article-table__top-bar">
     <div class="article-table__filter">Фильтр?</div>
-    <a mat-raised-button color="primary" class="article-table__add-article" (click)="writeArticleButton()">Написать статью</a>
+    <a mat-raised-button color="primary" class="article-table__add-article" routerLink="/admin/create">Написать
+      статью</a>
   </div>
   <app-articles-table></app-articles-table>
 </div>
