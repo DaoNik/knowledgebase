@@ -1,6 +1,5 @@
 .main {
   width: 100%;
-  // height: max-content;
   min-height: calc(90vh);
   padding: 60px 10px 10px;
   box-sizing: border-box;
@@ -28,7 +27,7 @@
 
 .articles {
   display: flex;
-  flex-direction: column;
+  flex-wrap: wrap;
   gap: 20px;
   box-sizing: border-box;
   width: 100%;
@@ -38,9 +37,7 @@
 
   @media (min-width: 1024px) {
     row-gap: 30px;
-    flex-direction: row;
-    flex-wrap: wrap;
-    justify-content: space-evenly;
+    justify-content: space-between;
     margin: 20px auto;
   }
 
@@ -57,7 +54,7 @@
   box-shadow: 0 2px 4px 0 grey;
 
   @media (min-width: 1024px) {
-    width: 45%;
+    width: 48%;
   }
 }
 
