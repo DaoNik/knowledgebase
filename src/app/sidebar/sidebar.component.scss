@@ -85,6 +85,10 @@
 
   background: linear-gradient(90deg, #dd57cf,#680f69);
   border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+
+  @media (min-width: 1440px) {
+    height: 80px;
+  }
 }
 
 .header__opacity-sidebar {
@@ -99,6 +103,10 @@
 
   @media (max-width: 600px) {
     width: 0;
+  }
+
+  @media (min-width: 1440px) {
+    top: 80px;
   }
 }
 

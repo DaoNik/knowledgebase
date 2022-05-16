@@ -17,5 +17,52 @@
 
   @media (min-width: 1440px) {
     justify-content: space-evenly;
+    height: 80px;
   }
+}
+
+.footer__copyright {
+  font-size: 14px;
+  line-height: 16px;
+
+  @media (min-width: 768px) {
+    font-size: 16px;
+    line-height: 18px;
+  }
+
+  @media (min-width: 1024px) {
+    font-size: 18px;
+    line-height: 20px;
+  }
+
+  @media (min-width: 1440px) {
+    font-size: 20px;
+    line-height: 22px;
+  }
+
+  @media (min-width: 1920px) {
+    font-size: 22px;
+    line-height: 24px;
+  }
+}
+
+.footer__feedback {
+  font-size: 24px;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+
+  @media (min-width: 1440px) {
+    font-size: 28px;
+    width: 40px;
+    height: 40px;
+  }
+}
+
+.footer__feedback:hover {
+  background-color: rgba(180, 180, 180, .5);
 }

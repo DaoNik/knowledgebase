@@ -7,6 +7,7 @@
   position: fixed;
   display: flex;
   align-items: center;
+  justify-content: space-around;
 
   padding: 10px;
   box-sizing: border-box;
@@ -15,6 +16,10 @@
   vertical-align: middle;
 
   z-index: 1;
+
+  @media (min-width: 1440px) {
+    height: 80px;
+  }
 }
 
 .header__text {
@@ -26,9 +31,9 @@
   color: #fff;
   text-decoration: none;
 
-  width: 275px;
+  // width: 275px;
 
-  margin-left: 25px;
+  // margin-left: 25px;
   z-index: 2;
 
   @media (max-width: 890px) {
@@ -44,10 +49,11 @@
 }
 
 .header__nav {
-  display: flex;
-  justify-content: space-around;
-  align-items: center;
-  width: 100%;
+  // display: flex;
+  // justify-content: space-around;
+  // align-items: center;
+  // width: 100%;
+  width: 70%;
 
   z-index: 1;
 }
@@ -69,5 +75,5 @@
 }
 
 .sidebar {
-  margin-right: 35px;
+  // margin-right: 35px;
 }
