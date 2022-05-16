@@ -16,17 +16,16 @@
 
 	.search__form_btn {
 		position: absolute;
-		
-		height: 27px;
-		width: 32px;
-		padding: 3px 0 0 5px;
+		height: 40px;
+		width: 40px;
+		padding: 5px 5px 0 5px;
 		border-radius: 0 10px 10px 0;
+		font-size: 30px;
 		transition: 0.2s;
 		cursor: pointer;
 
 		&.search-btn {
-			top: 5px;
-			right: 5px;
+			right: 0px;
 
 			@media (max-width: 650px) {
 				display: none;
@@ -34,8 +33,7 @@
 		}
 
 		&.filter-btn {
-			top: 5px;
-			right: -36px;
+			right: -40px;
 			border-radius: 10px;
 			color: white;
 		}

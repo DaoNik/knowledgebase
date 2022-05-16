@@ -11,11 +11,11 @@ import { IArticle } from '../interfaces/article';
 export class SearchResultsComponent implements OnInit {
   articles: IArticle[] = [];
 
-  constructor(
+  constructor (
     private articleService: ArticleService, 
     private router: Router,
     private route: ActivatedRoute
-    ) {}
+  ) {}
 
   ngOnInit(): void {
     this.route.params.subscribe(params => {
