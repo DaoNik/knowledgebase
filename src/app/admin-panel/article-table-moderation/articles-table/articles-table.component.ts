@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { Router } from '@angular/router';
 
 interface adminArticle {
@@ -11,19 +11,19 @@ interface adminArticle {
 const mockArticles: adminArticle[] = [
   {
     id: 'id10',
-    header: '100 способов сделать это...100 способов сделать это...100 способов сделать это...',
+    header: 'A 100 способов сделать это...100 способов сделать это...100 способов сделать это...',
     tags: ['тег1', 'тег2', 'тег3'],
     teamlead: 'username',
   },
   {
     id: 'id20',
-    header: '100 способов сделать это...',
+    header: 'B 100 способов сделать это...',
     tags: ['тег1', 'тег2', 'тег3'],
     teamlead: 'username',
   },
   {
     id: 'id30',
-    header: '100 способов сделать это...',
+    header: 'A 100 способов сделать это...',
     tags: ['тег1', 'тег2', 'тег3'],
     teamlead: 'username',
   },
@@ -60,10 +60,12 @@ const mockArticles: adminArticle[] = [
 })
 export class ArticlesTableComponent implements OnInit {
 
-  columnsToDisplay = ['number', 'header', 'tags', 'teamlead', 'actions'];
+  @ViewChild ('pagination') pagination!: Element;
+
   articles: adminArticle[] = mockArticles;
   articlesOnPage: number = 3;
   pages: number[] = [];
+
   currentPageArticles: adminArticle[] = this.articles.slice(0, this.articlesOnPage);
   currentPage: number = 1;
 
@@ -73,6 +75,12 @@ export class ArticlesTableComponent implements OnInit {
 
   ngOnInit(): void {
     this.countPages();
+    console.log(this.pagination);
+  }
+
+  ngAfterViewInit() {
+    console.log(this.pagination);
+    console.log(this.pagination.children);
   }
 
   countPages(): void {
@@ -107,5 +115,47 @@ export class ArticlesTableComponent implements OnInit {
     else {
       this.checkedArticles.splice(this.checkedArticles.indexOf(articleId), 1);
     }
+  }
+
+  sortByAlphabet(prev: adminArticle, next: adminArticle): number {
+    if (prev.header < next.header) { return -1; }
+    if (prev.header > next.header) { return 1; }
+    return 0;
+  }
+
+  sortByID(prev: adminArticle, next: adminArticle): number {
+    if (prev.id < next.id) { return -1; }
+    if (prev.id > next.id) { return 1; }
+    return 0;
+  }
+
+  sortByTeamlead(prev: adminArticle, next: adminArticle): number {
+    if (prev.teamlead < next.teamlead) { return -1; }
+    if (prev.teamlead > next.teamlead) { return 1; }
+    return 0;
+  }
+
+  sortByTags(prev: adminArticle, next: adminArticle): number {
+    if (prev.tags[0] < next.tags[0]) { return -1; }
+    if (prev.tags[0] > next.tags[0]) { return 1; }
+    return 0;
+  }
+
+  sortByFlag(flag: string): void {
+    switch (flag) {
+      case 'id':
+        this.articles = this.articles.sort(this.sortByID);
+        break;
+      case 'header':
+        this.articles = this.articles.sort(this.sortByAlphabet);
+        break;
+      case 'tags':
+        this.articles = this.articles.sort(this.sortByTags);
+        break;
+      case 'teamlead':
+        this.articles = this.articles.sort(this.sortByTeamlead);
+        break;
+    }
+    this.pageClick(this.currentPage);
   }
 }
