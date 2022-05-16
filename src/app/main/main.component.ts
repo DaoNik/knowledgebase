@@ -22,7 +22,7 @@ export class MainComponent implements OnInit {
       .subscribe((articles) => (this.articles = articles));
   }
 
-  openArticle(i: number) {
-    this.router.navigate(['article', `${i}`]);
+  openArticle(id: number) {
+    this.router.navigate(['article', `${id}`]);
   }
 }
