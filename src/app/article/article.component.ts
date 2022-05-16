@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
+import { Observable } from 'rxjs';
 import { IArticle } from '../interfaces/article';
 import { ArticleService } from './article.service';
 
@@ -9,9 +10,10 @@ import { ArticleService } from './article.service';
   styleUrls: ['./article.component.scss'],
 })
 export class ArticleComponent implements OnInit {
+  article$!: Observable<IArticle>;
   articles: IArticle[] = [
     {
-      id: 1,
+      _id: '1',
       title: 'Как кинуть Карину в мут?',
       category: 'Мут',
       description: 'Берешь и перетаскиваешь в мут, что еще думать то?!',
@@ -37,7 +39,7 @@ export class ArticleComponent implements OnInit {
       .getArticles()
       .subscribe((articles: IArticle[]) => (this.articles = articles));
     this.route.params.subscribe((params: Params) => {
-      this.articleId = Number(params['id']);
+      this.article$ = this.articlesServ.getArticle(params['id']);
     });
   }
 }

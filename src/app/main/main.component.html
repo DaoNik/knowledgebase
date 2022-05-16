@@ -5,7 +5,7 @@
     <li
       class="articles__item"
       *ngFor="let article of articles; let i = index"
-      (click)="openArticle(i)"
+      (click)="openArticle(article._id!)"
     >
       <a class="articles__item-link">
         <h3 class="articles__item-title">{{ article.title }}</h3>
