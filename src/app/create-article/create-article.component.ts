@@ -61,7 +61,7 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
     spellcheck: true,
     minHeight: '200px',
     maxHeight: '500px',
-    minWidth: '300px',
+    minWidth: '200px',
     translate: 'yes',
     enableToolbar: true,
     showToolbar: true,
@@ -132,7 +132,7 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
         title: new FormControl(article.title, [
           Validators.required,
           Validators.minLength(4),
-          Validators.maxLength(200),
+          Validators.maxLength(100),
           this.manySpacesValidator,
         ]),
         description: new FormControl(article.description, [
