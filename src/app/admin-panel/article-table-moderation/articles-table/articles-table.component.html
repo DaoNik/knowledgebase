@@ -34,7 +34,7 @@
         <ul class="article__actions-list">
           <span class="article__cell-name"></span>
           <li class="article__action">
-            <mat-icon title="Редaктировать" (click)="editArticle(article.id)">edit</mat-icon>
+            <mat-icon title="Редaктировать" routerLink="/admin/edit/{{article.id}}">edit</mat-icon>
           </li>
           <li class="article__action">
             <mat-icon title="Удалить" (click)="deleteArticle(article.id)">delete</mat-icon>

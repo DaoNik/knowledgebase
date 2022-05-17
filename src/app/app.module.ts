@@ -1,4 +1,4 @@
-import { NgModule } from '@angular/core';
+import { NgModule, Provider } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
@@ -8,7 +8,7 @@ import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 
 import { MatIconModule } from '@angular/material/icon';
-import { MatButtonModule } from '@angular/material/button'
+import { MatButtonModule } from '@angular/material/button';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatMenuModule } from '@angular/material/menu';
 import { MatCheckboxModule } from '@angular/material/checkbox';
@@ -25,8 +25,12 @@ import { FeedbackComponent } from './footer/feedback/feedback.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { ArticleComponent } from './article/article.component';
+import { SearchResultsComponent } from './search-results/search-results.component';
 
-
+const API_URL_PROVIDER: Provider = {
+  provide: 'API_URL',
+  useValue: 'https://wbschool-chat.ru/api/articles',
+};
 
 @NgModule({
   declarations: [
@@ -39,6 +43,7 @@ import { ArticleComponent } from './article/article.component';
     SearchComponent,
     FeedbackComponent,
     ArticleComponent,
+    SearchResultsComponent,
   ],
   imports: [
     BrowserModule,
@@ -65,7 +70,7 @@ import { ArticleComponent } from './article/article.component';
     MatFormFieldModule,
     HttpClientModule,
   ],
-  providers: [],
+  providers: [API_URL_PROVIDER],
   bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

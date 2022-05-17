@@ -3,7 +3,8 @@
   <ul class="article-table__nav-list">
     <li class="article-table__nav-item" *ngFor="let topic of topics">
       <button mat-raised-button [color]="topic.includes('Еще')? 'basic' : 'primary'" class="article-table__nav-item"
-      (click) = "clickTopic(topic)" [class]="currentTopic === topic? 'article-table__nav-item--active' : ''">{{topic}}</button>
+        (click)="clickTopic(topic)"
+        [class]="currentTopic === topic? 'article-table__nav-item--active' : ''">{{topic}}</button>
     </li>
   </ul>
   <div class="article-table__top-bar">

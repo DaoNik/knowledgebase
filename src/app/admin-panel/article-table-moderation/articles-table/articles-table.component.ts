@@ -57,10 +57,9 @@ const mockArticles: adminArticle[] = [
 @Component({
   selector: 'app-articles-table',
   templateUrl: './articles-table.component.html',
-  styleUrls: ['./articles-table.component.scss']
+  styleUrls: ['./articles-table.component.scss'],
 })
 export class ArticlesTableComponent implements OnInit {
-
   articles: adminArticle[] = mockArticles;
   articlesOnPage: number = 3;
   pages: number[] = [];
@@ -75,7 +74,7 @@ export class ArticlesTableComponent implements OnInit {
   search: FormControl = new FormControl('');
   tagInput: FormControl = new FormControl('');
 
-  constructor(private router: Router) { }
+  constructor(private router: Router) {}
 
   ngOnInit(): void {
     this.countPages();
@@ -109,22 +108,35 @@ export class ArticlesTableComponent implements OnInit {
   checkArticle(articleId: string): void {
     if (!this.checkedArticles.includes(articleId)) {
       this.checkedArticles.push(articleId);
-    }
-    else {
+    } else {
       this.checkedArticles.splice(this.checkedArticles.indexOf(articleId), 1);
     }
   }
 
   sortByAlphabet(prev: adminArticle, next: adminArticle): number {
-    return prev.header < next.header ? -1 : (prev.header > next.header) ? 1 : 0;
+    return prev.header < next.header ? -1 : prev.header > next.header ? 1 : 0;
   }
 
   sortByID(prev: adminArticle, next: adminArticle): number {
-    return prev.id < next.id ? -1 : (prev.id > next.id) ? 1 : 0;
+    return prev.id < next.id ? -1 : prev.id > next.id ? 1 : 0;
   }
 
   sortByTeamlead(prev: adminArticle, next: adminArticle): number {
-    return prev.teamlead < next.teamlead ? -1 : (prev.teamlead > next.teamlead) ? 1 : 0;
+    return prev.teamlead < next.teamlead
+      ? -1
+      : prev.teamlead > next.teamlead
+      ? 1
+      : 0;
+  }
+
+  sortByTags(prev: adminArticle, next: adminArticle): number {
+    if (prev.tags[0] < next.tags[0]) {
+      return -1;
+    }
+    if (prev.tags[0] > next.tags[0]) {
+      return 1;
+    }
+    return 0;
   }
 
   sortByFlag(flag: string): void {

@@ -1,17 +1,12 @@
 export interface IArticle {
-  id: number;
+  _id?: string;
   title: string;
   description: string;
-  dateCreate: string;
-  dateUpdate: string;
-  content: IContent;
+  dateCreate?: string;
+  dateUpdate?: string;
+  content?: string;
   authors: string[];
   respondents: string[];
   tags: string[];
   category: string;
-}
-
-export interface IContent {
-  text: string;
-  image: string;
 }
