@@ -1,9 +1,10 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
+import { AdminPanelService } from '../admin-panel.service';
 
 const mockTopics: string[] = [
-  'Приёмка',
-  'Отгрузка',
+  'Склад',
+  'Серверная сторона',
   'Еще раздел',
   'Еще раздел',
   'Еще раздел',
@@ -16,14 +17,15 @@ const mockTopics: string[] = [
 })
 export class ArticleTableModerationComponent implements OnInit {
   topics: string[] = mockTopics;
-  currentTopic: string = this.topics[0];
+  currentTopic: string = localStorage.getItem('categoryListed') || 'Склад';
 
-  constructor(private router: Router) {}
+  constructor(private adminService: AdminPanelService) {}
 
   ngOnInit(): void {}
 
   clickTopic(topic: string): void {
-    //здесь запрос на статьи по теме
+    localStorage.setItem('categoryListed', topic);
+    this.adminService.categoryListed.next(topic);
     this.currentTopic = topic;
   }
 }

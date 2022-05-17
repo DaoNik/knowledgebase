@@ -1,6 +1,5 @@
 import { Inject, Injectable } from '@angular/core';
 import { HttpClient } from '@angular/common/http'
-import { ArticleService } from '../article/article.service';
 import { BehaviorSubject, Observable } from 'rxjs';
 import { IArticle } from '../interfaces/article';
 
@@ -10,11 +9,10 @@ import { IArticle } from '../interfaces/article';
 export class AdminPanelService {
 
   categoryNotListed = new BehaviorSubject<string>(localStorage.getItem('categoryNotListed') || 'Склад');
-  categoryListed = new BehaviorSubject<string>('Склад');
+  categoryListed = new BehaviorSubject<string>(localStorage.getItem('categoryListed') || 'Склад');
 
   constructor(
     private http: HttpClient,
-    private articleService: ArticleService,
     @Inject('API_URL') private apiUrl: string
   ) {}
 
