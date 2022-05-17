@@ -21,7 +21,7 @@
   
 	.main__articles {
 		display: flex;
-		flex-direction: column;
+		flex-wrap: wrap;
 		gap: 20px;
 		box-sizing: border-box;
 		width: 100%;
@@ -30,7 +30,9 @@
 		margin: 10px auto;
 	
 		@media (min-width: 1024px) {
-			gap: 30px;
+			row-gap: 30px;
+			justify-content: space-between;
+			margin: 20px auto;
 		}
 	
 		@media (min-width: 1920px) {
@@ -45,6 +47,10 @@
 		max-width: 1920px;
 		margin: 0 auto;
 		box-shadow: 0 2px 4px 0 grey;
+
+		@media (min-width: 1024px) {
+			width: 48%;
+		}
 	}
   
 	.main__articles_item-link {

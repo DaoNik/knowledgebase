@@ -1,83 +1,54 @@
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-
-interface adminArticle {
-  id: string;
-  header: string;
-  tags: string[];
-  teamlead: string;
-};
-
-const mockArticles: adminArticle[] = [
-  {
-    id: 'id10',
-    header: 'A 100 способов сделать это...100 способов сделать это...100 способов сделать это...',
-    tags: ['тег1', 'тег2', 'тег3'],
-    teamlead: 'username',
-  },
-  {
-    id: 'id20',
-    header: 'B 100 способов сделать это...',
-    tags: ['тег1', 'тег2', 'тег3'],
-    teamlead: 'username',
-  },
-  {
-    id: 'id30',
-    header: 'A 100 способов сделать это...',
-    tags: ['тег1', 'тег2', 'тег3'],
-    teamlead: 'username',
-  },
-  {
-    id: 'id40',
-    header: '100 способов сделать это...',
-    tags: ['тег1', 'тег2', 'тег3'],
-    teamlead: 'username',
-  },
-  {
-    id: 'id50',
-    header: '100 способов сделать это...',
-    tags: ['тег1', 'тег2', 'тег3'],
-    teamlead: 'username',
-  },
-  {
-    id: 'id60',
-    header: '100 способов сделать это...',
-    tags: ['тег1', 'тег2', 'тег3'],
-    teamlead: 'username',
-  },
-  {
-    id: 'id70',
-    header: '100 способов сделать это...',
-    tags: ['тег1', 'тег2', 'тег3'],
-    teamlead: 'username',
-  }
-];
+import { concatMap, mergeMap, Observable, of } from 'rxjs';
+import { IArticle } from 'src/app/interfaces/article';
+import { AdminPanelService } from '../../admin-panel.service';
 
 @Component({
   selector: 'app-not-listed-table',
   templateUrl: './not-listed-table.component.html',
-  styleUrls: ['./not-listed-table.component.scss']
+  styleUrls: ['./not-listed-table.component.scss'],
 })
 export class NotListedTableComponent implements OnInit {
-
-  articles: adminArticle[] = mockArticles;
+  articles: IArticle[] = [];
+  article$!: Observable<IArticle[]>;
   articlesOnPage: number = 3;
   pages: number[] = [];
+  category: string = ""
 
-  currentPageArticles: adminArticle[] = this.articles.slice(0, this.articlesOnPage);
+  currentPageArticles: IArticle[] = [];
   currentPage: number = 1;
 
   checkedArticles: string[] = [];
 
-  constructor(private router: Router) { }
+  constructor(
+    private router: Router,
+    private adminPanelService: AdminPanelService
+  ) {}
 
   ngOnInit(): void {
-    this.countPages();
+    this.adminPanelService.categoryNotListed.pipe(
+      mergeMap(topic => this.adminPanelService.getArticles(topic))
+    ).subscribe((articles) => {
+      this.articles = articles;
+      this.currentPageArticles = this.articles.slice(0, this.articlesOnPage);
+      this.countPages();
+    })
+
+    // this.adminPanelService.categoryNotListed.subscribe((topic) => {
+    //   this.category = topic;
+    // });
+
+    // this.adminPanelService.getArticles(this.category).subscribe((articles) => {
+    //   this.articles = articles;
+    //   this.currentPageArticles = this.articles.slice(0, this.articlesOnPage);
+    //   this.countPages();
+    // });
   }
 
   countPages(): void {
     this.pages = [];
-    for (let i = 0; i < (this.articles.length / this.articlesOnPage); i++) {
+    for (let i = 0; i < this.articles.length / this.articlesOnPage; i++) {
       this.pages.push(i + 1);
     }
   }
@@ -85,51 +56,59 @@ export class NotListedTableComponent implements OnInit {
   pageClick(page: number): void {
     this.currentPage = page;
     const startArticle: number = (page - 1) * this.articlesOnPage;
-    this.currentPageArticles = this.articles.slice(startArticle, startArticle + this.articlesOnPage);
-  }
-
-  editArticle(articleId: string) {
-    console.log('Эта штука откроет (желательно, в соседней вкладке) редактирование статьи');
-    //this.router.navigateByUrl('тут урл на страницу редактирования');
+    this.currentPageArticles = this.articles.slice(
+      startArticle,
+      startArticle + this.articlesOnPage
+    );
   }
 
   deleteArticle(articleId: string) {
-    this.articles.splice(this.articles.findIndex(article => article.id === articleId), 1);
+    this.articles.splice(
+      this.articles.findIndex((article) => article._id === articleId),
+      1
+    );
     this.pageClick(this.currentPage);
     this.countPages();
-    //здесь запросик на удаление статьи
+    this.adminPanelService.deleteArticle(articleId).subscribe();
   }
 
   deleteSelected(articlesId: string[]): void {
     // articlesId.forEach((id) => this.articles.filter((el) => el.id === id))
-    this.articles.filter((article) => !articlesId.includes(article.id))
+    this.articles.filter((article) => !articlesId.includes(article._id!));
     // Здесь запрос на удаление выбранных элементов
   }
 
   checkArticle(articleId: string): void {
     if (!this.checkedArticles.includes(articleId)) {
       this.checkedArticles.push(articleId);
-    }
-    else {
+    } else {
       this.checkedArticles.splice(this.checkedArticles.indexOf(articleId), 1);
     }
   }
 
-  sortByAlphabet(prev: adminArticle, next: adminArticle): number {
-    return prev.header < next.header ? -1 : (prev.header > next.header) ? 1 : 0;
+  sortByAlphabet(prev: IArticle, next: IArticle): number {
+    return prev.title < next.title ? -1 : prev.title > next.title ? 1 : 0;
   }
 
-  sortByID(prev: adminArticle, next: adminArticle): number {
-    return prev.id < next.id ? -1 : (prev.id > next.id) ? 1 : 0;
+  sortByID(prev: IArticle, next: IArticle): number {
+    return prev._id! < next._id! ? -1 : prev._id! > next._id! ? 1 : 0;
   }
 
-  sortByTeamlead(prev: adminArticle, next: adminArticle): number {
-    return prev.teamlead < next.teamlead ? -1 : (prev.teamlead > next.teamlead) ? 1 : 0;
+  sortByTeamlead(prev: IArticle, next: IArticle): number {
+    return prev.authors[0] < next.authors[0]
+      ? -1
+      : prev.authors[0] > next.authors[0]
+      ? 1
+      : 0;
   }
 
-  sortByTags(prev: adminArticle, next: adminArticle): number {
-    if (prev.tags[0] < next.tags[0]) { return -1; }
-    if (prev.tags[0] > next.tags[0]) { return 1; }
+  sortByTags(prev: IArticle, next: IArticle): number {
+    if (prev.tags[0] < next.tags[0]) {
+      return -1;
+    }
+    if (prev.tags[0] > next.tags[0]) {
+      return 1;
+    }
     return 0;
   }
 
@@ -150,5 +129,4 @@ export class NotListedTableComponent implements OnInit {
     }
     this.pageClick(this.currentPage);
   }
-
 }

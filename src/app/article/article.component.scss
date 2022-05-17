@@ -1,12 +1,9 @@
 .article {
-    position: absolute;
-    top: 8vh;
     margin: 0 auto;
-    margin-bottom: 10px;
     width: 100%;
     border: 2px solid grey;
     box-shadow: 2px 2px 4px skyblue;
-    padding: 10px 10px 40px 10px;
+    padding: 70px 10px 40px 10px;
     background: rgb(247,242,247);
     background: linear-gradient(90deg, rgba(247,242,247,1) 0%, rgba(255,225,254,1) 19%, rgba(245,228,247,1) 38%, rgba(239,211,254,1) 61%, rgba(214,198,255,1) 82%, rgba(237,241,241,1) 100%);
     
@@ -18,6 +15,15 @@
 
         h1, h2 {
             text-align: center;
+            text-shadow: 3px -1px 2px rgba(126, 131, 154, 1);
+        }
+
+        h1:hover {
+            color: rgb(2, 2, 165);
+        }
+
+        h2:hover {
+            color: rgb(0, 77, 0);
         }
 
         &__dates {
