@@ -132,7 +132,7 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
         title: new FormControl(article.title, [
           Validators.required,
           Validators.minLength(4),
-          Validators.maxLength(200),
+          Validators.maxLength(100),
           this.manySpacesValidator,
         ]),
         description: new FormControl(article.description, [
