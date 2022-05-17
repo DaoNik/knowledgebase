@@ -143,7 +143,7 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
         ]),
         content: new FormControl(article.content, [
           Validators.required,
-          Validators.minLength(4),
+          Validators.minLength(10),
           this.manySpacesValidator,
         ]),
         authors: new FormControl(article.authors, [
