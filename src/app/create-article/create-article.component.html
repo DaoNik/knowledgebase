@@ -42,20 +42,6 @@
             </div>
 
             <div class="create-article__field">
-                <!-- <label class="create-article__label" for="category" id="category">Категория</label>
-                <input class="create-article__input" placeholder="Выберите категорию" (click)="ctrl$.next('category')"
-                    [formControl]="categoryCtrl" [matAutocomplete]="categoryAuto">
-                <mat-autocomplete #categoryAuto="matAutocomplete" (closed)="chipsLoaded = false">
-                    <ng-container *ngIf="chipsLoaded">
-                        <mat-option *ngFor="let category of filteredChips$ | async" [value]="category">
-                            {{category}}
-                        </mat-option>
-                    </ng-container>
-                </mat-autocomplete>
-                <small class="create-article__error" *ngIf="(form.get('category')?.getError('minlength') ||
-                    form.get('category')?.getError('required')) && form.get('category')?.touched">Выберите
-                    категорию</small> -->
-
                 <label class="create-article__label" for="category" id="category">Категория</label>
                 <div class="create-article__chips">
                     <mat-chip class="create-article__chip" *ngFor="let category of form.get('category')?.value"
