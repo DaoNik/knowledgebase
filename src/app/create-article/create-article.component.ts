@@ -160,6 +160,7 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
         category: new FormControl(article.category ? [article.category] : '', [
           Validators.required,
           Validators.minLength(1),
+          Validators.maxLength(1),
         ]),
         tags: new FormControl(article.tags, [
           Validators.required,
