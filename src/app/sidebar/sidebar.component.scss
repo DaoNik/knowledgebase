@@ -83,7 +83,7 @@
   margin: 0;
   z-index: 2;
 
-  background: linear-gradient(90deg, #dd57cf,#680f69);
+  background: linear-gradient(90deg, #c24eb6, #8d4686, #680f69);
   border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 
   @media (min-width: 1440px) {
@@ -145,7 +145,7 @@
 }
 
 .sidebar__more__info {
-  border-top: 1px solid rgb(88, 79, 79);
+  border-top: 1px solid #a45ba2;
 }
 
 .sidebar__link_person {
