@@ -30,6 +30,8 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
   tagsInput!: ElementRef<HTMLInputElement>;
   @ViewChild('authorsInput')
   authorsInput!: ElementRef<HTMLInputElement>;
+  @ViewChild('categoryInput')
+  categoryInput!: ElementRef<HTMLInputElement>;
 
   public article$!: Observable<IArticle>;
   public articleId!: string;
@@ -51,6 +53,7 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
   public tags = ['Frontend', 'Backend', 'БД'];
   public respondentsCtrl = new FormControl('', Validators.required);
   public tagsCtrl = new FormControl('', Validators.required);
+  public categoryCtrl = new FormControl('', Validators.required);
   public authorsCtrl = new FormControl('', Validators.required);
   public ctrl$ = new Subject<string>();
   public filteredChips$!: Observable<string[]>;
@@ -154,7 +157,7 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
           Validators.required,
           Validators.minLength(1),
         ]),
-        category: new FormControl(article.category, [
+        category: new FormControl(article.category ? [article.category] : '', [
           Validators.required,
           Validators.minLength(1),
         ]),
@@ -178,7 +181,7 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
         chipsCtrl = this.authorsCtrl;
         chips = this.authors;
       } else if (ctrl === 'category') {
-        chipsCtrl = this.form.get('category') as FormControl;
+        chipsCtrl = this.categoryCtrl;
         chips = this.categories;
       } else {
         chipsCtrl = this.respondentsCtrl;
@@ -213,7 +216,7 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
         description: this.form.get('description')?.value.trim(),
         content: this.form.get('content')?.value.trim(),
         authors: this.form.get('authors')?.value,
-        category: this.form.get('category')?.value,
+        category: this.form.get('category')?.value[0],
         respondents: this.form.get('respondents')?.value,
         tags: this.form.get('tags')?.value,
       };
@@ -239,6 +242,8 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
         ? this.respondents
         : ctrl === 'tags'
         ? this.tags
+        : ctrl === 'category'
+        ? this.categories
         : this.authors;
 
     chips.push(chip);
@@ -260,6 +265,8 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
         ? this.respondents
         : ctrl === 'tags'
         ? this.tags
+        : ctrl === 'category'
+        ? this.categories
         : this.authors;
 
     chips.splice(chips.indexOf(event.option.viewValue), 1);

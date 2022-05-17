@@ -42,9 +42,9 @@
             </div>
 
             <div class="create-article__field">
-                <label class="create-article__label" for="tags" id="tags">Категория</label>
+                <!-- <label class="create-article__label" for="category" id="category">Категория</label>
                 <input class="create-article__input" placeholder="Выберите категорию" (click)="ctrl$.next('category')"
-                    [formControl]="$any(form.get('category'))" [matAutocomplete]="categoryAuto">
+                    [formControl]="categoryCtrl" [matAutocomplete]="categoryAuto">
                 <mat-autocomplete #categoryAuto="matAutocomplete" (closed)="chipsLoaded = false">
                     <ng-container *ngIf="chipsLoaded">
                         <mat-option *ngFor="let category of filteredChips$ | async" [value]="category">
@@ -54,6 +54,36 @@
                 </mat-autocomplete>
                 <small class="create-article__error" *ngIf="(form.get('category')?.getError('minlength') ||
                     form.get('category')?.getError('required')) && form.get('category')?.touched">Выберите
+                    категорию</small> -->
+
+                <label class="create-article__label" for="category" id="category">Категория</label>
+                <div class="create-article__chips">
+                    <mat-chip class="create-article__chip" *ngFor="let category of form.get('category')?.value"
+                        (removed)="removeChip(category, 'category')" color="primary" selected>
+                        {{category}}
+                        <button matChipRemove>
+                            <mat-icon>cancel</mat-icon>
+                        </button>
+                    </mat-chip>
+                </div>
+                <mat-chip-list #chipCategoriesList>
+                    <input class="create-article__input" #categoryInput placeholder="Выберите категорию"
+                        [matAutocomplete]="categoryAuto" (click)="ctrl$.next('category')" [formControl]="categoryCtrl"
+                        [matChipInputFor]="chipCategoriesList">
+                </mat-chip-list>
+                <mat-autocomplete (closed)="chipsLoaded = false" #categoryAuto="matAutocomplete"
+                    (optionSelected)="selectChip($event, 'category', categoryInput, categoryCtrl)">
+                    <ng-container *ngIf="chipsLoaded">
+                        <mat-option *ngFor="let category of filteredChips$ | async" [value]="category">
+                            {{category}}
+                        </mat-option>
+                    </ng-container>
+                </mat-autocomplete>
+                <small class="create-article__error"
+                    *ngIf="(categoryCtrl.getError('required') && categoryCtrl.touched) && !form.get('category')?.value.length">Выберите
+                    категорию</small>
+                <small class="create-article__error"
+                    *ngIf="categoryCtrl.touched && form.get('category')?.value.length > 1">Можно выбрать только одну
                     категорию</small>
             </div>
 
@@ -147,8 +177,8 @@
                     хотя бы одного автора</small>
             </div>
 
-            <button class="create-article__send-btn" mat-flat-button color="primary" (click)="createArticle()"
-                [disabled]="form.invalid">{{isEditArticle ? 'Редактировать' : 'Создать'}}</button>
+            <button class="create-article__send-btn" mat-flat-button color="primary" [disabled]="form.invalid"
+                (click)="createArticle()">{{isEditArticle ? 'Редактировать' : 'Создать'}}</button>
         </form>
     </ng-container>
 </main>
