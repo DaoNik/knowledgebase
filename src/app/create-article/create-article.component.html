@@ -4,7 +4,7 @@
 
             <div class="create-article__field">
                 <label class="create-article__label" for="title">Название</label>
-                <input class="create-article__input" placeholder="Введите название статьи" id="title"
+                <input class="create-article__input" maxlength="100" placeholder="Введите название статьи" id="title"
                     formControlName="title">
                 <small class="create-article__error"
                     *ngIf="form.get('title')?.getError('required') && form.get('title')?.touched">Поле обязательно для
@@ -12,14 +12,12 @@
                 <small class="create-article__error"
                     *ngIf="(form.get('title')?.getError('minlength') ||
                     form.get('title')?.getError('maxlength') || form.get('title')?.getError('manySpaces')) && form.get('title')?.touched">Длина поля
-                    должна
-                    быть от 4 до
-                    100 символов</small>
+                    должна быть от 4 до 100 символов</small>
             </div>
 
             <div class="create-article__field">
                 <label class="create-article__label" for="description">Краткое описание</label>
-                <textarea class="create-article__textarea" id="description"
+                <textarea class="create-article__textarea" maxlength="200" id="description"
                     placeholder="Введите краткое описание статьи" formControlName="description"></textarea>
                 <small class="create-article__error"
                     *ngIf="form.get('description')?.getError('required') && form.get('description')?.touched">Поле
@@ -27,9 +25,7 @@
                 <small class="create-article__error"
                     *ngIf="(form.get('description')?.getError('minlength') ||
                     form.get('description')?.getError('maxlength') || form.get('description')?.getError('manySpaces')) && form.get('description')?.touched">Длина
-                    поля должна
-                    быть от 10 до
-                    100 символов</small>
+                    поля должна быть от 10 до 200 символов</small>
             </div>
 
             <div class="create-article__field">
@@ -41,27 +37,39 @@
                     обязательно для
                     заполнения</small>
                 <small class="create-article__error"
-                    *ngIf="(form.get('content')?.getError('minlength') ||
-                    form.get('content')?.getError('maxlength') || form.get('content')?.getError('manySpaces')) && form.get('content')?.touched">Длина
-                    поля
-                    должна
-                    быть от 4 до
-                    1000 символов</small>
+                    *ngIf="(form.get('content')?.getError('minlength') || form.get('content')?.getError('manySpaces')) && form.get('content')?.touched">Длина
+                    поля должна быть от 10 символов</small>
             </div>
 
             <div class="create-article__field">
-                <label class="create-article__label" for="tags" id="tags">Категория</label>
-                <input class="create-article__input" placeholder="Выберите категорию" (click)="ctrl$.next('category')"
-                    [formControl]="$any(form.get('category'))" [matAutocomplete]="categoryAuto">
-                <mat-autocomplete #categoryAuto="matAutocomplete" (closed)="chipsLoaded = false">
+                <label class="create-article__label" for="category" id="category">Категория</label>
+                <div class="create-article__chips">
+                    <mat-chip class="create-article__chip" *ngFor="let category of form.get('category')?.value"
+                        (removed)="removeChip(category, 'category')" color="primary" selected>
+                        {{category}}
+                        <button matChipRemove>
+                            <mat-icon>cancel</mat-icon>
+                        </button>
+                    </mat-chip>
+                </div>
+                <mat-chip-list #chipCategoriesList>
+                    <input class="create-article__input" #categoryInput placeholder="Выберите категорию"
+                        [matAutocomplete]="categoryAuto" (click)="ctrl$.next('category')" [formControl]="categoryCtrl"
+                        [matChipInputFor]="chipCategoriesList">
+                </mat-chip-list>
+                <mat-autocomplete (closed)="chipsLoaded = false" #categoryAuto="matAutocomplete"
+                    (optionSelected)="selectChip($event, 'category', categoryInput, categoryCtrl)">
                     <ng-container *ngIf="chipsLoaded">
                         <mat-option *ngFor="let category of filteredChips$ | async" [value]="category">
                             {{category}}
                         </mat-option>
                     </ng-container>
                 </mat-autocomplete>
-                <small class="create-article__error" *ngIf="(form.get('category')?.getError('minlength') ||
-                    form.get('category')?.getError('required')) && form.get('category')?.touched">Выберите
+                <small class="create-article__error"
+                    *ngIf="(categoryCtrl.getError('required') && categoryCtrl.touched) && !form.get('category')?.value.length">Выберите
+                    категорию</small>
+                <small class="create-article__error"
+                    *ngIf="categoryCtrl.touched && form.get('category')?.value.length > 1">Можно выбрать только одну
                     категорию</small>
             </div>
 
@@ -155,8 +163,8 @@
                     хотя бы одного автора</small>
             </div>
 
-            <button class="create-article__send-btn" mat-flat-button color="primary" (click)="createArticle()"
-                [disabled]="form.invalid">{{isEditArticle ? 'Редактировать' : 'Создать'}}</button>
+            <button class="create-article__send-btn" mat-flat-button color="primary" [disabled]="form.invalid"
+                (click)="createArticle()">{{isEditArticle ? 'Редактировать' : 'Создать'}}</button>
         </form>
     </ng-container>
 </main>
