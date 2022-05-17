@@ -16,5 +16,8 @@
         <p class="articles__item-description">{{ article.description }}</p>
       </a>
     </li>
+    <p class="articles__no-articles" *ngIf="articles.length < 1">
+      К сожалению нет подходящих статей
+    </p>
   </ul>
 </main>

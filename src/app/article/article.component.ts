@@ -1,5 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
+import { Observable } from 'rxjs';
 import { IArticle } from '../interfaces/article';
 import { ArticleService } from './article.service';
 
@@ -9,7 +10,7 @@ import { ArticleService } from './article.service';
   styleUrls: ['./article.component.scss'],
 })
 export class ArticleComponent implements OnInit {
-  article!: IArticle;
+  article$!: Observable<IArticle>;
 
   articleId!: number;
 
@@ -20,12 +21,7 @@ export class ArticleComponent implements OnInit {
 
   ngOnInit(): void {
     this.route.params.subscribe((params: Params) => {
-      this.articlesServ.getArticles().subscribe((articles: IArticle[]) => {
-        articles.filter((item) => {
-          console.log(this.article);
-          if (item._id === params['id']) this.article = item;
-        });
-      });
+      this.article$ = this.articlesServ.getArticle(params['id']);
     });
   }
 }

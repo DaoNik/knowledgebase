@@ -1,5 +1,5 @@
 <section>
-  <div class="article" *ngIf="article; else loading">
+  <div class="article" *ngIf="article$ | async as article; else loading">
     <header class="article__header">
       <h1 name="title">{{ article.title }}</h1>
       <h2 name="category">Категория: {{ article.category }}</h2>
@@ -17,7 +17,9 @@
         <div class="article__header__team__authors">
           <ul>
             <h3>Создатели</h3>
-            <li *ngFor="let author of article.authors">{{ author }}</li>
+            <li *ngFor="let author of article.authors">
+              {{ author }}
+            </li>
           </ul>
         </div>
         <div class="article__header__team__respondents">
@@ -33,7 +35,7 @@
     <hr />
     <main class="article__main">
       <h3>Описание</h3>
-      <p>{{ article.content }}</p>
+      <p [innerHtml]="article.content"></p>
     </main>
   </div>
   <ng-template #loading> Loading </ng-template>
