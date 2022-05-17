@@ -3,5 +3,4 @@ export interface IAdminArticle {
     title: string;
     tags: string[];
     teamlead: string[];
-    
 }
