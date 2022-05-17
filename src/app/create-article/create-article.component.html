@@ -69,7 +69,8 @@
                     *ngIf="(categoryCtrl.getError('required') && categoryCtrl.touched) && !form.get('category')?.value.length">Выберите
                     категорию</small>
                 <small class="create-article__error"
-                    *ngIf="categoryCtrl.touched && form.get('category')?.value.length > 1">Можно выбрать только одну
+                    *ngIf="categoryCtrl.touched && form.get('category')?.getError('maxlength')">Можно
+                    выбрать только одну
                     категорию</small>
             </div>
 
