@@ -1,4 +1,4 @@
-<div class="article-table__wrapper">
+<div *ngIf="articles.length" class="article-table__wrapper">
     <table *ngIf="pages.length" class="article-table">
       <thead>
         <tr class="article-table__header article-table__row">
@@ -12,23 +12,26 @@
       </thead>
       <tr class="article-table__item article article-table__row" *ngFor="let article of currentPageArticles; let i = index">
         <td class="article__no"><span class="article__cell-name">№</span>{{i+1}}</td>
-        <td class="article__id"><span class="article__cell-name">ID</span>{{article.id}}</td>
-        <td class="article__name"><span class="article__cell-name">Заголовок</span>{{article.header}}</td>
+        <td class="article__id"><span class="article__cell-name">ID</span>{{article._id}}</td>
+        <td class="article__name"><span class="article__cell-name">Заголовок</span>{{article.title}}</td>
         <td class="article__tags"><span class="article__cell-name">Теги</span>{{article.tags}}</td>
-        <td class="article__teamlead"><span class="article__cell-name">Ответственный</span>{{article.teamlead}}</td>
+        <td class="article__teamlead"><span class="article__cell-name">Ответственный</span>{{article.authors}}</td>
         <td class="article__actions">
           <ul class="article__actions-list">
             <span class="article__cell-name"></span>
             <li class="article__action">
-              <mat-icon title="Редaктировать" (click)="editArticle(article.id)">edit</mat-icon>
+              <mat-icon title="Редaктировать" routerLink="/admin/edit/{{article._id}}">edit</mat-icon>
             </li>
             <li class="article__action">
-              <mat-icon title="Удалить" (click)="deleteArticle(article.id)">delete</mat-icon>
+              <mat-icon title="Удалить" (click)="deleteArticle(article._id!)">delete</mat-icon>
             </li>
             <li class="article__action">
-              <input type="checkbox" [id]="'check'+article.id" class="article__action-check">
-              <label [for]="'check'+article.id">
-                <mat-icon title="Отметить" (click)="checkArticle(article.id)">check_box</mat-icon>
+              <input type="checkbox" [id]="'check'+article._id" class="article__action-check">
+              <label [for]="'check'+article._id">
+                <mat-icon title="Отметить" *ngIf="!checkedArticles.includes(article._id!)"
+                (click)="checkArticle(article._id!)">check_box_outline_blank</mat-icon>
+                <mat-icon title="Отметить" *ngIf="checkedArticles.includes(article._id!)"
+                (click)="checkArticle(article._id!)">check_box</mat-icon>
               </label>
             </li>
             <li>

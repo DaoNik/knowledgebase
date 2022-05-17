@@ -111,10 +111,6 @@ mat-icon {
   display: none;
 }
 
-.article__action input:checked~label mat-icon {
-  color: red;
-}
-
 .article-table__pagination-list {
   display: flex;
   flex-wrap: wrap;
