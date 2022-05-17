@@ -61,7 +61,7 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
     spellcheck: true,
     minHeight: '200px',
     maxHeight: '500px',
-    minWidth: '300px',
+    minWidth: '200px',
     translate: 'yes',
     enableToolbar: true,
     showToolbar: true,
