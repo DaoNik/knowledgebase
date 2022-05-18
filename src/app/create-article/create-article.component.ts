@@ -249,7 +249,7 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
   }
 
   removeChip(chip: string, ctrl: string): void {
-    const control = this.form.get(`${ctrl}`);
+    const control = this.form.get(ctrl);
     let chips =
       ctrl === 'respondents'
         ? this.respondents
@@ -272,7 +272,7 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
     chipInput: HTMLInputElement,
     chipCtrl: FormControl
   ): void {
-    const control = this.form.get(`${ctrl}`);
+    const control = this.form.get(ctrl);
     let chips =
       ctrl === 'respondents'
         ? this.respondents
@@ -287,5 +287,21 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
 
     chipInput.value = '';
     chipCtrl.setValue(null);
+  }
+
+  getError(ctrl: string | FormControl, err: string): boolean {
+    if (typeof ctrl === 'string') {
+      return this.form.get(ctrl)?.getError(err);
+    }
+
+    return ctrl.getError(err);
+  }
+
+  isTouched(ctrl: string | FormControl): boolean {
+    if (typeof ctrl === 'string') {
+      return this.form.get(ctrl)!.touched;
+    }
+
+    return ctrl.touched;
   }
 }
