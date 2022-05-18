@@ -161,6 +161,8 @@
 
             <button class="create-article__send-btn" mat-flat-button color="primary" [disabled]="form.invalid"
                 (click)="createArticle()">{{isEditArticle ? 'Редактировать' : 'Создать'}}</button>
+            <button mat-flat-button color="warn" (click)="resetForm()">Очистить
+                форму</button>
         </form>
     </ng-container>
 </main>

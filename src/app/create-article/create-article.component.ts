@@ -304,4 +304,26 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
 
     return ctrl.touched;
   }
+
+  resetForm(): void {
+    const category = this.form.get('category')?.value;
+    const tags = this.form.get('tags')?.value;
+    const respondents = this.form.get('respondents')?.value;
+    const authors = this.form.get('authors')?.value;
+
+    this.categories = [...this.categories, ...category];
+    this.tags = [...this.tags, ...tags];
+    this.respondents = [...this.respondents, ...respondents];
+    this.authors = [...this.authors, ...authors];
+
+    this.form.reset({
+      title: '',
+      description: '',
+      content: '',
+      category: [],
+      tags: [],
+      respondents: [],
+      authors: [],
+    });
+  }
 }
