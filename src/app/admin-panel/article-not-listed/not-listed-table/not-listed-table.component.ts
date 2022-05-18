@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { concatMap, mergeMap, Observable, of } from 'rxjs';
 import { IArticle } from 'src/app/interfaces/article';
@@ -16,10 +17,15 @@ export class NotListedTableComponent implements OnInit {
   pages: number[] = [];
   category: string = ""
 
-  currentPageArticles: IArticle[] = [];
+  currentArticles: IArticle[] = this.articles;
+  currentPageArticles: IArticle[] = this.currentArticles.slice(0, this.articlesOnPage);
   currentPage: number = 1;
 
   checkedArticles: string[] = [];
+  filterTags: string[] = [];
+
+  search: FormControl = new FormControl('');
+  tagInput: FormControl = new FormControl('');
 
   constructor(
     private router: Router,
@@ -117,16 +123,73 @@ export class NotListedTableComponent implements OnInit {
       case 'id':
         this.articles = this.articles.sort(this.sortByID);
         break;
-      case 'header':
+      case 'title':
         this.articles = this.articles.sort(this.sortByAlphabet);
         break;
       case 'tags':
         this.articles = this.articles.sort(this.sortByTags);
         break;
-      case 'teamlead':
+      case 'authors':
         this.articles = this.articles.sort(this.sortByTeamlead);
         break;
     }
     this.pageClick(this.currentPage);
   }
+
+  // 
+  resetPage(): void {
+    this.currentPage = 1;
+    this.pageClick(this.currentPage);
+    this.countPages();
+  }
+
+  filterByTag(tag: string) {
+    let tagInputValue = this.tagInput.value.trim();
+    if (!this.filterTags.includes(tag)) {
+      tagInputValue === '' ? this.tagInput.setValue(tag) : this.tagInput.setValue(this.tagInput.value + ', ' + tag);
+      this.filterTags.push(tag);
+
+      let temp: IArticle[] = [];
+      this.currentArticles.forEach(el => {
+        if (el.tags.includes(tag)) {
+          temp.push(el);
+        }
+      });
+      this.currentArticles = temp;
+    }
+    else {
+      tagInputValue = tagInputValue.split(', ').splice(tagInputValue.indexOf(tag), tag.length).join(', ');
+      this.tagInput.setValue(tagInputValue);
+      this.filterTags.splice(this.filterTags.indexOf(tag), 1);
+      this.currentArticles = this.articles;
+
+    }
+    this.resetPage();
+  }
+
+  filterByTeamlead(teamlead: string) {
+    if (!this.filterTags.includes(teamlead)) {
+      this.filterTags.push(teamlead);
+      let temp: IArticle[] = [];
+      this.currentArticles.forEach(el => {
+        if (el.authors.includes(teamlead)) {
+          temp.push(el);
+        }
+      });
+      this.currentArticles = temp;
+    }
+    else {
+      this.filterTags.splice(this.filterTags.indexOf(teamlead), 1);
+      let filters: string[] = this.filterTags;
+      this.filterTags = []
+      this.currentArticles = this.articles;
+      filters.forEach(tag => {
+        this.filterByTeamlead(tag);
+      });
+    }
+    this.resetPage();
+  }
 }
+
+
+
