@@ -15,7 +15,7 @@ import {
 } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
-import { map, Observable, startWith, Subject } from 'rxjs';
+import { forkJoin, map, Observable, of, startWith, Subject } from 'rxjs';
 import { IArticle } from '../interfaces/article';
 
 @Component({
@@ -37,20 +37,10 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
   public articleId!: string;
   public isEditArticle!: boolean;
   public form!: FormGroup;
-  public authors = ['Саша Сашин', 'Петр Петрович'];
-  public respondents = [
-    'Отдел разработки #1',
-    'Отдел разработки #2',
-    'Отдел разработки #3',
-  ];
-  public categories = [
-    'Склад',
-    'Пункты выдачи',
-    'Клиентская сторона',
-    'Серверная сторона',
-    'Логистика',
-  ];
-  public tags = ['Frontend', 'Backend', 'БД'];
+  public authors!: string[];
+  public respondents!: string[];
+  public categories!: string[];
+  public tags!: string[];
   public respondentsCtrl = new FormControl('', Validators.required);
   public tagsCtrl = new FormControl('', Validators.required);
   public categoryCtrl = new FormControl('', Validators.required);
@@ -100,74 +90,96 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
         this.articleId = this.route.snapshot.params['id'];
         this.article$ = this.createArticleService.getArticle(this.articleId);
       } else {
-        this.article$ = new Observable<IArticle>((subscriber) =>
-          subscriber.next({
-            title: '',
-            description: '',
-            content: '',
-            authors: [],
-            respondents: [],
-            category: '',
-            tags: [],
-          })
-        );
+        this.article$ = of({
+          title: '',
+          description: '',
+          content: '',
+          authors: [],
+          respondents: [],
+          category: '',
+          tags: [],
+        });
       }
     });
   }
 
   createForm(): void {
-    this.article$.subscribe((article) => {
-      article.authors.forEach((editAuthor) => {
-        this.authors = this.authors.filter((author) => author !== editAuthor);
-      });
+    forkJoin([
+      this.createArticleService.getAuthors(),
+      this.createArticleService.getRespondents(),
+      this.createArticleService.getTags(),
+      this.createArticleService.getCategories(),
+      this.article$,
+    ])
+      .pipe(
+        map((data) => {
+          this.authors = data[0];
+          this.respondents = data[1];
+          this.tags = data[2];
+          this.categories = data[3];
 
-      article.respondents.forEach((editRespondent) => {
-        this.respondents = this.respondents.filter(
-          (respondent) => respondent !== editRespondent
+          return data[4];
+        })
+      )
+      .subscribe((article) => {
+        article.authors.forEach((editAuthor) => {
+          this.authors = this.authors.filter((author) => author !== editAuthor);
+        });
+
+        article.respondents.forEach((editRespondent) => {
+          this.respondents = this.respondents.filter(
+            (respondent) => respondent !== editRespondent
+          );
+        });
+
+        article.tags.forEach((editTag) => {
+          this.tags = this.tags.filter((tag) => tag !== editTag);
+        });
+
+        this.categories = this.categories.filter(
+          (editCategory) => editCategory !== article.category
         );
-      });
 
-      article.tags.forEach((editTag) => {
-        this.tags = this.tags.filter((tag) => tag !== editTag);
+        this.form = new FormGroup({
+          title: new FormControl(article.title, [
+            Validators.required,
+            Validators.minLength(4),
+            Validators.maxLength(100),
+            this.manySpacesValidator,
+          ]),
+          description: new FormControl(article.description, [
+            Validators.required,
+            Validators.minLength(10),
+            Validators.maxLength(200),
+            this.manySpacesValidator,
+          ]),
+          content: new FormControl(article.content, [
+            Validators.required,
+            Validators.minLength(10),
+            this.manySpacesValidator,
+          ]),
+          authors: new FormControl(article.authors, [
+            Validators.required,
+            Validators.minLength(1),
+          ]),
+          respondents: new FormControl(article.respondents, [
+            Validators.required,
+            Validators.minLength(1),
+          ]),
+          category: new FormControl(
+            article.category ? [article.category] : '',
+            [
+              Validators.required,
+              Validators.minLength(1),
+              Validators.maxLength(1),
+            ]
+          ),
+          tags: new FormControl(article.tags, [
+            Validators.required,
+            Validators.minLength(1),
+          ]),
+        });
       });
-
-      this.form = new FormGroup({
-        title: new FormControl(article.title, [
-          Validators.required,
-          Validators.minLength(4),
-          Validators.maxLength(100),
-          this.manySpacesValidator,
-        ]),
-        description: new FormControl(article.description, [
-          Validators.required,
-          Validators.minLength(10),
-          Validators.maxLength(200),
-          this.manySpacesValidator,
-        ]),
-        content: new FormControl(article.content, [
-          Validators.required,
-          Validators.minLength(10),
-          this.manySpacesValidator,
-        ]),
-        authors: new FormControl(article.authors, [
-          Validators.required,
-          Validators.minLength(1),
-        ]),
-        respondents: new FormControl(article.respondents, [
-          Validators.required,
-          Validators.minLength(1),
-        ]),
-        category: new FormControl(article.category ? [article.category] : '', [
-          Validators.required,
-          Validators.minLength(1),
-          Validators.maxLength(1),
-        ]),
-        tags: new FormControl(article.tags, [
-          Validators.required,
-          Validators.minLength(1),
-        ]),
-      });
-    });
   }
 
   filterChips(): void {
