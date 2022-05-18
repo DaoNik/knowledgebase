@@ -316,6 +316,11 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
     this.respondents = [...this.respondents, ...respondents];
     this.authors = [...this.authors, ...authors];
 
+    this.categoryCtrl.reset();
+    this.tagsCtrl.reset();
+    this.respondentsCtrl.reset();
+    this.authorsCtrl.reset();
+
     this.form.reset({
       title: '',
       description: '',
