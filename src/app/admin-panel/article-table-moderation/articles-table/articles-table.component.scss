@@ -161,3 +161,15 @@ mat-icon {
     opacity: 0.8;
   }
 }
+
+.article-table__no-articles {
+  text-align: center;
+  padding: 25px 0;
+
+  font-size: 22px;
+  font-weight: 500;
+}
+
+.article-table__delete-checked {
+  margin-left: calc(100% - 165px);
+}

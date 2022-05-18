@@ -1,6 +1,9 @@
 import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
+import { mergeMap, Observable } from 'rxjs';
+import { IArticle } from 'src/app/interfaces/article';
+import { AdminPanelService } from '../../admin-panel.service';
 
 interface adminArticle {
   id: string;
@@ -60,12 +63,11 @@ const mockArticles: adminArticle[] = [
   styleUrls: ['./articles-table.component.scss'],
 })
 export class ArticlesTableComponent implements OnInit {
-  articles: adminArticle[] = mockArticles;
+  articles: IArticle[] = [];
   articlesOnPage: number = 3;
   pages: number[] = [];
 
-  currentArticles: adminArticle[] = this.articles;
-  currentPageArticles: adminArticle[] = this.currentArticles.slice(0, this.articlesOnPage);
+  currentPageArticles: IArticle[] = this.articles.slice(0, this.articlesOnPage);
   currentPage: number = 1;
 
   checkedArticles: string[] = [];
@@ -74,15 +76,21 @@ export class ArticlesTableComponent implements OnInit {
   search: FormControl = new FormControl('');
   tagInput: FormControl = new FormControl('');
 
-  constructor(private router: Router) {}
+  constructor(private adminService: AdminPanelService) { }
 
   ngOnInit(): void {
-    this.countPages();
+    this.adminService.categoryListed.pipe(
+      mergeMap(topic => this.adminService.getArticles(topic))
+    ).subscribe((articles) => {
+      this.articles = articles;
+      this.currentPageArticles = this.articles.slice(0, this.articlesOnPage);
+      this.countPages();
+    });
   }
 
   countPages(): void {
     this.pages = [];
-    for (let i = 0; i < (this.currentArticles.length / this.articlesOnPage); i++) {
+    for (let i = 0; i < (this.articles.length / this.articlesOnPage); i++) {
       this.pages.push(i + 1);
     }
   }
@@ -90,19 +98,23 @@ export class ArticlesTableComponent implements OnInit {
   pageClick(page: number): void {
     this.currentPage = page;
     const startArticle: number = (page - 1) * this.articlesOnPage;
-    this.currentPageArticles = this.currentArticles.slice(startArticle, startArticle + this.articlesOnPage);
-  }
-
-  editArticle(articleId: string) {
-    console.log('Эта штука откроет (желательно, в соседней вкладке) редактирование статьи');
-    //this.router.navigateByUrl('тут урл на страницу редактирования');
+    this.currentPageArticles = this.articles.slice(startArticle, startArticle + this.articlesOnPage);
   }
 
   deleteArticle(articleId: string) {
-    this.currentArticles.splice(this.currentArticles.findIndex(article => article.id === articleId), 1);
+    this.articles.splice(this.articles.findIndex(article => article._id === articleId), 1);
     this.pageClick(this.currentPage);
     this.countPages();
-    //здесь запросик на удаление статьи
+    this.adminService.deleteArticle(articleId).subscribe();
+  }
+
+  deleteCheckedArticles() {
+    
+    this.checkedArticles.forEach((article) => {
+      this.deleteArticle(article);
+    });
+    this.checkedArticles = [];
+    this.resetPage();
   }
 
   checkArticle(articleId: string): void {
@@ -113,20 +125,24 @@ export class ArticlesTableComponent implements OnInit {
     }
   }
 
-  sortByAlphabet(prev: adminArticle, next: adminArticle): number {
-    return prev.header < next.header ? -1 : prev.header > next.header ? 1 : 0;
+  sortByAlphabet(prev: IArticle, next: IArticle): number {
+    return prev.title < next.title ? -1 : prev.title > next.title ? 1 : 0;
   }
 
-  sortByID(prev: adminArticle, next: adminArticle): number {
-    return prev.id < next.id ? -1 : prev.id > next.id ? 1 : 0;
-  }
-
-  sortByTeamlead(prev: adminArticle, next: adminArticle): number {
-    return prev.teamlead < next.teamlead
+  sortByAuthors(prev: IArticle, next: IArticle): number {
+    return prev.authors[0] < next.authors[0]
       ? -1
-      : prev.teamlead > next.teamlead
-      ? 1
-      : 0;
+      : prev.authors[0] > next.authors[0]
+        ? 1
+        : 0;
+  }
+
+  sortByRespondents(prev: IArticle, next: IArticle): number {
+    return prev.respondents[0] < next.respondents[0]
+      ? -1
+      : prev.respondents[0] > next.respondents[0]
+        ? 1
+        : 0;
   }
 
   sortByTags(prev: adminArticle, next: adminArticle): number {
@@ -141,14 +157,14 @@ export class ArticlesTableComponent implements OnInit {
 
   sortByFlag(flag: string): void {
     switch (flag) {
-      case 'id':
-        this.currentArticles = this.currentArticles.sort(this.sortByID);
+      case 'respondents':
+        this.articles = this.articles.sort(this.sortByRespondents);
         break;
       case 'header':
-        this.currentArticles = this.currentArticles.sort(this.sortByAlphabet);
+        this.articles = this.articles.sort(this.sortByAlphabet);
         break;
-      case 'teamlead':
-        this.currentArticles = this.currentArticles.sort(this.sortByTeamlead);
+      case 'authors':
+        this.articles = this.articles.sort(this.sortByAuthors);
         break;
     }
     this.pageClick(this.currentPage);
@@ -160,50 +176,4 @@ export class ArticlesTableComponent implements OnInit {
     this.countPages();
   }
 
-  filterByTag(tag: string) {
-    let tagInputValue = this.tagInput.value.trim();
-    if (!this.filterTags.includes(tag)) {
-      tagInputValue === '' ? this.tagInput.setValue(tag) : this.tagInput.setValue(this.tagInput.value + ', ' + tag);
-      this.filterTags.push(tag);
-
-      let temp: adminArticle[] = [];
-      this.currentArticles.forEach(el => {
-        if (el.tags.includes(tag)) {
-          temp.push(el);
-        }
-      });
-      this.currentArticles = temp;
-    }
-    else {
-      tagInputValue = tagInputValue.split(', ').splice(tagInputValue.indexOf(tag), tag.length).join(', ');
-      this.tagInput.setValue(tagInputValue);
-      this.filterTags.splice(this.filterTags.indexOf(tag), 1);
-      this.currentArticles = this.articles;
-
-    }
-    this.resetPage();
-  }
-
-  filterByTeamlead(teamlead: string) {
-    if (!this.filterTags.includes(teamlead)) {
-      this.filterTags.push(teamlead);
-      let temp: adminArticle[] = [];
-      this.currentArticles.forEach(el => {
-        if (el.teamlead.includes(teamlead)) {
-          temp.push(el);
-        }
-      });
-      this.currentArticles = temp;
-    }
-    else {
-      this.filterTags.splice(this.filterTags.indexOf(teamlead), 1);
-      let filters: string[] = this.filterTags;
-      this.filterTags = []
-      this.currentArticles = this.articles;
-      filters.forEach(tag => {
-        this.filterByTeamlead(tag);
-      });
-    }
-    this.resetPage();
-  }
 }
