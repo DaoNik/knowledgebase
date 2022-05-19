@@ -1,18 +1,27 @@
 <section>
-  <div class="article" *ngIf="article$ | async as article; else loading">
-    <header class="article__header">
-      <h1 name="title">{{ article.title }}</h1>
-      <h2 name="category">Категория: {{ article.category }}</h2>
-      <div class="article__header__dates">
-        <p>
-          <b>Дата создания:</b>
-          {{ article.dateCreate | date: "dd/MM/yyyy HH:mm:ss" }}
-        </p>
-        <p>
-          <b>Дата обновления:</b>
-          {{ article.dateUpdate | date: "dd/MM/yyyy HH:mm:ss" }}
-        </p>
-      </div>
+  <div class="container">
+
+    <div class="article" *ngIf="article$ | async as article; else loading">
+      <header class="article__header">
+        <h1 name="title">{{ article.title }}</h1>
+        <h2 name="category">Категория: {{ article.category }}</h2>
+        <div class="article__header__dates">
+          <!-- <p>
+            Cоздано:
+            {{ article.dateCreate | date: "dd/MM/yyyy HH:mm" }}
+          </p> -->
+          <p>
+            Последнее обновление
+            {{ article.dateUpdate | date: "d MMMM y - HH:mm": '+2': 'ru' }}
+          </p>
+        </div>
+      </header>
+
+      <main class="article__main">
+        <h3>Описание</h3>
+        <p class="article__main__description" [innerHtml]="article.content"></p>
+      </main>
+
       <div class="article__header__team">
         <div class="article__header__team__authors">
           <ul>
@@ -31,12 +40,9 @@
           </ul>
         </div>
       </div>
-    </header>
-    <hr />
-    <main class="article__main">
-      <h3>Описание</h3>
-      <p class="article__main__description" [innerHtml]="article.content"></p>
-    </main>
+
+    </div>
+    <ng-template #loading> Loading </ng-template>
+
   </div>
-  <ng-template #loading> Loading </ng-template>
 </section>
