@@ -1,58 +1,72 @@
-.article {
+h1, h2, h3, p {
+    margin: 0;
+}
+
+.container {
     margin: 0 auto;
+    max-width: 1028px;
+}
+
+.article {
     width: 100%;
-    border: 2px solid grey;
-    box-shadow: 2px 2px 4px skyblue;
-    padding: 70px 10px 40px 10px;
-    background: rgb(247,242,247);
-    background: linear-gradient(90deg, rgba(247,242,247,1) 0%, rgba(255,225,254,1) 19%, rgba(245,228,247,1) 38%, rgba(239,211,254,1) 61%, rgba(214,198,255,1) 82%, rgba(237,241,241,1) 100%);
+    padding: 0 20px 40px;
     
     hr {
-        margin: 20px 0 20px 0;
+        margin: 20px 0;
     }
 
     &__header {
+        text-align: start;
 
-        h1, h2 {
-            text-align: center;
-            text-shadow: 3px -1px 2px rgba(126, 131, 154, 1);
+        h1 {
+            margin: 20px 0 20px;
+            font-size: 28px;
+            line-height: 1.1071428571;
+            font-weight: 600;
+            letter-spacing: -.015em;
         }
 
-        h1:hover {
-            color: rgb(2, 2, 165);
-        }
-
-        h2:hover {
-            color: rgb(0, 77, 0);
+        h2 {
+            margin-bottom: 40px;
+            font-size: 26px;
+            font-weight: 600;
         }
 
         &__dates {
             display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 1rem;
+            flex-direction: column;
+            justify-content: start;
+            font-size: 16px;
+            line-height: 1.3125;
+            font-weight: 400;
+            letter-spacing: 0;
+            margin-bottom: 60px;
         }
-
-        &__team {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 1rem;
-        }
-
     }
 
     &__main {
         h3 {
-            text-align: center;
+            margin: 0;
+            text-align: start;
         }
 
         &__description {
-            background-color: white;
-            margin: 10px;
-            padding: 10px;
-            box-shadow: 2px 2px 4px grey;
+            margin: 10px 0 40px;
         }
     }
-
 }
+
+.article__header__team {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+
+    h3 {
+        margin-bottom: 10px;
+    }
+
+    ul {
+        padding: 0;
+        list-style: none;
+    }
+}   
