@@ -1,0 +1,6 @@
+<ul class="bread-crumbs">
+  <li class="bread-crumbs__item" *ngFor="let breadcrumb of breadcrumbs; let i = index">
+    <a [routerLink]="breadcrumb.url" class="bread-crumbs__link">{{breadcrumb.displayName}}</a>
+    <mat-icon *ngIf="breadcrumbs[i+1]">chevron_right</mat-icon>
+  </li>
+</ul>

@@ -1,0 +1,33 @@
+.bread-crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 70px 10px 0;
+  margin: 0;
+  list-style: none;
+  gap: 10px;
+
+  @media screen and (min-width: 768px) {
+    padding: 70px 20px 0;
+  }
+
+  @media screen and (min-width: 1440px) {
+    padding: 100px 0 0;
+  }
+}
+
+.bread-crumbs__item {
+  display: flex;
+  padding: 5px 0;
+  color: #7b1fa2;
+}
+
+.bread-crumbs__link {
+
+  text-decoration: none;
+  line-height: 21px;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+
