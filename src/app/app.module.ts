@@ -26,6 +26,7 @@ import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { ArticleComponent } from './article/article.component';
 import { SearchResultsComponent } from './search-results/search-results.component';
+import { BreadCrumbsComponent } from './bread-crumbs/bread-crumbs.component';
 
 // Для пайпа даты 
 import { registerLocaleData } from '@angular/common'; 
@@ -49,6 +50,7 @@ const API_URL_PROVIDER: Provider = {
     FeedbackComponent,
     ArticleComponent,
     SearchResultsComponent,
+    BreadCrumbsComponent,
   ],
   imports: [
     BrowserModule,

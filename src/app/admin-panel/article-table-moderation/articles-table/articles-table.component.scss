@@ -48,6 +48,9 @@ ul {
 .article-table__header-cell--clickable {
   cursor: pointer;
   border: 1px solid #dddddd;
+  &:hover {
+    opacity: 0.8;
+  }
 }
 
 .article-table__header-cell,
