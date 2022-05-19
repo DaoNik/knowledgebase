@@ -1,18 +1,18 @@
 <p *ngIf="!articles.length" class="article-table__no-articles">Статей в данной категории нет в базе знаний</p>
 <div class="article-table__wrapper" *ngIf ="articles.length">
-  <form class="article-table__search-wrapper">
+ <!-- На этой итерации ненужная функциональность <form class="article-table__search-wrapper">
     <input class="article-table__search" type="text" placeholder="Найти..." formControl="search">
     <input class="article-table__search-tags" type="text" placeholder="Теги..." formControl="tagInput" [value]="tagInput.value">
-  </form>
+  </form>-->
 
   <table class="article-table">
     <thead>
       <tr class="article-table__header article-table__row">
         <th class="article__no article-table__header-cell">№</th>
-        <th class="article__name article-table__header-cell--clickable" (click)="sortByFlag('header')">Заголовок</th>
+        <th class="article__name article-table__header-cell--clickable" (click)="sortByFlag('header')" title="Сортировать">Заголовок</th>
         <th class="article__tags article-table__header-cell">Теги</th>
-        <th class="article__id article-table__header-cell--clickable" (click)="sortByFlag('respondents')">Отдел</th>
-        <th class="article__teamlead article-table__header-cell--clickable" (click)="sortByFlag('authors')">
+        <th class="article__id article-table__header-cell--clickable" (click)="sortByFlag('respondents')" title="Сортировать">Отдел</th>
+        <th class="article__teamlead article-table__header-cell--clickable" (click)="sortByFlag('authors')" title="Сортировать">
           Авторы</th>
         <th class="article__actions article-table__header-cell">Действия</th>
       </tr>
