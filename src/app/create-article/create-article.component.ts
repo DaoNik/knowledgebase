@@ -249,7 +249,7 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
   }
 
   removeChip(chip: string, ctrl: string): void {
-    const control = this.form.get(`${ctrl}`);
+    const control = this.form.get(ctrl);
     let chips =
       ctrl === 'respondents'
         ? this.respondents
@@ -272,7 +272,7 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
     chipInput: HTMLInputElement,
     chipCtrl: FormControl
   ): void {
-    const control = this.form.get(`${ctrl}`);
+    const control = this.form.get(ctrl);
     let chips =
       ctrl === 'respondents'
         ? this.respondents
@@ -287,5 +287,48 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
 
     chipInput.value = '';
     chipCtrl.setValue(null);
+  }
+
+  getError(ctrl: string | FormControl, err: string): boolean {
+    if (typeof ctrl === 'string') {
+      return this.form.get(ctrl)?.getError(err);
+    }
+
+    return ctrl.getError(err);
+  }
+
+  isTouched(ctrl: string | FormControl): boolean {
+    if (typeof ctrl === 'string') {
+      return this.form.get(ctrl)!.touched;
+    }
+
+    return ctrl.touched;
+  }
+
+  resetForm(): void {
+    const category = this.form.get('category')?.value;
+    const tags = this.form.get('tags')?.value;
+    const respondents = this.form.get('respondents')?.value;
+    const authors = this.form.get('authors')?.value;
+
+    this.categories = [...this.categories, ...category];
+    this.tags = [...this.tags, ...tags];
+    this.respondents = [...this.respondents, ...respondents];
+    this.authors = [...this.authors, ...authors];
+
+    this.categoryCtrl.reset();
+    this.tagsCtrl.reset();
+    this.respondentsCtrl.reset();
+    this.authorsCtrl.reset();
+
+    this.form.reset({
+      title: '',
+      description: '',
+      content: '',
+      category: [],
+      tags: [],
+      respondents: [],
+      authors: [],
+    });
   }
 }

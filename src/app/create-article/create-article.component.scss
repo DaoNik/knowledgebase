@@ -81,6 +81,8 @@
   }
 
   &__send-btn {
+    margin-right: 10px;
+
     &:disabled {
       background-color: rgb(182, 182, 182);
     }

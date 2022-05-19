@@ -6,13 +6,12 @@
                 <label class="create-article__label" for="title">Название</label>
                 <input class="create-article__input" maxlength="100" placeholder="Введите название статьи" id="title"
                     formControlName="title">
-                <small class="create-article__error"
-                    *ngIf="form.get('title')?.getError('required') && form.get('title')?.touched">Поле обязательно для
+                <small class="create-article__error" *ngIf="getError('title', 'required') && isTouched('title')">Поле
+                    обязательно для
                     заполнения</small>
                 <small class="create-article__error"
-                    *ngIf="(form.get('title')?.getError('minlength') ||
-                    form.get('title')?.getError('maxlength') || form.get('title')?.getError('manySpaces')) && form.get('title')?.touched">Длина поля
-                    должна быть от 4 до 100 символов</small>
+                    *ngIf="getError('title', 'minlength') || getError('title', 'maxlength') || getError('title', 'manySpaces')">Длина
+                    поля должна быть от 4 до 100 символов</small>
             </div>
 
             <div class="create-article__field">
@@ -20,11 +19,10 @@
                 <textarea class="create-article__textarea" maxlength="200" id="description"
                     placeholder="Введите краткое описание статьи" formControlName="description"></textarea>
                 <small class="create-article__error"
-                    *ngIf="form.get('description')?.getError('required') && form.get('description')?.touched">Поле
+                    *ngIf="getError('description', 'required') && isTouched('description')">Поле
                     обязательно для заполнения</small>
                 <small class="create-article__error"
-                    *ngIf="(form.get('description')?.getError('minlength') ||
-                    form.get('description')?.getError('maxlength') || form.get('description')?.getError('manySpaces')) && form.get('description')?.touched">Длина
+                    *ngIf="getError('description', 'minlength') || getError('description', 'maxlength') || getError('description', 'manySpaces')">Длина
                     поля должна быть от 10 до 200 символов</small>
             </div>
 
@@ -33,11 +31,10 @@
                 <angular-editor class="create-article__editor" id="content" formControlName="content"
                     [config]="editorConfig"></angular-editor>
                 <small class="create-article__error"
-                    *ngIf="form.get('content')?.getError('required') && form.get('content')?.touched">Поле
-                    обязательно для
-                    заполнения</small>
+                    *ngIf="getError('content', 'required') && isTouched('content')">Поле
+                    обязательно для заполнения</small>
                 <small class="create-article__error"
-                    *ngIf="(form.get('content')?.getError('minlength') || form.get('content')?.getError('manySpaces')) && form.get('content')?.touched">Длина
+                    *ngIf="getError('content', 'minlength') || getError('content', 'manySpaces')">Длина
                     поля должна быть от 10 символов</small>
             </div>
 
@@ -66,12 +63,11 @@
                     </ng-container>
                 </mat-autocomplete>
                 <small class="create-article__error"
-                    *ngIf="(categoryCtrl.getError('required') && categoryCtrl.touched) && !form.get('category')?.value.length">Выберите
+                    *ngIf="getError(categoryCtrl, 'required') && !form.get('category')?.value.length && isTouched(categoryCtrl)">Выберите
                     категорию</small>
                 <small class="create-article__error"
-                    *ngIf="categoryCtrl.touched && form.get('category')?.getError('maxlength')">Можно
-                    выбрать только одну
-                    категорию</small>
+                    *ngIf="getError('category', 'maxlength') && isTouched(categoryCtrl)">Можно
+                    выбрать только одну категорию</small>
             </div>
 
             <div class="create-article__field">
@@ -99,9 +95,8 @@
                     </ng-container>
                 </mat-autocomplete>
                 <small class="create-article__error"
-                    *ngIf="(tagsCtrl.getError('required') && tagsCtrl.touched) && !form.get('tags')?.value.length">Выберите
-                    хотя
-                    бы один тег</small>
+                    *ngIf="getError(tagsCtrl, 'required') && isTouched(tagsCtrl) && !form.get('tags')?.value.length">Выберите
+                    хотя бы один тег</small>
             </div>
 
             <div class="create-article__field">
@@ -130,7 +125,7 @@
                     </ng-container>
                 </mat-autocomplete>
                 <small class="create-article__error"
-                    *ngIf="(respondentsCtrl.getError('required') && respondentsCtrl.touched) && !form.get('respondents')?.value.length">Выберите
+                    *ngIf="getError(respondentsCtrl, 'required') && isTouched(respondentsCtrl) && !form.get('respondents')?.value.length">Выберите
                     хотя бы одного ответственного</small>
             </div>
 
@@ -160,12 +155,14 @@
                     </ng-container>
                 </mat-autocomplete>
                 <small class="create-article__error"
-                    *ngIf="(authorsCtrl.getError('required') && authorsCtrl.touched) && !form.get('authors')?.value.length">Выберите
+                    *ngIf="getError(authorsCtrl, 'required') && isTouched(authorsCtrl) && !form.get('authors')?.value.length">Выберите
                     хотя бы одного автора</small>
             </div>
 
             <button class="create-article__send-btn" mat-flat-button color="primary" [disabled]="form.invalid"
                 (click)="createArticle()">{{isEditArticle ? 'Редактировать' : 'Создать'}}</button>
+            <button mat-flat-button color="warn" (click)="resetForm()">Очистить
+                форму</button>
         </form>
     </ng-container>
 </main>
