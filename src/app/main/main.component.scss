@@ -170,3 +170,21 @@
     line-height: 30px;
   }
 }
+
+
+.articles__pagination-list {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  justify-content: center;
+  padding: 0;
+  list-style: none;
+}
+
+.articles__pagination-link {
+  min-width: 0;
+
+  &--active {
+    opacity: 0.8;
+  }
+}
