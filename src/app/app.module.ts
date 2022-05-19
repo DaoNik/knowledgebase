@@ -27,6 +27,11 @@ import { MatFormFieldModule } from '@angular/material/form-field';
 import { ArticleComponent } from './article/article.component';
 import { SearchResultsComponent } from './search-results/search-results.component';
 
+// Для пайпа даты 
+import { registerLocaleData } from '@angular/common'; 
+import localeRu from '@angular/common/locales/ru';
+registerLocaleData(localeRu)
+
 const API_URL_PROVIDER: Provider = {
   provide: 'API_URL',
   useValue: 'https://wbschool-chat.ru/api/articles',
