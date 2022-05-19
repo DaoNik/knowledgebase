@@ -63,7 +63,7 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
     defaultFontSize: '3',
     sanitize: true,
     toolbarPosition: 'top',
-    toolbarHiddenButtons: [['fontName', 'toggleEditorMode']],
+    toolbarHiddenButtons: [['fontName', 'toggleEditorMode', 'insertVideo']],
   };
 
   constructor(
