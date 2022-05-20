@@ -40,3 +40,30 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     }
   }
 }
+
+.search__from_autocomplete {
+  background-color: white;
+
+  .mat-option {
+    color: black!important;
+    position: relative!important;
+
+    .search__from_autocomplete_category {
+      position: absolute!important;
+      color: grey!important;
+      right: 0!important;
+      margin-right: 5px!important;
+      padding-left: 10px!important;
+      background: linear-gradient(90deg, rgba(255, 255, 255, 0) 0%, rgb(255, 255, 255) 10px, rgb(255, 255, 255) 100%);
+
+
+      mat-icon {
+        margin: 0!important;
+      }
+
+      @media (max-width: 768px) {
+        display: none;
+      }
+    }
+  }
+}
