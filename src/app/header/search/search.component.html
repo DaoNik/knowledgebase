@@ -1,5 +1,4 @@
 <form class="search__form">
-  <!-- <input class='search__form_input' placeholder='Введите вашу проблему' type='text'> -->
   <input
     type="text"
     placeholder="Pick one"
@@ -11,13 +10,20 @@
     [formControl]="searchQuery"
     [matAutocomplete]="auto"
   />
-  <mat-autocomplete #auto="matAutocomplete">
+  <mat-autocomplete #auto="matAutocomplete" 
+  class="search__from_autocomplete">
     <mat-option
-      *ngFor="let option of filteredResults | async"
+      *ngFor="let option of filteredResults | async | slice : 0 : 4"
       [value]="option.title"
       (click)="goToArticle(option._id!)"
     >
-      {{ option.title }}
+      <span class="search__from_autocomplete_title">
+        {{ option.title }} 
+      </span>
+      <span class="search__from_autocomplete_category">
+        <mat-icon>chevron_right</mat-icon>
+        {{ option.category }}
+      </span>
     </mat-option>
   </mat-autocomplete>
   <mat-icon class="search__form_btn search-btn" (click)="search()"
