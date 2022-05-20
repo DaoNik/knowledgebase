@@ -31,6 +31,7 @@ import { BreadCrumbsComponent } from './bread-crumbs/bread-crumbs.component';
 // Для пайпа даты 
 import { registerLocaleData } from '@angular/common'; 
 import localeRu from '@angular/common/locales/ru';
+import { NotFoundComponent } from './not-found/not-found.component';
 registerLocaleData(localeRu)
 
 const API_URL_PROVIDER: Provider = {
@@ -51,6 +52,7 @@ const API_URL_PROVIDER: Provider = {
     ArticleComponent,
     SearchResultsComponent,
     BreadCrumbsComponent,
+    NotFoundComponent,
   ],
   imports: [
     BrowserModule,
