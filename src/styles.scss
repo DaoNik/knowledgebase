@@ -42,9 +42,10 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 }
 
 .search__from_autocomplete {
-  background-color: white;
+  background: white!important;
 
   .mat-option {
+    background: white!important;
     color: black!important;
     position: relative!important;
 
@@ -66,4 +67,6 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
       }
     }
   }
+
+
 }
