@@ -20,11 +20,19 @@ const routes: Routes = [
     },
   },
   {
-    path: 'article/:id',
-    component: ArticleComponent,
+    path: 'article',
     data: {
       displayName: 'Статья'
     },
+    children: [
+      {
+        path: ':id',
+        component: ArticleComponent,
+        data: {
+          displayName: 'Номер статьи'
+        },
+      }
+    ]
   },
   {
     path: 'search-result/:title/:categories',
