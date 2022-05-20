@@ -3,6 +3,7 @@ import { RouterModule, Routes } from '@angular/router';
 import { AdminPanelComponent } from './admin-panel/admin-panel.component';
 import { ArticleComponent } from './article/article.component';
 import { MainComponent } from './main/main.component';
+import { NotFoundComponent } from './not-found/not-found.component';
 import { SearchResultsComponent } from './search-results/search-results.component';
 
 const routes: Routes = [
@@ -32,7 +33,8 @@ const routes: Routes = [
     data: {
       displayName: 'Результаты поиска'
     },
-  }
+  },
+  { path: '**', component: NotFoundComponent}
 ];
 
 @NgModule({
