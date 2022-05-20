@@ -42,6 +42,10 @@ export class SearchComponent implements OnInit {
       title: 'Пункты выдачи',
       status: true,
     },
+    {
+      title: 'JS',
+      status: true,
+    },
   ];
   filteredResults!: Observable<IArticle[]>;
   foundArticles!: IArticle[];
