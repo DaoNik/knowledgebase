@@ -1,0 +1,140 @@
+.modal-task {
+	display: grid;
+	position: relative;
+	grid-template-columns: 70% 30%;
+	grid-template-rows: repeat(4, 1fr);
+	grid-column-gap: 0px;
+	grid-row-gap: 0px;
+	width: 100%;
+
+	.modal-task__close {
+		position: absolute;
+		right: 0px;
+		height: 30px;
+		width: 30px;
+		transition: 0.3s;
+		cursor: pointer;
+
+		mat-icon {
+			height: 30px;
+			width: 30px;
+			font-size: 30px;
+		}
+
+		&:hover {
+			background: rgba(128, 128, 128, 0.36);
+			right: 2px;
+			transform: scale(1.1);
+		}
+	}
+
+	.modal-task__title { 
+		grid-area: 1 / 1 / 2 / 3;
+
+		padding: 10px;
+		// background: blue;
+		display: flex;
+		flex-direction: row;
+
+		h2 {
+			margin: 0;
+		}
+	}
+	
+	.modal-task__status { 
+		grid-area: 2 / 1 / 3 / 2; 
+		padding: 10px;
+		display: flex;
+		flex-direction: row;
+		// background: green;
+
+		p {
+			margin: 0;
+			padding: 4px;
+		}
+	}
+	
+	.modal-task__description { 
+		grid-area: 3 / 1 / 4 / 2; 
+		padding: 10px;
+		display: flex;
+		flex-direction: row;
+		// background: pink;
+		
+		p {
+			margin: 0;
+			padding: 4px;
+		}
+	}
+	
+	.modal-task__text { 
+		grid-area: 4 / 1 / 5 / 2; 
+		// background: orange;
+		text-align: center;
+
+		.modal-task__text_input {
+			margin: 0 auto;
+			width: 90%;
+			height: 80%;
+		}
+	}
+	
+	.modal-task__assignee { 
+		grid-area: 2 / 2 / 5 / 3; 
+		padding: 10px;
+		// background: red;
+		display: flex;
+		flex-direction: row;
+
+		.modal-task__assignee_line {
+			border: 1px solid grey;
+			background: grey;
+			margin-right: 5px;
+			width: 0;
+			height: 100%;
+		}
+
+		.modal-task__assigne_person {
+			display: flex;
+			flex-direction: row;
+			margin-bottom: 5px;
+
+			.modal-task__assigne_person_avatar {
+				width: 30px;
+				height: 30px;
+				border-radius: 15px;
+			}
+
+			.modal-task__assigne_person_name {
+				// background-color: yellow;
+				padding: 5px 10px;
+			}
+		}
+	}
+
+	@media (max-width: 900px) {
+		grid-template-columns: 1fr;
+		grid-template-rows: repeat(5, 1fr);
+
+		.modal-task__title { 
+			grid-area: 1 / 1 / 2 / 2; 
+		}
+		
+		.modal-task__status { 
+			grid-area: 2 / 1 / 3 / 2; 
+		}
+		
+		.modal-task__description { 
+			grid-area: 4 / 1 / 5 / 2; 
+		}
+		
+		.modal-task__text { 
+			grid-area: 5 / 1 / 6 / 2; 
+		}
+		
+		.modal-task__assignee { 
+			grid-area: 3 / 1 / 4 / 2;
+		}
+	}
+}
+

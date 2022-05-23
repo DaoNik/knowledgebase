@@ -15,11 +15,31 @@ import { NotListedTableComponent } from './article-not-listed/not-listed-table/n
 
 export const adminRoutes: Routes = [
   { path: '', redirectTo: 'moderate', pathMatch: 'full' },
-  { path: 'moderate', component: ArticleTableModerationComponent, data: { displayName: 'Модерирование статей' } },
-  { path: 'roles', component: RoleModerationComponent, data: { displayName: 'Назначение ролей' } },
-  { path: 'create', component: CreateArticleComponent, data: { displayName: 'Создать статью' } },
-  { path: 'edit/:id', component: CreateArticleComponent, data: { displayName: 'Редактировать статью' } },
-  { path: 'not-listed', component: ArticleNotListedComponent, data: { displayName: 'В ожидании одобрения' } },
+  {
+    path: 'moderate',
+    component: ArticleTableModerationComponent,
+    data: { displayName: 'Модерирование статей' },
+  },
+  {
+    path: 'roles',
+    component: RoleModerationComponent,
+    data: { displayName: 'Назначение ролей' },
+  },
+  {
+    path: 'create',
+    component: CreateArticleComponent,
+    data: { displayName: 'Создать статью' },
+  },
+  {
+    path: 'edit/:id',
+    component: CreateArticleComponent,
+    data: { displayName: 'Редактировать статью' },
+  },
+  {
+    path: 'not-listed',
+    component: ArticleNotListedComponent,
+    data: { displayName: 'В ожидании одобрения' },
+  },
 ];
 
 @NgModule({
@@ -40,4 +60,4 @@ export const adminRoutes: Routes = [
   ],
   exports: [AdminPanelComponent],
 })
-export class AdminPanelModule { }
+export class AdminPanelModule {}
