@@ -11,7 +11,7 @@ export class BreadCrumbsService {
   constructor(
     private http: HttpClient,
     @Inject('API_URL') private apiUrl: string
-    ) { }
+  ) { }
 
   getArticle(id: string): Observable<IArticle> {
     return this.http.get<IArticle>(`${this.apiUrl}/${id}`);

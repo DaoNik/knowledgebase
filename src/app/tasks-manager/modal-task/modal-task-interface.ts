@@ -9,5 +9,6 @@ export interface ITaskData {
 
 export interface IAssignee {
 	avatar: string,
+	id: number,
 	name: string
 }
