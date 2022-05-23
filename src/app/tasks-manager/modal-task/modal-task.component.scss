@@ -184,7 +184,8 @@
 
 	@media (max-width: 900px) {
 		grid-template-columns: 1fr;
-		grid-template-rows: repeat(5, 1fr);
+		height: 600px;
+		grid-template-rows: 70px 30px auto 90px 200px;
 
 		.modal-task__title { 
 			grid-area: 1 / 1 / 2 / 2; 
@@ -204,6 +205,10 @@
 		
 		.modal-task__assignee { 
 			grid-area: 3 / 1 / 4 / 2;
+
+			.modal-task__assignee_line {
+				display: none;
+			}
 		}
 	}
 }

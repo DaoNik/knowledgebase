@@ -1,6 +1,6 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
-import { IAssignee, ITaskData } from './modal-task-interface';
+import { IAssignee, ITaskData, ITypeOption } from './modal-task-interface';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { map, Observable, startWith } from 'rxjs';
@@ -36,8 +36,8 @@ export class ModalTaskComponent implements OnInit {
       value: 'true'
     }]]
   });
-  mockStatusVariants = ['Todo', 'In progress', 'Done']
-  mockUsers = [
+  mockStatusVariants: string[] = ['Todo', 'In progress', 'Done']
+  mockUsers: IAssignee[] = [
     {
       name: 'Giovanni Gorgio', 
       id: 1,
@@ -56,7 +56,7 @@ export class ModalTaskComponent implements OnInit {
       avatar: ''
     }
   ]
-  typeOptions = [{
+  typeOptions: ITypeOption[] = [{
     name: 'text',
     type: '',
     value: ''
@@ -73,7 +73,7 @@ export class ModalTaskComponent implements OnInit {
   }]
   inputTrigger = false;
   headerTrigger = false;
-  createOption = {
+  createOption: ITypeOption = {
     name: 'text',
     type: '',
     value: ''
@@ -83,7 +83,7 @@ export class ModalTaskComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<ModalTaskComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
+    @Inject(MAT_DIALOG_DATA) public data: string,
     private fb: FormBuilder
   ) {}
   
