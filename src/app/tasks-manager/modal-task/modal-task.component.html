@@ -1,0 +1,38 @@
+<div class="modal-task">
+	<div class="modal-task__close" (click)="onNoClick()">
+		<mat-icon>close</mat-icon>
+	</div>
+	<div class="modal-task__title">
+		<mat-icon>task</mat-icon>
+		<h2>{{mockTaskData.value.title}}</h2>
+	</div>
+	<div class="modal-task__status">
+		<mat-icon>checklist</mat-icon>
+		<p>Статус: {{mockTaskData.value.status}}</p>
+	</div>
+	<div class="modal-task__description">
+		<mat-icon>description</mat-icon>
+		<p>{{mockTaskData.value.description}}</p>
+	</div>
+	<div class="modal-task__text">
+		<input class='modal-task__text_input' 
+			   type='text'
+			   value={{mockTaskData.value.text}} 
+		>
+	</div>
+	<div class="modal-task__assignee">
+		<div class="modal-task__assignee_line"></div>
+		<div class="person-wrapper">
+			<div class="modal-task__assigne_person" 
+			 *ngFor="let person of mockTaskData.value.assignee">
+				<img class="modal-task__assigne_person_avatar" *ngIf="!!person.avatar" [src]="person.avatar" alt="user pic" />
+				<img class="modal-task__assigne_person_avatar" *ngIf="!person.avatar" src="assets/user-pic.jpeg" alt="user pic" />
+				<div class="modal-task__assigne_person_name">
+					{{person.name}}
+				</div>
+			</div>
+		</div>
+		
+	</div>
+</div>
+

@@ -1,0 +1,45 @@
+<h2 class="main-title">Основная задачи</h2>
+<div class="main__board" cdkDropListGroup>
+ 
+  <div class="example-container" *ngFor="let column of list">
+    
+    <div class="example-toDo-header">
+      <button *ngIf="isHidden === false && column.name === 'To Do'" (click)="isHidden = !isHidden">+</button>
+      <h2>{{column.name}}</h2>
+    </div>
+
+    <form [formGroup]="form" *ngIf="isHidden && column.name === 'To Do'" (ngSubmit)="addToDo()">
+      <mat-form-field appearance="fill">
+        <mat-label>Task name</mat-label>
+        <input matInput type="text" formControlName="toDoName">
+      </mat-form-field>
+      <button mat-raised-button class="example-createToDo" type="submit" [disabled]="form.invalid">Create</button>
+    </form>
+    
+    <div
+      cdkDropList
+      [cdkDropListData]="column.tasks"
+      class="example-list"
+      (cdkDropListDropped)="drop($event)"
+    >
+      <div class="example-box" *ngFor="let item of column.tasks" cdkDrag (click)="openTask(item)">
+        {{ item }}
+      </div>
+    </div>
+  </div>
+  
+  <div>
+    <div class="example-newList">
+      <button (click)="isHiddenColumn = !isHiddenColumn">+</button>
+      <p>Добавить колонку</p>
+    </div>
+    
+    <form [formGroup]="formColumns" (ngSubmit)="addColumn()" *ngIf="isHiddenColumn">
+      <mat-form-field appearance="fill">
+        <mat-label>Column name</mat-label>
+        <input matInput type="text" formControlName="columnName">
+      </mat-form-field>
+      <button mat-raised-button class="example-createToDo" type="submit" [disabled]="formColumns.invalid">Create</button>
+    </form>
+  </div>
+</div>
