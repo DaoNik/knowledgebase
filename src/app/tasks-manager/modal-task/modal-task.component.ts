@@ -135,10 +135,15 @@ export class ModalTaskComponent implements OnInit {
 
   private _filter(value: string): IAssignee[] {
     const filterValue = value.toLowerCase();
-
+    // console.log(this.mockTaskData.value.assignee.filter(item => item.))
+    console.log(this.mockTaskData.value.assignee.filter((item: IAssignee) => item.id != this.mockUsers[0].id))
+    // console.log(this.mockUsers.filter(user => (
+    //   user.name.toLowerCase().includes(filterValue) && 
+    //   this.mockTaskData.value.assignee.filter((item: IAssignee) => item.id != user.id)
+    // )))
     return this.mockUsers.filter(user => (
       user.name.toLowerCase().includes(filterValue) && 
-      !this.mockTaskData.value.assignee.includes(user)
+      this.mockTaskData.value.assignee.filter((item: IAssignee) => item.id != user.id)
     ));
   }
 }
