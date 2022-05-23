@@ -18,8 +18,8 @@ const routes: Routes = [
       ),
   },
   {
-    path: 'tasks-manager',
-    data: { displayName: 'Task Manager' },
+    path: 'tasks',
+    data: { displayName: 'Менеджер задач' },
     component: TasksManagerComponent,
     loadChildren: () =>
       import('./tasks-manager/tasks-manager.module').then(

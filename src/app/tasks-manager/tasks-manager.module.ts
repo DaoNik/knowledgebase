@@ -22,23 +22,23 @@ import { MatBadgeModule } from '@angular/material/badge';
 
 import { HeaderComponent } from './header/header.component';
 import { SidebarComponent } from './header/sidebar/sidebar.component';
-import { MainComponent } from './main/main.component';
+import { TaskListsComponent } from './task-lists/task-lists.component';
 import { FormIssueComponent } from './form-issue/form-issue.component';
 import { ModalTaskComponent } from './modal-task/modal-task.component';
 import { RouterModule, Routes } from '@angular/router';
 import { TasksManagerComponent } from './tasks-manager.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'tasks', pathMatch: 'full' },
-  { path: 'tasks', component: MainComponent },
-  { path: 'form', component: FormIssueComponent },
+  { path: '', redirectTo: 'lists', pathMatch: 'full' },
+  { path: 'lists', component: TaskListsComponent, data: {displayName: 'Списки задач'} },
+  { path: 'form', component: FormIssueComponent, data: {displayName: 'Форма заявки'}  },
 ];
 
 @NgModule({
   declarations: [
     HeaderComponent,
     SidebarComponent,
-    MainComponent,
+    TaskListsComponent,
     FormIssueComponent,
     ModalTaskComponent,
     TasksManagerComponent,
