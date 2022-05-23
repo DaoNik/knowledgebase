@@ -20,7 +20,7 @@
 					(click)="mockTaskData.value.status = status"
 					[ngStyle]="{'color': mockTaskData.value.status == status ? 'orange' : 'black'}">
 						{{status}}
-					</button>
+			</button>
 		</mat-menu>
 	</div>
 	<div class="modal-task__description">
@@ -89,16 +89,6 @@
 			>
 		</div>
 		
-		<!-- <div class='modal-task__text_input_btns'
-			 *ngIf="inputTrigger">
-			<button mat-raised-button 
-					color="primary" 
-					(click)="inputTrigger = !inputTrigger"
-			>
-				Сохранить
-			</button>
-		</div> -->
-		
 	</div>
 	<div class="modal-task__assignee">
 		<div class="modal-task__assignee_line"></div>
@@ -111,19 +101,24 @@
 					{{person.name}}
 				</div>
 			</div>
-			<div class="modal-task__assigne_add">
+			<div class="modal-task__assignee_add">
 				<mat-form-field class="example-full-width" appearance="fill">
-					<mat-label>Number</mat-label>
+					<mat-label>Username</mat-label>
 					<input type="text"
 						   matInput
 						   [formControl]="searchAssigneeQuery"
 						   [matAutocomplete]="auto">
 					<mat-autocomplete #auto="matAutocomplete">
-					  <mat-option *ngFor="let option of filteredOptions | async" [value]="option">
+					  <mat-option *ngFor="let option of filteredOptions | async" [value]="option.name" (click)="addAssignee(option)">
 						{{option.name}}
 					  </mat-option>
 					</mat-autocomplete>
-				  </mat-form-field>
+				</mat-form-field>
+				<!-- <button mat-raised-button 
+						color="primary"
+						(click)="addAssignee()">
+					<mat-icon>+</mat-icon>
+				</button> -->
 			</div>
 		</div>
 		

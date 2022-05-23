@@ -3,7 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dial
 import { IAssignee, ITaskData } from './modal-task-interface';
 import { FormBuilder, FormControl } from '@angular/forms';
 import { MatMenuTrigger } from '@angular/material/menu';
-import { map, Observable } from 'rxjs';
+import { map, Observable, startWith } from 'rxjs';
 
 @Component({
   selector: 'app-modal-task',
@@ -127,23 +127,26 @@ export class ModalTaskComponent implements OnInit {
     this.mockTaskData.value.text.splice(i, 1);
   }
 
+  addAssignee(option: IAssignee): void {
+    this.mockTaskData.value.assignee.push(option);
+    // this.filteredOptions =
+    this.searchAssigneeQuery.setValue('')
+  }
+
   ngOnInit(): void {
     this.filteredOptions = this.searchAssigneeQuery.valueChanges.pipe(
+      startWith(''),
       map(value => this._filter(value)),
     );
   }
 
   private _filter(value: string): IAssignee[] {
     const filterValue = value.toLowerCase();
-    // console.log(this.mockTaskData.value.assignee.filter(item => item.))
-    console.log(this.mockTaskData.value.assignee.filter((item: IAssignee) => item.id != this.mockUsers[0].id))
-    // console.log(this.mockUsers.filter(user => (
-    //   user.name.toLowerCase().includes(filterValue) && 
-    //   this.mockTaskData.value.assignee.filter((item: IAssignee) => item.id != user.id)
-    // )))
+    const arrOfUsedIds = this.mockTaskData.value.assignee.map((i: IAssignee) => i.id)
+
     return this.mockUsers.filter(user => (
       user.name.toLowerCase().includes(filterValue) && 
-      this.mockTaskData.value.assignee.filter((item: IAssignee) => item.id != user.id)
+      !arrOfUsedIds.includes(user.id)
     ));
   }
 }
