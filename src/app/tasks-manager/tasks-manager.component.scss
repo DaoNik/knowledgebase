@@ -23,6 +23,12 @@
   }
 }
 
-.task-manager__link {
-  
+.task-manager__nav-list {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: start;
+  gap: 30px;
+
+  padding: 0;
 }
