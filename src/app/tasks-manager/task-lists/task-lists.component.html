@@ -22,7 +22,8 @@
       class="example-list"
       (cdkDropListDropped)="drop($event)"
     >
-      <div class="example-box" *ngFor="let item of column.tasks" cdkDrag (click)="openTask(item)">
+      <div class="example-box" *ngFor="let item of column.tasks" cdkDrag routerLink={{item}}>
+        <!-- (click)="openTask(item)" -->
         {{ item }}
       </div>
     </div>
@@ -43,3 +44,4 @@
     </form>
   </div>
 </div>
+<router-outlet></router-outlet>

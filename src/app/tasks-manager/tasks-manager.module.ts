@@ -29,10 +29,21 @@ import { ModalTaskComponent } from './modal-task/modal-task.component';
 import { RouterModule, Routes } from '@angular/router';
 import { TasksManagerComponent } from './tasks-manager.component';
 import { TasksTableComponent } from './tasks-table/tasks-table.component';
+import { ModalTaskService } from './modal-task/modal-task.service';
+import { ModalTaskEntryComponent } from './modal-task/modal-task-entry.component';
+import { MainComponent } from '../main/main.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'lists', pathMatch: 'full' },
-  { path: 'lists', component: TaskListsComponent, data: {displayName: 'Списки задач'} },
+  { path: 'lists', component: TaskListsComponent, children: [
+    {
+      path: ':item',
+      component: ModalTaskEntryComponent,
+      data: {
+        displayName: 'Задача',
+      },
+    },
+  ],  data: {displayName: 'Списки задач'} },
   { path: 'form', component: FormIssueComponent, data: {displayName: 'Форма заявки'}  },
   { path: 'table', component: TasksTableComponent, data: {displayName: 'Таблица задач'}  },
 ];
