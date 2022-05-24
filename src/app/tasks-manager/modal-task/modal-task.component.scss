@@ -2,11 +2,10 @@
 	display: grid;
 	position: relative;
 	grid-template-columns: 70% 30%;
-	grid-template-rows: 70px 30px 90px 300px;
-	grid-column-gap: 0px;
-	grid-row-gap: 0px;
+	grid-template-rows: auto 30px minmax(100px, 300px);
+	grid-column-gap: 10px;
+	grid-row-gap: 20px;
 	width: 100%;
-	height: 500px;
 	color: black;
 
 	.modal-task__close {
@@ -33,50 +32,74 @@
 	.modal-task__title { 
 		grid-area: 1 / 1 / 2 / 3;
 		margin-bottom: 0;
-		padding: 10px 10px 0;
-		width: 90%;
+		padding: 10px 0 0 10px;
+		width: calc(100% - 10px);
 		height: 100%;
 		display: flex;
 		flex-direction: row;		
 		text-align: left;
 
 		h2 {
+			width: 80%;
 			margin: 0;
 			height: 100%;
 			overflow-wrap: break-word;
 			overflow: hidden;
+			font-size: 24px;
+			font-weight: bold;
 		}
 
 		input {
+			width: 80%;
 			height: 30px;
-			width: 100%;
 			font-size: 24px;
 			font-weight: bold;
 			border: none;
+
+			&:focus {
+				outline: none;
+			}
+		}
+
+		.modal-task__title_status {
+			width: 20%;
+			height: calc(100% + 10px);
+			margin: -10px -10px 0 0;
+			text-align: center;
+			padding: 23px 0;
+			cursor: pointer;
+
+			p {
+				font-size: 24px;
+
+				@media (max-width: 730px) {
+					font-size: 20px;
+				}
+			}
+		}
+
+		@media (max-width: 730px) {
+			.modal-task__title_status {
+				min-width: 110px;
+			}
+
+			h2 {
+				width: calc(100% - 110px)
+			}
+
+			input {
+				width: calc(100% - 110px)
+			}
 		}
 	}
 	
 	.modal-task__status { 
 		grid-area: 2 / 1 / 3 / 2; 
-		padding: 10px;
+		margin: 0 0 20px;
 		display: flex;
 		flex-direction: row;
 		cursor: pointer;
-		// background: green;
 
-		p {
-			margin: 0;
-			padding: 4px;
-		}
-	}
-	
-	.modal-task__description { 
-		grid-area: 3 / 1 / 4 / 2; 
-		padding: 10px;
-		display: flex;
-		flex-direction: row;
-		// background: pink;
-		
 		p {
 			margin: 0;
 			padding: 4px;
@@ -84,13 +107,28 @@
 	}
 	
 	.modal-task__text { 
-		grid-area: 4 / 1 / 5 / 2;
+		grid-area: 3 / 1 / 4 / 2; 
 		text-align: center;
 		overflow: auto;
+		padding-right: 25px;
 
 		.modal-task__text_wrp {
 			display: flex;
 			flex-direction: row;
+
+			.more {
+				cursor: pointer;
+				transition: 0.3s;
+
+				&:hover {
+					transform: scale(1.1);
+				}
+			}
+
+			.custom-done {
+				text-decoration: line-through;
+				color: gray;
+			}
 		}
 
 		.modal_task__text_icon {
@@ -109,8 +147,8 @@
 			border: none;
 
 			&:focus {
-				border: none;
-				box-shadow: none;
+				outline: none;
+				border-bottom: 1px solid black;
 			}
 		}
 
@@ -121,6 +159,10 @@
 			height: 24px;
 			border: none;
 			border-bottom: 1px solid;
+
+			&:focus {
+				outline: none;
+			}
 		}
 
 		.modal-task__text_input_disabled {
@@ -141,11 +183,16 @@
 	}
 	
 	.modal-task__assignee { 
-		grid-area: 2 / 2 / 5 / 3; 
+		grid-area: 2 / 2 / 4 / 3; 
 		padding: 10px;
+		width: calc(100% - 10px);
 		display: flex;
 		flex-direction: row;
 		overflow: auto;
+
+		.person-wrapper {
+			width: 100%;
+		}
 
 		.modal-task__assignee_line {
 			border: 1px solid grey;
@@ -173,6 +220,12 @@
 		.modal-task__assignee_add {
 			display: flex;
 			flex-direction: row;
+			width: 100%;
+			height: 60px;
+
+			input {
+				width: 100%;
+			}
 
 			button {
 				height: 50px;
@@ -183,23 +236,17 @@
 
 	@media (max-width: 900px) {
 		grid-template-columns: 1fr;
-		height: 600px;
-		grid-template-rows: 70px 30px auto 90px 200px;
+		// height: 600px;
+		// grid-template-rows: 70px 30px auto 90px 200px;
+		grid-template-rows: auto 30px minmax(auto, 200px) minmax(100px, 300px);
 
 		.modal-task__title { 
 			grid-area: 1 / 1 / 2 / 2; 
+			width: 100%;
 		}
 		
 		.modal-task__status { 
 			grid-area: 2 / 1 / 3 / 2; 
-		}
-		
-		.modal-task__description { 
-			grid-area: 4 / 1 / 5 / 2; 
-		}
-		
-		.modal-task__text { 
-			grid-area: 5 / 1 / 6 / 2; 
 		}
 		
 		.modal-task__assignee { 
@@ -208,6 +255,10 @@
 			.modal-task__assignee_line {
 				display: none;
 			}
+		}
+
+		.modal-task__text { 
+			grid-area: 4 / 1 / 5 / 2; 
 		}
 	}
 }

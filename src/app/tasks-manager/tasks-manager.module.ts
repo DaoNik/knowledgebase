@@ -27,10 +27,22 @@ import { FormIssueComponent } from './form-issue/form-issue.component';
 import { ModalTaskComponent } from './modal-task/modal-task.component';
 import { RouterModule, Routes } from '@angular/router';
 import { TasksManagerComponent } from './tasks-manager.component';
+import { ModalTaskService } from './modal-task/modal-task.service';
+import { ModalTaskEntryComponent } from './modal-task/modal-task-entry.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'tasks', pathMatch: 'full' },
-  { path: 'tasks', component: MainComponent },
+  { path: 'tasks', component: MainComponent,
+    children: [
+      {
+        path: ':item',
+        component: ModalTaskEntryComponent,
+        data: {
+          displayName: 'Задача',
+        },
+      },
+    ], 
+  },
   { path: 'form', component: FormIssueComponent },
 ];
 

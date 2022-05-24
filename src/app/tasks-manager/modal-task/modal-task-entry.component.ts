@@ -1,17 +1,19 @@
-import { Injectable } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ModalTaskComponent } from './modal-task.component';
 
-@Injectable({
-  providedIn: 'root'
+@Component({
+  template: ''
 })
-export class ModalTaskService {
+export class ModalTaskEntryComponent {
   constructor(
     public dialog: MatDialog,
     private router: Router,
     private route: ActivatedRoute
   ) {
+    const url = this.router.url.split('/')
+    this.openDialog(url[url.length - 1].replace(/%20/g, ' '));
   }
 
   openDialog(data?: any): void {
@@ -20,6 +22,10 @@ export class ModalTaskService {
       data: data,
       maxWidth: '1000px',
       width: '90%'
+    });
+    
+    dialogRef.afterClosed().subscribe(result => {
+      this.router.navigate(['../'], { relativeTo: this.route });
     });
   }
 }
