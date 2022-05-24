@@ -29,6 +29,8 @@ export class MainComponent implements OnInit {
     tasks: ['Get up', 'Brush teeth', 'Take a shower', 'Check e-mail', 'Walk dog']
   };
 
+  changer: boolean = false;
+
   list: ITasksList[] = [this.todo, this.inProgress, this.done];
 
   public form!: FormGroup;
@@ -80,5 +82,14 @@ export class MainComponent implements OnInit {
     }
     this.list.push(newColumn);
     this.isHiddenColumn = false;
+  }
+
+  changeName(event: any, name: string) {
+    this.list.forEach((column: any) => {
+      if (column.name === name) {
+        column.name = event.target.value
+      }
+    })
+    this.changer = false;
   }
 }
