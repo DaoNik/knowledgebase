@@ -20,8 +20,6 @@ import { MatSelectModule } from '@angular/material/select';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatBadgeModule } from '@angular/material/badge';
 
-import { HeaderComponent } from './header/header.component';
-import { SidebarComponent } from './header/sidebar/sidebar.component';
 import { TaskListsComponent } from './task-lists/task-lists.component';
 import { FormIssueComponent } from './form-issue/form-issue.component';
 import { ModalTaskComponent } from './modal-task/modal-task.component';
@@ -36,8 +34,6 @@ const routes: Routes = [
 
 @NgModule({
   declarations: [
-    HeaderComponent,
-    SidebarComponent,
     TaskListsComponent,
     FormIssueComponent,
     ModalTaskComponent,
