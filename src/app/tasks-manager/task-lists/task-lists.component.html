@@ -1,8 +1,8 @@
-<h2 class="main-title">Основная задачи</h2>
+<h2 class="main-title">Доска задач</h2>
 <div class="main__board" cdkDropListGroup>
- 
+
   <div class="example-container" *ngFor="let column of list">
-    
+
     <div class="example-toDo-header">
       <button *ngIf="isHidden === false && column.name === 'To Do'" (click)="isHidden = !isHidden">+</button>
       <h2>{{column.name}}</h2>
@@ -28,13 +28,13 @@
       </div>
     </div>
   </div>
-  
+
   <div>
     <div class="example-newList">
       <button (click)="isHiddenColumn = !isHiddenColumn">+</button>
       <p>Добавить колонку</p>
     </div>
-    
+
     <form [formGroup]="formColumns" (ngSubmit)="addColumn()" *ngIf="isHiddenColumn">
       <mat-form-field appearance="fill">
         <mat-label>Column name</mat-label>

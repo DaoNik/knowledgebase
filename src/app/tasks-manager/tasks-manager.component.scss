@@ -11,7 +11,6 @@
 }
 
 .main {
-  margin-top: 80px;
   padding: 0 10px;
   width: 100%;
 
@@ -20,6 +19,16 @@
   }
 
   @media (min-width: 1440px) {
-    margin: 100px auto 0;
+    margin: 0 auto;
   }
+}
+
+.task-manager__nav-list {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: start;
+  gap: 30px;
+
+  padding: 0;
 }
