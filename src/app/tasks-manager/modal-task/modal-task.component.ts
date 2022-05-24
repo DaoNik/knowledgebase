@@ -1,9 +1,11 @@
 import { Component, Inject, OnInit, ViewChild } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
 import { IAssignee, ITaskData, ITypeOption } from './modal-task-interface';
-import { FormBuilder, FormControl } from '@angular/forms';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { MatMenuTrigger } from '@angular/material/menu';
 import { map, Observable, startWith } from 'rxjs';
+import { ActivatedRoute, Params, Router } from '@angular/router';
+import { ModalTaskService } from './modal-task.service';
 
 @Component({
   selector: 'app-modal-task',
@@ -12,8 +14,9 @@ import { map, Observable, startWith } from 'rxjs';
 })
 export class ModalTaskComponent implements OnInit {
   mockTaskData = this.fb.group({
-    title: [this.data],
+    title: [this.data, Validators.minLength(4)],
     status: ['In progress'],
+    column: ['Третий столбец'],
     assignee: 
       [[{
         name: 'Giovanni Gorgio', 
@@ -36,7 +39,7 @@ export class ModalTaskComponent implements OnInit {
       value: 'true'
     }]]
   });
-  mockStatusVariants: string[] = ['Todo', 'In progress', 'Done']
+  mockColumnNames: string[] = ['Первый столбец', 'Второй столбец', 'Третий столбец']
   mockUsers: IAssignee[] = [
     {
       name: 'Giovanni Gorgio', 
@@ -55,7 +58,8 @@ export class ModalTaskComponent implements OnInit {
       id: 4,
       avatar: ''
     }
-  ]
+  ];
+  statusVariants: string[] = ['Todo', 'In progress', 'Done'];
   typeOptions: ITypeOption[] = [{
     name: 'text',
     type: '',
@@ -84,8 +88,12 @@ export class ModalTaskComponent implements OnInit {
   constructor(
     public dialogRef: MatDialogRef<ModalTaskComponent>,
     @Inject(MAT_DIALOG_DATA) public data: string,
-    private fb: FormBuilder
-  ) {}
+    private fb: FormBuilder,
+    private router: Router,
+    private route: ActivatedRoute,
+    private modalTaskServ: ModalTaskService
+  ) {
+  }
   
 
   onNoClick(): void {
@@ -134,6 +142,10 @@ export class ModalTaskComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    console.log('loaded modal')
+    this.route.params.subscribe((params: Params) => {
+      this.data = params['id']; //this.articlesServ.getArticle()
+    });
     this.filteredOptions = this.searchAssigneeQuery.valueChanges.pipe(
       startWith(''),
       map(value => this._filter(value)),

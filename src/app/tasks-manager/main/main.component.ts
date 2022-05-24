@@ -7,6 +7,7 @@ import {
 import { ModalTaskService } from '../modal-task/modal-task.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ITasksList } from '../interfaces/taskList.interface';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-main',
@@ -36,7 +37,11 @@ export class MainComponent implements OnInit {
   isHidden: boolean = false;
   isHiddenColumn: boolean = false;
 
-  constructor(private modalServ: ModalTaskService) {
+  constructor(
+    private modalServ: ModalTaskService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {
     this.form = new FormGroup({
       toDoName: new FormControl("", [Validators.required, Validators.minLength(4), Validators.maxLength(40)])
     })
@@ -66,6 +71,7 @@ export class MainComponent implements OnInit {
 
   openTask(item: any) {
     this.modalServ.openDialog(item)
+    this.router.navigate(['tasks-manager/tasks', item]);
   }
   addToDo() {
     this.isHidden = false;
