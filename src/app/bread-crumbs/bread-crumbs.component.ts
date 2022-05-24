@@ -36,7 +36,7 @@ export class BreadCrumbsComponent implements OnInit {
             url: currUrl,
             params: routeSnaphot.params
           });
-          
+
           if (this.breadcrumbs[this.breadcrumbs.length - 1].displayName == 'Номер статьи') {
 
             this.breadService.getArticle(this.breadcrumbs[this.breadcrumbs.length - 1].params['id']).subscribe((item: IArticle) => {

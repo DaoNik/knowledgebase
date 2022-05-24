@@ -7,13 +7,20 @@ import {
 import { ModalTaskService } from '../modal-task/modal-task.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ITasksList } from '../interfaces/taskList.interface';
+import { ActivatedRoute, Router } from '@angular/router';
+
+const mockLists: string[] = [];
+
 
 @Component({
-  selector: 'app-main',
-  templateUrl: './main.component.html',
-  styleUrls: ['./main.component.scss'],
+  selector: 'app-task-lists',
+  templateUrl: './task-lists.component.html',
+  styleUrls: ['./task-lists.component.scss'],
 })
-export class MainComponent implements OnInit {
+export class TaskListsComponent implements OnInit {
+
+  basicLists: string[] = ['TO DO', 'IN PROGRESS', 'DONE'];
+
   todo: ITasksList = {
     name: "To Do",
     tasks: ['Get to work', 'Pick up groceries', 'Go home', 'Fall asleep']
@@ -38,7 +45,11 @@ export class MainComponent implements OnInit {
   isHidden: boolean = false;
   isHiddenColumn: boolean = false;
 
-  constructor(private modalServ: ModalTaskService) {
+  constructor(
+    private modalServ: ModalTaskService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {
     this.form = new FormGroup({
       toDoName: new FormControl("", [Validators.required, Validators.minLength(4), Validators.maxLength(40)])
     })
@@ -68,6 +79,7 @@ export class MainComponent implements OnInit {
 
   openTask(item: any) {
     this.modalServ.openDialog(item)
+    this.router.navigate(['tasks-manager/tasks', item]);
   }
   addToDo() {
     this.isHidden = false;

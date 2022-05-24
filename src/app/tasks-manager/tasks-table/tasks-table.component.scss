@@ -1,0 +1,73 @@
+.container {
+    max-width: 1280px;
+    margin: 0 auto;
+    padding-bottom: 60px;
+}
+
+table {
+    width: 100%;        
+}
+
+.mat-row {
+    cursor: pointer;
+}
+.mat-row:active {
+    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+    0 8px 10px 1px rgba(0, 0, 0, 0.14),
+    0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.mat-cell {
+    font-size: 8px;
+
+    @media (min-width: 370px) {
+        font-size: 10px;        
+    }
+    @media (min-width: 460px) {
+        font-size: 14px;        
+    }
+}
+.mat-header-cell {
+    font-size: 8px;
+
+    @media (min-width: 370px) {
+        font-size: 10px;        
+    }
+    @media (min-width: 460px) {
+        font-size: 14px;        
+    }
+}
+
+.mat-form-field {
+    font-size: 14px;
+    width: 100%;
+
+    margin-top: 20px;
+}
+
+td,
+th {
+    width: 20%;
+}
+
+.cdk-drag-preview {
+    width: 100%;
+    height: 100%;
+    box-sizing: border-box;
+    border-radius: 4px;
+    box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
+        0 8px 10px 1px rgba(0, 0, 0, 0.14),
+        0 3px 14px 2px rgba(0, 0, 0, 0.12);
+}
+
+.cdk-drag-placeholder {
+    opacity: 0;
+}
+
+.cdk-drag-animating {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}
+
+.example-list.cdk-drop-list-dragging .example-box:not(.cdk-drag-placeholder) {
+    transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
+}

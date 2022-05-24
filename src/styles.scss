@@ -42,9 +42,10 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 }
 
 .search__from_autocomplete {
-  background-color: white;
+  background: white!important;
 
   .mat-option {
+    background: white!important;
     color: black!important;
     position: relative!important;
 
@@ -67,3 +68,12 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     }
   }
 }
+
+.modal-task-global {
+  mat-dialog-container {
+    padding: 0 0 25px 25px;
+  }
+}
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

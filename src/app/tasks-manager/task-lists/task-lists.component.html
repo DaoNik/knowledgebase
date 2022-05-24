@@ -1,8 +1,8 @@
-<h2 class="main-title">Основная задачи</h2>
+<h2 class="main-title">Доска задач</h2>
 <div class="main__board" cdkDropListGroup>
- 
+
   <div class="example-container" *ngFor="let column of list">
-    
+
     <div class="example-toDo-header">
       <h2 *ngIf="!changer" (dblclick)="changer = !changer">{{column.name}}</h2>
       <mat-form-field *ngIf="changer" appearance="fill">
@@ -24,19 +24,19 @@
       class="example-list"
       (cdkDropListDropped)="drop($event)"
     >
-      <div class="example-box" *ngFor="let item of column.tasks" cdkDrag>
+      <div class="example-box" *ngFor="let item of column.tasks" cdkDrag routerLink={{item}}>
         <button *ngIf="isHidden === false" (click)="isHidden = !isHidden">+</button>
         <div>{{ item }}</div>
       </div>
     </div>
   </div>
-  
+
   <div>
     <div class="example-newList">
       <button (click)="isHiddenColumn = !isHiddenColumn">+</button>
       <p>Добавить колонку</p>
     </div>
-    
+
     <form [formGroup]="formColumns" (ngSubmit)="addColumn()" *ngIf="isHiddenColumn">
       <mat-form-field appearance="fill">
         <mat-label>Column name</mat-label>
@@ -46,3 +46,4 @@
     </form>
   </div>
 </div>
+<router-outlet></router-outlet>
