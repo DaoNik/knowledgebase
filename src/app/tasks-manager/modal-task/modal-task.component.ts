@@ -13,51 +13,47 @@ import { ModalTaskService } from './modal-task.service';
   styleUrls: ['./modal-task.component.scss']
 })
 export class ModalTaskComponent implements OnInit {
-  mockTaskData = this.fb.group({
-    title: [this.data, Validators.minLength(4)],
-    status: ['In progress'],
-    column: ['Третий столбец'],
-    assignee: 
-      [[{
-        name: 'Giovanni Gorgio', 
-        id: 1,
-        avatar: ''
-      },{
-        name: 'Bruh Bruv', 
-        id: 2,
-        avatar: ''
-      }]]
-    ,
-    description: ['Короткое описание задачи'],
-    text: [[{
-      text: 'Пункт 1', 
-      type: 'ul',
-      value: 'false'
-    },{
-      text: 'Пункт 2', 
-      type: 'todo',
-      value: 'true'
-    }]]
+  // taskData = this.fb.group({
+  //   title: ['Title', Validators.minLength(4)],
+  //   id: this.data,
+  //   status: ['In progress'],
+  //   column: ['Третий столбец'],
+  //   assignee: 
+  //     [[{
+  //       name: 'Giovanni Gorgio', 
+  //       id: 1,
+  //       avatar: ''
+  //     },{
+  //       name: 'Bruh Bruv', 
+  //       id: 2,
+  //       avatar: ''
+  //     }]]
+  //   ,
+  //   description: ['Короткое описание задачи'],
+  //   text: [[{
+  //     text: 'Пункт 1', 
+  //     type: 'ul',
+  //     value: 'false'
+  //   },{
+  //     text: 'Пункт 2', 
+  //     type: 'todo',
+  //     value: 'true'
+  //   }]]
+  // });
+  recievedData: any;
+  taskData = this.fb.group({
+    title: ['Title', Validators.minLength(4)],
+    id: this.data,
+    status: [],
+    column: [],
+    columnId: [],
+    assignee: [[]],
+    text: [[]]
   });
-  mockColumnNames: string[] = ['Первый столбец', 'Второй столбец', 'Третий столбец']
-  mockUsers: IAssignee[] = [
-    {
-      name: 'Giovanni Gorgio', 
-      id: 1,
-      avatar: ''
-    },{
-      name: 'Bruh Bruv', 
-      id: 2,
-      avatar: ''
-    },{
-      name: 'Another User', 
-      id: 3,
-      avatar: ''
-    },{
-      name: 'Darth Vader', 
-      id: 4,
-      avatar: ''
-    }
+  // taskData: ITaskData = []
+  columns: any = []
+  mockUsers: string[] = [
+    'Giovanni Gorgio', 'Bruh Bruv', 'Another User', 'Darth Vader'
   ];
   statusVariants: string[] = ['Todo', 'In progress', 'Done'];
   typeOptions: ITypeOption[] = [{
@@ -83,7 +79,7 @@ export class ModalTaskComponent implements OnInit {
     value: ''
   };
   searchAssigneeQuery = new FormControl(['']);
-  filteredOptions!: Observable<IAssignee[]>;
+  filteredOptions!: Observable<string[]>;
 
   constructor(
     public dialogRef: MatDialogRef<ModalTaskComponent>,
@@ -99,66 +95,129 @@ export class ModalTaskComponent implements OnInit {
   onNoClick(): void {
     this.dialogRef.close();
   }
-  
-  dummy(a: any) {
-    console.log(a)
-  }
 
   addText(e: any, num: number) {
+    console.log(this.taskData.value.text)
     if (num == -1) {
-      this.mockTaskData.value.text.push({
-        text: e.target.value, 
-        type: this.createOption.type,
-        value: this.createOption.value
-      })
+      if (!this.taskData.value.text) {
+        this.taskData.value.text = [{
+          text: e.target.value, 
+          type: this.createOption.type,
+          value: this.createOption.value
+        }]
+      } else {
+        this.taskData.value.text.push({
+          text: e.target.value, 
+          type: this.createOption.type,
+          value: this.createOption.value
+        })
+      }
       e.target.value = '';
       this.createOption.type = '';
       this.createOption.value = '';
     } else {
-      this.mockTaskData.value.text[num].text = e.target.value;
+      this.taskData.value.text[num].text = e.target.value;
     }
     this.inputTrigger = false;
-    console.log(this.mockTaskData.value.text)
+    console.log(this.taskData.value.text)
+    this.updateTaskData();
+  }
+
+  changeStatus(status: string) {
+    this.taskData.value.status = status;
+    this.updateTaskData();
+  }
+
+  changeColumn(columnTitle: string) {
+    this.taskData.value.column = columnTitle;
+    this.updateTaskData();
+  }
+
+  changetitle() {
+    this.headerTrigger = !this.headerTrigger;
+    this.updateTaskData();
   }
 
   changeType(option: any, i: number) {
     if (i >= 0){
-      this.mockTaskData.value.text[i].type = option.type;
-      this.mockTaskData.value.text[i].value = option.value;
+      this.taskData.value.text[i].type = option.type;
+      this.taskData.value.text[i].value = option.value;
     } else {
       this.createOption.type = option.type;
       this.createOption.value = option.value;
     }
+    this.updateTaskData();
   }
 
   deleteString(i: number) {
-    this.mockTaskData.value.text.splice(i, 1);
+    this.taskData.value.text.splice(i, 1);
+    this.updateTaskData();
   }
 
-  addAssignee(option: IAssignee): void {
-    this.mockTaskData.value.assignee.push(option);
-    // this.filteredOptions =
-    this.searchAssigneeQuery.setValue('')
+  addAssignee(option: string): void {
+    this.taskData.value.assignee.push(option);
+    this.searchAssigneeQuery.setValue('');
+    this.updateTaskData();
+  }
+
+  removeAssignee(index: number): void {
+    this.taskData.value.assignee.splice(index, 1);
+    this.updateTaskData();
   }
 
   ngOnInit(): void {
-    console.log('loaded modal')
-    this.route.params.subscribe((params: Params) => {
-      this.data = params['id']; //this.articlesServ.getArticle()
-    });
+    const url = this.router.url.split('/')
+    
+    
+    this.modalTaskServ.getTask(Number(url[url.length - 1])).subscribe((res: any) => {
+      this.taskData.patchValue({
+        title: res.title,
+        assignee: res.respondents,
+        status: res.status,
+        columnId: res.columnId
+      });
+
+      if (res.description.length > 0) {
+        this.taskData.patchValue({
+          text: JSON.parse(res.description)
+        });
+      }
+
+      this.modalTaskServ.getColumns().subscribe(columns => {
+          this.columns = columns;
+          columns.map((column: any) => {
+          if (column.id == res.columnId) {
+            this.taskData.patchValue({
+              column: column.title
+            });
+          }
+        })
+      })
+    })
+      
     this.filteredOptions = this.searchAssigneeQuery.valueChanges.pipe(
       startWith(''),
       map(value => this._filter(value)),
     );
   }
 
-  private _filter(value: string): IAssignee[] {
+  updateTaskData() {
+    const updatedData = {
+      title: this.taskData.value.title,
+      status: this.taskData.value.status,
+      column: this.taskData.value.column,
+      respondents: this.taskData.value.assignee,
+      description: JSON.stringify(this.taskData.value.text)
+    }
+    this.modalTaskServ.updateTask(Number(this.data), updatedData).subscribe(resp => console.log(resp))
+  }
+
+  private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
-    const arrOfUsedIds = this.mockTaskData.value.assignee.map((i: IAssignee) => i.id)
+    const arrOfUsedNames = this.taskData.value.assignee ? this.taskData.value.assignee.map((i: string) => i) : []
 
     return this.mockUsers.filter(user => (
-      user.name.toLowerCase().includes(filterValue) && 
-      !arrOfUsedIds.includes(user.id)
+      user.toLowerCase().includes(filterValue) && !!!this.taskData.value.assignee.includes(user)
     ));
   }
 }
