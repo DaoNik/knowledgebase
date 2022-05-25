@@ -1,6 +1,16 @@
 <main class="main">
-  <h2 class="main__title visually-hidden">Частые вопросы</h2>
-  <!-- <app-article></app-article> -->
+  <div class="intro">
+    <h2 class="main__title">Все решения в одном месте</h2>
+    <p class="intro__description">
+      Здесь собраны все статьи о проблемах с которыми вы можете столкнуться и
+      пути их решения
+    </p>
+    <app-search class="intro__search"></app-search>
+    <p class="intro__articles">
+      Найдено {{ currentPageArticles.length }} статей
+    </p>
+  </div>
+
   <ul class="articles">
     <li
       class="articles__item"
@@ -22,8 +32,17 @@
   </ul>
   <ul class="articles__pagination-list">
     <li class="articles__pagination-item" *ngFor="let page of pages">
-      <button color="primary" mat-raised-button class="articles__pagination-link" (click)="pageClick(page)"
-        [class]="currentPage === page? 'articles__pagination-link--active' : ''">{{page}}</button>
+      <button
+        color="primary"
+        mat-raised-button
+        class="articles__pagination-link"
+        (click)="pageClick(page)"
+        [class]="
+          currentPage === page ? 'articles__pagination-link--active' : ''
+        "
+      >
+        {{ page }}
+      </button>
     </li>
   </ul>
 </main>
