@@ -6,11 +6,9 @@ import {
 } from '@angular/cdk/drag-drop';
 import { ModalTaskService } from '../modal-task/modal-task.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { ITasksList } from '../interfaces/taskList.interface';
+import { IBoard } from '../interfaces/taskList.interface';
 import { ActivatedRoute, Router } from '@angular/router';
-
-const mockLists: string[] = [];
-
+import { TasksManagerService } from '../tasks-manager.service';
 
 @Component({
   selector: 'app-task-lists',
@@ -18,49 +16,48 @@ const mockLists: string[] = [];
   styleUrls: ['./task-lists.component.scss'],
 })
 export class TaskListsComponent implements OnInit {
-
-  basicLists: string[] = ['TO DO', 'IN PROGRESS', 'DONE'];
-
-  todo: ITasksList = {
-    name: "To Do",
-    tasks: ['Get to work', 'Pick up groceries', 'Go home', 'Fall asleep']
-  };
-
-  inProgress: ITasksList = {
-    name: "In Progress",
-    tasks: ['Max goes to toilet', 'Max washes his ass', 'Dimon goes to walk on Naberezhnaya', 'We are kicked Karina into the mute voice channel']
-  };
-
-  done: ITasksList = {
-    name: "Done",
-    tasks: ['Get up', 'Brush teeth', 'Take a shower', 'Check e-mail', 'Walk dog']
-  };
-
   changer: boolean = false;
+  isHidden: boolean = false;
+  isHiddenColumn: boolean = false;
 
-  list: ITasksList[] = [this.todo, this.inProgress, this.done];
+  board!: IBoard;
+  priority: string[] = ['Inconsiderable', 'Medium', 'Important'];
+  status: string[] = ['To Do', 'In Progress', 'Done'];
+  columnId!: number;
+  taskId!: number;
 
   public form!: FormGroup;
   public formColumns!: FormGroup;
-  isHidden: boolean = false;
-  isHiddenColumn: boolean = false;
 
   constructor(
     private modalServ: ModalTaskService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private taskServ: TasksManagerService
   ) {
     this.form = new FormGroup({
-      toDoName: new FormControl("", [Validators.required, Validators.minLength(4), Validators.maxLength(40)])
+      title: new FormControl("", [Validators.required, Validators.minLength(4), Validators.maxLength(100)]),
+      priority: new FormControl("Medium", Validators.required),
+      status: new FormControl("To Do", Validators.required)
     })
     this.formColumns = new FormGroup({
-      columnName: new FormControl("", [Validators.required, Validators.minLength(4), Validators.maxLength(15)])
+      columnName: new FormControl("", [Validators.required, Validators.minLength(4), Validators.maxLength(50)])
     })
   }
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.taskServ.getBoard()
+    .subscribe((board) => {
+      board.columns.forEach(column => {
+        this.taskServ.getColumn(column.id).subscribe(res => {
+          column.tasks = res.tasks;
+          this.board =  board;
+        })
+      })
+    })
+  }
 
-  drop(event: CdkDragDrop<string[]>) {
+  drop(event: CdkDragDrop<any[]>, columnId: number) {
     if (event.previousContainer === event.container) {
       moveItemInArray(
         event.container.data,
@@ -75,33 +72,37 @@ export class TaskListsComponent implements OnInit {
         event.currentIndex
       );
     }
+    this.taskServ.editTask(this.taskId, columnId)
+    .subscribe();
   }
 
-  openTask(item: any) {
+  openTask(item: string) {
     this.modalServ.openDialog(item)
     this.router.navigate(['tasks-manager/tasks', item]);
   }
-  addToDo() {
+  
+  addToDo(columnId: number) {
     this.isHidden = false;
-    this.list[0].tasks.unshift(this.form.value.toDoName)
+    this.taskServ.createTask(columnId, this.form.value.title, this.form.value.priority, this.form.value.status)
+    .subscribe();
     this.form.reset();
   }
 
   addColumn() {
-    let newColumn: ITasksList = {
-      name: this.formColumns.value.columnName,
-      tasks: []
-    }
-    this.list.push(newColumn);
+    this.taskServ.createColumn(1, this.formColumns.value.columnName)
+    .subscribe();
     this.isHiddenColumn = false;
   }
 
-  changeName(event: any, name: string) {
-    this.list.forEach((column: any) => {
-      if (column.name === name) {
-        column.name = event.target.value
-      }
-    })
+  changeName(event: any, id: number) {
+    this.taskServ.editColumn(id, event.target.value)
+    .subscribe();
+    this.changer = false;
+  }
+
+  deleteColumn(id: number) {
+    this.taskServ.deleteColumn(id)
+    .subscribe();
     this.changer = false;
   }
 }

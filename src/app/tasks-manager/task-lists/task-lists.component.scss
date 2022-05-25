@@ -25,36 +25,6 @@
   overflow: hidden;
   display: block;
   margin-bottom: 20px;
-
-  button {
-    margin-right: 20px;
-    border: none;
-    background: none;
-    color: white;
-    font-weight: 200;
-    font-size: 20px;
-    display: none;
-  }
-
-  button:hover {
-    font-size: 26px;
-    font-weight: 400;
-    color: black;
-  }
-}
-
-.example-box:hover {
-  button {
-    display: block;
-    font-weight: 200;
-    font-size: 20px;
-    color: black;
-  }
-
-  button:hover {
-    font-size: 26px;
-    font-weight: 400;
-  }
 }
 
 .example-box {
@@ -136,7 +106,27 @@
 
 mat-form-field {
   margin: 5px 0;
-  border: 1px gray; 
-  border-style: double;
-  border-radius: 10px;
+}
+
+.example-button {
+  button {
+    margin-right: 20px;
+    border: none;
+    background: none;
+    color: white;
+  }
+}
+
+.example-button:hover {
+  button {
+    display: block;
+    font-size: 26px;
+    font-weight: 400;
+    color: black;
+  }
+}
+
+.example-form {
+  display: flex;
+  flex-direction: column;
 }

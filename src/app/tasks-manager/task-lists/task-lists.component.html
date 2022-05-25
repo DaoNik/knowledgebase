@@ -1,34 +1,57 @@
-<h2 class="main-title">Доска задач</h2>
+<h2 class="main-title" *ngIf="board">{{board.title}}</h2>
 <div class="main__board" cdkDropListGroup>
 
-  <div class="example-container" *ngFor="let column of list">
+  <div class="example-container" *ngFor="let column of board.columns">
 
     <div class="example-toDo-header">
-      <h2 *ngIf="!changer" (dblclick)="changer = !changer">{{column.name}}</h2>
-      <mat-form-field *ngIf="changer" appearance="fill">
-        <input matInput type="text" value={{column.name}} (keydown.enter)="changeName($event, column.name)">
+      <h2 *ngIf="!changer" (dblclick)="[changer = !changer, columnId = column.id]">{{column.title}}</h2>
+      <mat-form-field *ngIf="changer && column.id === columnId" appearance="fill">
+        <input matInput type="text" value={{column.title}} (keydown.enter)="changeName($event, column.id)">
+        <button mat-button mat-raised-button (click)="deleteColumn(column.id)">Delete</button>
       </mat-form-field>
     </div>
-
-    <form [formGroup]="form" *ngIf="isHidden && column.name === 'To Do'" (ngSubmit)="addToDo()">
-      <mat-form-field appearance="fill">
-        <mat-label>Task name</mat-label>
-        <input matInput type="text" formControlName="toDoName">
-      </mat-form-field>
-      <button mat-raised-button class="example-createToDo" type="submit" [disabled]="form.invalid">Create</button>
-    </form>
     
     <div
+    *ngIf="column.tasks"
       cdkDropList
       [cdkDropListData]="column.tasks"
       class="example-list"
-      (cdkDropListDropped)="drop($event)"
+      (cdkDropListDropped)="drop($event, column.id)"
     >
-      <div class="example-box" *ngFor="let item of column.tasks" cdkDrag routerLink={{item}}>
-        <button *ngIf="isHidden === false" (click)="isHidden = !isHidden">+</button>
-        <div>{{ item }}</div>
+      <div class="example-box" *ngFor="let task of column.tasks" cdkDrag routerLink={{task.id}} (mousedown)="taskId = task.id">
+        {{task.title}}
       </div>
     </div>
+
+    <div class="example-button">
+      <button *ngIf="isHidden === false" (click)="[isHidden = !isHidden, columnId = column.id]">+</button>
+    </div>
+
+    <!-- Форма создания новой таски на самой доске -->
+    <form class="example-form" [formGroup]="form" *ngIf="isHidden && column.id === columnId" (ngSubmit)="addToDo(column.id)">
+      <mat-form-field appearance="fill">
+        <mat-label>Task name</mat-label>
+        <input matInput type="text" formControlName="title">
+      </mat-form-field>
+      <!-- <mat-form-field appearance="fill">
+        <mat-label>Status</mat-label>
+        <mat-select>
+          <mat-option *ngFor="let option of status" [value]="option" formControlName="status">
+            {{option}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <mat-form-field appearance="fill">
+        <mat-label>Priority</mat-label>
+        <mat-select>
+          <mat-option *ngFor="let option of priority" [value]="option" formControlName="priority">
+            {{option}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+      <button mat-raised-button class="example-createToDo" type="submit" [disabled]="form.invalid">Create</button> -->
+    </form>
+
   </div>
 
   <div>
