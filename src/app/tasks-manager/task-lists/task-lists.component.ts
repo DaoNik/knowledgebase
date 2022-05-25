@@ -9,12 +9,18 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { ITasksList } from '../interfaces/taskList.interface';
 import { ActivatedRoute, Router } from '@angular/router';
 
+const mockLists: string[] = [];
+
+
 @Component({
-  selector: 'app-main',
-  templateUrl: './main.component.html',
-  styleUrls: ['./main.component.scss'],
+  selector: 'app-task-lists',
+  templateUrl: './task-lists.component.html',
+  styleUrls: ['./task-lists.component.scss'],
 })
-export class MainComponent implements OnInit {
+export class TaskListsComponent implements OnInit {
+
+  basicLists: string[] = ['TO DO', 'IN PROGRESS', 'DONE'];
+
   todo: ITasksList = {
     name: "To Do",
     tasks: ['Get to work', 'Pick up groceries', 'Go home', 'Fall asleep']
@@ -29,6 +35,8 @@ export class MainComponent implements OnInit {
     name: "Done",
     tasks: ['Get up', 'Brush teeth', 'Take a shower', 'Check e-mail', 'Walk dog']
   };
+
+  changer: boolean = false;
 
   list: ITasksList[] = [this.todo, this.inProgress, this.done];
 
@@ -86,5 +94,14 @@ export class MainComponent implements OnInit {
     }
     this.list.push(newColumn);
     this.isHiddenColumn = false;
+  }
+
+  changeName(event: any, name: string) {
+    this.list.forEach((column: any) => {
+      if (column.name === name) {
+        column.name = event.target.value
+      }
+    })
+    this.changer = false;
   }
 }

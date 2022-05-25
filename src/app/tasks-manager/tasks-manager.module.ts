@@ -19,41 +19,42 @@ import { MatRippleModule } from '@angular/material/core';
 import { MatSelectModule } from '@angular/material/select';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
 import { MatBadgeModule } from '@angular/material/badge';
+import { MatTableModule } from '@angular/material/table';
+import { MatPaginatorModule } from '@angular/material/paginator';
+import { MatSortModule } from '@angular/material/sort';
 
-import { HeaderComponent } from './header/header.component';
-import { SidebarComponent } from './header/sidebar/sidebar.component';
-import { MainComponent } from './main/main.component';
+import { TaskListsComponent } from './task-lists/task-lists.component';
 import { FormIssueComponent } from './form-issue/form-issue.component';
 import { ModalTaskComponent } from './modal-task/modal-task.component';
 import { RouterModule, Routes } from '@angular/router';
 import { TasksManagerComponent } from './tasks-manager.component';
+import { TasksTableComponent } from './tasks-table/tasks-table.component';
 import { ModalTaskService } from './modal-task/modal-task.service';
 import { ModalTaskEntryComponent } from './modal-task/modal-task-entry.component';
+import { MainComponent } from '../main/main.component';
 
 const routes: Routes = [
-  { path: '', redirectTo: 'tasks', pathMatch: 'full' },
-  { path: 'tasks', component: MainComponent,
-    children: [
-      {
-        path: ':item',
-        component: ModalTaskEntryComponent,
-        data: {
-          displayName: 'Задача',
-        },
+  { path: '', redirectTo: 'lists', pathMatch: 'full' },
+  { path: 'lists', component: TaskListsComponent, children: [
+    {
+      path: ':item',
+      component: ModalTaskEntryComponent,
+      data: {
+        displayName: 'Задача',
       },
-    ], 
-  },
-  { path: 'form', component: FormIssueComponent },
+    },
+  ],  data: {displayName: 'Списки задач'} },
+  { path: 'form', component: FormIssueComponent, data: {displayName: 'Форма заявки'}  },
+  { path: 'table', component: TasksTableComponent, data: {displayName: 'Таблица задач'}  },
 ];
 
 @NgModule({
   declarations: [
-    HeaderComponent,
-    SidebarComponent,
-    MainComponent,
+    TaskListsComponent,
     FormIssueComponent,
     ModalTaskComponent,
     TasksManagerComponent,
+    TasksTableComponent,
   ],
   imports: [
     DragDropModule,
@@ -79,6 +80,9 @@ const routes: Routes = [
     MatSelectModule,
     MatAutocompleteModule,
     MatBadgeModule,
+    MatTableModule,
+    MatPaginatorModule,
+    MatSortModule,
   ],
   exports: [TasksManagerComponent],
 })
