@@ -9,14 +9,6 @@
         <input matInput type="text" value={{column.name}} (keydown.enter)="changeName($event, column.name)">
       </mat-form-field>
     </div>
-
-    <form [formGroup]="form" *ngIf="isHidden && column.name === 'To Do'" (ngSubmit)="addToDo()">
-      <mat-form-field appearance="fill">
-        <mat-label>Task name</mat-label>
-        <input matInput type="text" formControlName="toDoName">
-      </mat-form-field>
-      <button mat-raised-button class="example-createToDo" type="submit" [disabled]="form.invalid">Create</button>
-    </form>
     
     <div
       cdkDropList
@@ -25,10 +17,21 @@
       (cdkDropListDropped)="drop($event)"
     >
       <div class="example-box" *ngFor="let item of column.tasks" cdkDrag routerLink={{item}}>
-        <button *ngIf="isHidden === false" (click)="isHidden = !isHidden">+</button>
         <div>{{ item }}</div>
       </div>
     </div>
+
+    <div class="example-button">
+      <button *ngIf="isHidden === false" (click)="isHidden = !isHidden">+</button>
+    </div>
+
+    <form [formGroup]="form" *ngIf="isHidden" (ngSubmit)="addToDo()">
+      <mat-form-field appearance="fill">
+        <mat-label>Task name</mat-label>
+        <input matInput type="text" formControlName="toDoName">
+      </mat-form-field>
+      <button mat-raised-button class="example-createToDo" type="submit" [disabled]="form.invalid">Create</button>
+    </form>
   </div>
 
   <div>
