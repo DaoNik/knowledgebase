@@ -72,7 +72,10 @@ export class TaskListsComponent implements OnInit {
         event.currentIndex
       );
     }
-    this.taskServ.editTask(this.taskId, columnId)
+    const updatedData = {
+      columnId: columnId
+    };
+    this.taskServ.editTask(this.taskId, updatedData)
     .subscribe();
   }
 
@@ -80,7 +83,7 @@ export class TaskListsComponent implements OnInit {
     this.modalServ.openDialog(item)
     this.router.navigate(['tasks-manager/tasks', item]);
   }
-  
+
   addToDo(columnId: number) {
     this.isHidden = false;
     this.taskServ.createTask(columnId, this.form.value.title, this.form.value.priority, this.form.value.status)
