@@ -9,7 +9,7 @@
 	</h2>
 		<input *ngIf="headerTrigger"
 			   formControlName="title"
-			   (keyup.enter)="changetitle()"
+			   (keyup.enter)="changeTitle()"
 			   >
 		<div class="modal-task__title_status"
 			 [ngStyle]="{'background': 
@@ -36,7 +36,7 @@
 		<mat-menu #tableMenu="matMenu">
 			<button mat-menu-item 
 					*ngFor="let column of columns"
-					(click)="changeColumn(column.title)"
+					(click)="changeColumn(column)"
 					value={{column.title}}
 					[ngStyle]="{'color': taskData.value.column == column.title ? 'orange' : 'black'}">
 						{{column.title}}

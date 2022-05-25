@@ -6,6 +6,7 @@ import { MatMenuTrigger } from '@angular/material/menu';
 import { map, Observable, startWith } from 'rxjs';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { ModalTaskService } from './modal-task.service';
+import { TasksManagerService } from '../tasks-manager.service';
 
 @Component({
   selector: 'app-modal-task',
@@ -50,7 +51,6 @@ export class ModalTaskComponent implements OnInit {
     assignee: [[]],
     text: [[]]
   });
-  // taskData: ITaskData = []
   columns: any = []
   mockUsers: string[] = [
     'Giovanni Gorgio', 'Bruh Bruv', 'Another User', 'Darth Vader'
@@ -87,7 +87,8 @@ export class ModalTaskComponent implements OnInit {
     private fb: FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
-    private modalTaskServ: ModalTaskService
+    private modalTaskServ: ModalTaskService,
+    private taskManagerService: TasksManagerService
   ) {
   }
   
@@ -128,18 +129,19 @@ export class ModalTaskComponent implements OnInit {
     this.updateTaskData();
   }
 
-  changeColumn(columnTitle: string) {
-    this.taskData.value.column = columnTitle;
+  changeColumn(column: any) {
+    this.taskData.value.column = column.title;
+    this.taskData.value.columnId = column.id;
     this.updateTaskData();
   }
 
-  changetitle() {
+  changeTitle() {
     this.headerTrigger = !this.headerTrigger;
     this.updateTaskData();
   }
 
   changeType(option: any, i: number) {
-    if (i >= 0){
+    if (i >= 0) {
       this.taskData.value.text[i].type = option.type;
       this.taskData.value.text[i].value = option.value;
     } else {
@@ -167,29 +169,28 @@ export class ModalTaskComponent implements OnInit {
 
   ngOnInit(): void {
     const url = this.router.url.split('/')
-    
-    
-    this.modalTaskServ.getTask(Number(url[url.length - 1])).subscribe((res: any) => {
+    this.taskManagerService.getTask(Number(url[url.length - 1])).subscribe((res: any) => {
+      console.log(res.columnId)
       this.taskData.patchValue({
         title: res.title,
         assignee: res.respondents,
         status: res.status,
         columnId: res.columnId
       });
-
       if (res.description.length > 0) {
         this.taskData.patchValue({
           text: JSON.parse(res.description)
         });
       }
 
-      this.modalTaskServ.getColumns().subscribe(columns => {
+      this.taskManagerService.getColumns().subscribe(columns => {
           this.columns = columns;
           columns.map((column: any) => {
           if (column.id == res.columnId) {
             this.taskData.patchValue({
               column: column.title
             });
+            console.log(`${column.id} == ${res.columnId} = ${column.id == res.columnId}`)
           }
         })
       })
@@ -206,15 +207,16 @@ export class ModalTaskComponent implements OnInit {
       title: this.taskData.value.title,
       status: this.taskData.value.status,
       column: this.taskData.value.column,
+      columnId: this.taskData.value.columnId,
       respondents: this.taskData.value.assignee,
       description: JSON.stringify(this.taskData.value.text)
     }
-    this.modalTaskServ.updateTask(Number(this.data), updatedData).subscribe(resp => console.log(resp))
+    this.taskManagerService.editTask(Number(this.data), updatedData).subscribe()
   }
 
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();
-    const arrOfUsedNames = this.taskData.value.assignee ? this.taskData.value.assignee.map((i: string) => i) : []
+    // const arrOfUsedNames = this.taskData.value.assignee ? this.taskData.value.assignee.map((i: string) => i) : []
 
     return this.mockUsers.filter(user => (
       user.toLowerCase().includes(filterValue) && !!!this.taskData.value.assignee.includes(user)
