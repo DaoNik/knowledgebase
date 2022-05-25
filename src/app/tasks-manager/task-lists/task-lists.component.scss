@@ -106,9 +106,6 @@
 
 mat-form-field {
   margin: 5px 0;
-  border: 1px gray; 
-  border-style: double;
-  border-radius: 10px;
 }
 
 .example-button {
@@ -127,4 +124,9 @@ mat-form-field {
     font-weight: 400;
     color: black;
   }
+}
+
+.example-form {
+  display: flex;
+  flex-direction: column;
 }
