@@ -210,7 +210,7 @@ export class ModalTaskComponent implements OnInit {
       respondents: this.taskData.value.assignee,
       description: JSON.stringify(this.taskData.value.text)
     }
-    this.taskManagerService.editTask(Number(this.data), updatedData).subscribe()
+    this.taskManagerService.editTask(Number(this.data), updatedData).subscribe();
   }
 
   private _filter(value: string): string[] {
