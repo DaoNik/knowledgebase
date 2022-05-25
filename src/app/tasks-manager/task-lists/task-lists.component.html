@@ -18,7 +18,7 @@
       class="example-list"
       (cdkDropListDropped)="drop($event, column.id)"
     >
-      <div class="example-box" *ngFor="let task of column.tasks" cdkDrag routerLink={{task}} (mousedown)="taskId = task.id">
+      <div class="example-box" *ngFor="let task of column.tasks" cdkDrag routerLink={{task.id}} (mousedown)="taskId = task.id">
         {{task.title}}
       </div>
     </div>
@@ -33,7 +33,7 @@
         <mat-label>Task name</mat-label>
         <input matInput type="text" formControlName="title">
       </mat-form-field>
-      <mat-form-field appearance="fill">
+      <!-- <mat-form-field appearance="fill">
         <mat-label>Status</mat-label>
         <mat-select>
           <mat-option *ngFor="let option of status" [value]="option" formControlName="status">
@@ -49,7 +49,7 @@
           </mat-option>
         </mat-select>
       </mat-form-field>
-      <button mat-raised-button class="example-createToDo" type="submit" [disabled]="form.invalid">Create</button>
+      <button mat-raised-button class="example-createToDo" type="submit" [disabled]="form.invalid">Create</button> -->
     </form>
 
   </div>

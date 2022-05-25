@@ -92,8 +92,7 @@ export class ModalTaskComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private modalTaskServ: ModalTaskService
-  ) {
-  }
+  ) {}
   
 
   onNoClick(): void {
@@ -142,7 +141,7 @@ export class ModalTaskComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log('loaded modal')
+    // console.log('loaded modal')
     this.route.params.subscribe((params: Params) => {
       this.data = params['id']; //this.articlesServ.getArticle()
     });
@@ -150,6 +149,7 @@ export class ModalTaskComponent implements OnInit {
       startWith(''),
       map(value => this._filter(value)),
     );
+    console.log(this.data)
   }
 
   private _filter(value: string): IAssignee[] {

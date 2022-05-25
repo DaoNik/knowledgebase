@@ -49,7 +49,7 @@ export class TasksManagerService {
     return this.http.get<ITask>(`${this.url}/tasks/${id}`)
   }
 
-  createTask(columnId: number, title: string, priority: string, status: string, description?: string, authors?: string, respondents?: string[], tags?: string[], category?: string): Observable<ITask> {
+  createTask(columnId: number, title: string, priority?: string, status?: string, description?: string, authors?: string, respondents?: string[], tags?: string[], category?: string): Observable<ITask> {
     return this.http.post<ITask>(`${this.url}/tasks`, {columnId, title, priority, status, description, authors, respondents, tags, category})
   }
 

@@ -76,10 +76,11 @@ export class TaskListsComponent implements OnInit {
     .subscribe();
   }
 
-  openTask(item: any) {
+  openTask(item: string) {
     this.modalServ.openDialog(item)
     this.router.navigate(['tasks-manager/tasks', item]);
   }
+  
   addToDo(columnId: number) {
     this.isHidden = false;
     this.taskServ.createTask(columnId, this.form.value.title, this.form.value.priority, this.form.value.status)
