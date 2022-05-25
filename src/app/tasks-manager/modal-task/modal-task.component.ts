@@ -89,8 +89,7 @@ export class ModalTaskComponent implements OnInit {
     private route: ActivatedRoute,
     private modalTaskServ: ModalTaskService,
     private taskManagerService: TasksManagerService
-  ) {
-  }
+  ) {}
   
 
   onNoClick(): void {
@@ -195,11 +194,11 @@ export class ModalTaskComponent implements OnInit {
         })
       })
     })
-      
     this.filteredOptions = this.searchAssigneeQuery.valueChanges.pipe(
       startWith(''),
       map(value => this._filter(value)),
     );
+    console.log(this.data)
   }
 
   updateTaskData() {
