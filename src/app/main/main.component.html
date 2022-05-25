@@ -5,10 +5,8 @@
       Здесь собраны все статьи о проблемах с которыми вы можете столкнуться и
       пути их решения
     </p>
-    <app-search class="intro__search"></app-search>
-    <p class="intro__articles">
-      Найдено {{ articles.length }} статей
-    </p>
+    <app-search [bgColor]="true" class="intro__search"></app-search>
+    <p class="intro__articles">Найдено {{ articles.length }} статей</p>
   </div>
 
   <ul class="articles">
@@ -21,9 +19,10 @@
         <h3 class="articles__item-title">{{ article.title }}</h3>
         <p class="articles__item-date">
           Последнее обновление:
-          {{ article.dateUpdate | date: "dd/MM/yyyy" }}
+          {{ article.dateUpdate | date: "d MMMM y":"":"ru" }}
         </p>
         <p class="articles__item-description">{{ article.description }}</p>
+        <p class="articles__item-read">Читать статью</p>
       </a>
     </li>
     <p class="articles__no-articles" *ngIf="articles.length < 1">

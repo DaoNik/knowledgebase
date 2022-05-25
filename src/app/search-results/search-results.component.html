@@ -1,29 +1,37 @@
 <main class="main">
-  <h2 class="main__title visually-hidden">Частые вопросы</h2>
-  <!-- <app-article></app-article> -->
-  <ul class="main__articles">
+  <ul class="articles">
     <li
-      class="main__articles_item"
+      class="articles__item"
       *ngFor="let article of currentPageArticles; let i = index"
       (click)="openArticle(article._id!)"
     >
-      <a class="main__articles_item-link">
-        <h3 class="main__articles_item-title">{{ article.title }}</h3>
-        <p class="main__articles_item-date">
+      <a class="articles__item-link">
+        <h3 class="articles__item-title">{{ article.title }}</h3>
+        <p class="articles__item-date">
           Последнее обновление:
-          {{ article.dateUpdate | date: "dd/MM/yyyy" }}
+          {{ article.dateUpdate | date: "d MMMM y":"":"ru" }}
         </p>
-        <p class="main__articles_item-description">{{ article.description }}</p>
+        <p class="articles__item-description">{{ article.description }}</p>
+        <p class="articles__item-read">Читать статью</p>
       </a>
     </li>
-    <p class="main__articles_no-articles" *ngIf="articles.length < 1">
+    <p class="articles__no-articles" *ngIf="articles.length < 1">
       К сожалению нет подходящих статей
     </p>
   </ul>
-  <ul class="main__articles_pagination-list">
-    <li class="main__articles_pagination-item" *ngFor="let page of pages">
-      <button color="primary" mat-raised-button class="main__articles_pagination-link" (click)="pageClick(page)"
-        [class]="currentPage === page? 'main__articles_pagination-link--active' : ''">{{page}}</button>
+  <ul class="articles__pagination-list">
+    <li class="articles__pagination-item" *ngFor="let page of pages">
+      <button
+        color="primary"
+        mat-raised-button
+        class="articles__pagination-link"
+        (click)="pageClick(page)"
+        [class]="
+          currentPage === page ? 'articles__pagination-link--active' : ''
+        "
+      >
+        {{ page }}
+      </button>
     </li>
   </ul>
 </main>

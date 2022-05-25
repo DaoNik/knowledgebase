@@ -2,21 +2,21 @@
   <input
     type="text"
     placeholder="Pick one"
-    placeholder= "Введите вашу проблему"
-    class="search__form_input"
+    placeholder="Введите вашу проблему"
+    class="search__form-input"
+    [ngClass]="{ 'search__form-input_bg': bgColor }"
     (keyup.enter)="search()"
     [formControl]="searchQuery"
     [matAutocomplete]="auto"
   />
-  <mat-autocomplete #auto="matAutocomplete" 
-  class="search__from_autocomplete">
+  <mat-autocomplete #auto="matAutocomplete" class="search__from_autocomplete">
     <mat-option
-      *ngFor="let option of filteredResults | async | slice : 0 : 4"
+      *ngFor="let option of filteredResults | async | slice: 0:4"
       [value]="option.title"
       (click)="goToArticle(option._id!)"
     >
       <span class="search__from_autocomplete_title">
-        {{ option.title }} 
+        {{ option.title }}
       </span>
       <span class="search__from_autocomplete_category">
         <mat-icon>chevron_right</mat-icon>
@@ -25,12 +25,10 @@
     </mat-option>
   </mat-autocomplete>
   <button class="search__form-btn search__form-btn_search">
-    <mat-icon (click)="search()"
-      >search</mat-icon>
+    <mat-icon (click)="search()">search</mat-icon>
   </button>
-   <button class="search__form-btn search__form-btn_filter">
-    <mat-icon [matMenuTriggerFor]="menu"
-    >filter_alt</mat-icon>
+  <button class="search__form-btn search__form-btn_filter">
+    <mat-icon [matMenuTriggerFor]="menu">filter_alt</mat-icon>
   </button>
   <mat-menu #menu="matMenu">
     <button
