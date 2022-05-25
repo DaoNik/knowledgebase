@@ -41,12 +41,10 @@
     }
 
 		&:hover {
-			// background-color: rgba(190, 190, 190, 0.3);
       color: #000;
 		}
 
 		&:active {
-			// background-color: rgba(190, 190, 190, 0.723);
       color: #000;
 		}
 	}
@@ -63,9 +61,5 @@
     @media (min-width: 1024px) {
       right: 5px;
     }
-	}
-
-	.search__from_autocomplete {
-		// Styles for this class are in global styles.scss
 	}
 }
