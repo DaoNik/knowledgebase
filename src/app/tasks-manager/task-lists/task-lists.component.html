@@ -18,7 +18,7 @@
       class="example-list"
       (cdkDropListDropped)="drop($event, column.id)"
     >
-      <div class="example-box" *ngFor="let task of column.tasks" cdkDrag routerLink={{task}} (mousedown)="taskId = task.id">
+      <div class="example-box" *ngFor="let task of column.tasks" cdkDrag routerLink={{task.id}} (mousedown)="taskId = task.id">
         {{task.title}}
       </div>
     </div>
