@@ -8,8 +8,7 @@ import {
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { map, Observable, pipe } from 'rxjs';
-import { ITask } from '../interfaces/taskList.interface';
+import { map } from 'rxjs';
 import { TasksManagerService } from '../tasks-manager.service';
 
 export interface ITableTasks {

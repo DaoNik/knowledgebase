@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, ViewChild } from '@angular/core';
 import {
   FormBuilder,
   Validators,
@@ -13,7 +13,7 @@ import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
   templateUrl: './form-issue.component.html',
   styleUrls: ['./form-issue.component.scss'],
 })
-export class FormIssueComponent implements OnInit {
+export class FormIssueComponent {
   allTags: string[] = ['Frontend', 'Backend', 'Склад', 'Базы данных'];
   issueForm!: FormGroup;
   tagCtrl = new FormControl();
@@ -50,8 +50,6 @@ export class FormIssueComponent implements OnInit {
       )
     );
   }
-
-  ngOnInit(): void {}
 
   onSubmit() {
     console.log(this.issueForm.value);

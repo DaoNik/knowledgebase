@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { IBreadcrumbs } from './breadcrumbs';
 import { ActivatedRouteSnapshot, Router, RoutesRecognized } from '@angular/router';
 import { BreadCrumbsService } from './bread-crumbs.service';
@@ -9,7 +9,7 @@ import { IArticle } from '../interfaces/article';
   templateUrl: './bread-crumbs.component.html',
   styleUrls: ['./bread-crumbs.component.scss']
 })
-export class BreadCrumbsComponent implements OnInit {
+export class BreadCrumbsComponent {
 
   breadcrumbs: IBreadcrumbs[] = [];
 
@@ -64,10 +64,6 @@ export class BreadCrumbsComponent implements OnInit {
     } else {
       this.router.navigate([url]);
     }
-  }
-
-  ngOnInit(): void {
-    // console.log(this.breadcrumbs)
   }
 
 }
