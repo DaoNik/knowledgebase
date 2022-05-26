@@ -21,7 +21,6 @@ export class BreadCrumbsComponent {
       if (eventData instanceof RoutesRecognized) {
         this.breadcrumbs = [];
         let currentUrlPart: ActivatedRouteSnapshot = eventData.state.root;
-        // console.log(currentUrlPart.children.length)
         let currUrl: string = '';
 
         while (currentUrlPart.children.length > 0) {
@@ -50,7 +49,6 @@ export class BreadCrumbsComponent {
           }
           currentUrlPart = currentUrlPart.children[0];
         }
-        // console.log(currUrl)
       }
     })
    }

@@ -96,7 +96,6 @@ export class ModalTaskComponent implements OnInit {
   }
 
   addText(e: any, num: number) {
-    console.log(this.taskData.value.text)
     if (num == -1) {
       if (!this.taskData.value.text) {
         this.taskData.value.text = [{
@@ -118,7 +117,6 @@ export class ModalTaskComponent implements OnInit {
       this.taskData.value.text[num].text = e.target.value;
     }
     this.inputTrigger = false;
-    console.log(this.taskData.value.text)
     this.updateTaskData();
   }
 
@@ -187,7 +185,6 @@ export class ModalTaskComponent implements OnInit {
             this.taskData.patchValue({
               column: column.title
             });
-            // console.log(`${column.id} == ${res.columnId} = ${column.id == res.columnId}`)
           }
         })
       })

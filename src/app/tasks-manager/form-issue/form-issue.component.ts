@@ -52,7 +52,6 @@ export class FormIssueComponent {
   }
 
   onSubmit() {
-    console.log(this.issueForm.value);
     this.issueForm.reset();
     this.tags = [];
   }
