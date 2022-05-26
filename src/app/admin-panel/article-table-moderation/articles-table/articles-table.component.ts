@@ -1,7 +1,6 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Router } from '@angular/router';
-import { mergeMap, Observable } from 'rxjs';
+import { mergeMap } from 'rxjs';
 import { IArticle } from 'src/app/interfaces/article';
 import { AdminPanelService } from '../../admin-panel.service';
 
