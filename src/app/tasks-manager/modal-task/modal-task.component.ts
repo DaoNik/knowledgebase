@@ -49,7 +49,9 @@ export class ModalTaskComponent implements OnInit {
     column: [],
     columnId: [],
     assignee: [[]],
-    text: [[]]
+    text: [[]],
+    dateCreated: [],
+    dateUpdated: []
   });
   columns: any = []
   mockUsers: string[] = [
@@ -80,6 +82,8 @@ export class ModalTaskComponent implements OnInit {
   };
   searchAssigneeQuery = new FormControl(['']);
   filteredOptions!: Observable<string[]>;
+  inputFile: string = '';
+  fileUploaded = false;
 
   constructor(
     public dialogRef: MatDialogRef<ModalTaskComponent>,
@@ -166,15 +170,27 @@ export class ModalTaskComponent implements OnInit {
     this.updateTaskData();
   }
 
+  fileInputChange(input: any) {
+    if (!!input.files[0]) {
+      this.inputFile = input.files[0].name
+      this.fileUploaded = true;
+      setTimeout(() => {
+        this.fileUploaded = false;
+      }, 1000)
+    }
+  }
+
   ngOnInit(): void {
     const url = this.router.url.split('/')
     this.taskManagerService.getTask(Number(url[url.length - 1])).subscribe((res: any) => {
-      console.log(res.columnId)
+      console.log(res)
       this.taskData.patchValue({
         title: res.title,
         assignee: res.respondents,
         status: res.status,
-        columnId: res.columnId
+        columnId: res.columnId,
+        dateCreated: this._dateTransform(res.createdAt),
+        dateUpdated: this._dateTransform(res.updatedAt)
       });
       if (res.description.length > 0) {
         this.taskData.patchValue({
@@ -210,7 +226,20 @@ export class ModalTaskComponent implements OnInit {
       respondents: this.taskData.value.assignee,
       description: JSON.stringify(this.taskData.value.text)
     }
-    this.taskManagerService.editTask(Number(this.data), updatedData).subscribe();
+    this.taskManagerService.editTask(Number(this.data), updatedData).subscribe(res => {
+      this.taskData.patchValue({
+        title: res.title,
+        assignee: res.respondents,
+        status: res.status,
+        columnId: res.columnId,
+        dateCreated: this._dateTransform(res.createdAt),
+        dateUpdated: this._dateTransform(res.updatedAt)
+      });
+    });
+  }
+
+  private _dateTransform(date: string): string {
+    return `${date.slice(0, 10)} ${date.slice(11, 19)}`
   }
 
   private _filter(value: string): string[] {

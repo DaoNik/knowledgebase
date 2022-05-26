@@ -25,8 +25,8 @@
 			</div>
 		</div>
 		<div class="modal-task__header_creation">
-			<div>Created by System 2 month ago</div>
-			<div>Updated by System 1 month ago</div>
+			<div>Created at {{taskData.value.dateCreated}}</div>
+			<div>Updated at {{taskData.value.dateUpdated}}</div>
 		</div>
 		<div class="modal-task__header_title">
 			<h2 *ngIf="!headerTrigger"
@@ -82,10 +82,15 @@
 	</div>
 	<div class="modal-task__data">
 		<div class="modal-task__data_files">
-			<mat-icon>attach_files</mat-icon>
-			Drop your files here
+			<div *ngIf="!fileUploaded" class="modal-task__data_files_label">
+				<mat-icon>attach_files</mat-icon>
+				Drop your files here
+			</div>
+			<div *ngIf="fileUploaded"  class="modal-task__data_files_label added">
+				Загружено!
+			</div>
+			<input type="file" multiple (change)="fileInputChange(fileInput)" #fileInput>
 		</div>
-
 		<mat-tab-group>
 			<mat-tab label="Описание">
 				<div class="modal-task__data_description"
@@ -156,8 +161,13 @@
 			</mat-tab>
 			<mat-tab label="Комментарии">
 				<div class="modal-task__data_comments">
-						
+
 				</div>
+			</mat-tab>
+			<mat-tab *ngIf="inputFile.length > 0" label="Приложения">
+
+			</mat-tab>
+			<mat-tab *ngIf="inputFile.length == 0" label="Приложения" disabled>
 			</mat-tab>
 		  </mat-tab-group>
 

@@ -67,7 +67,7 @@
 			}
 
 			input {
-				width: 80%;
+				width: 100%;
 				height: 32px;
 				font-size: 24px;
 				font-weight: bold;
@@ -86,14 +86,17 @@
 		top: 20px;
 		width: 40%;
 		// background: green;
-		height: calc(100% - 20px);
+		height: calc(100% - 40px);
 
 		.modal-task__sidebar_info {
+			height: 100%;
+			
 			.task-info {
 				margin: 0 auto;
 				border: 1px solid rgb(224, 224, 224);
 				background: rgb(241, 241, 255);
 				width: 85%;
+				height: 75%;
 
 				tr {
 					height: 30px;
@@ -103,6 +106,7 @@
 			.task-subinfo {
 				margin: 20px auto;
 				width: 85%;
+				height: 25%;
 
 				tr {
 					height: 30px;
@@ -121,15 +125,38 @@
 		right: 0;
 
 		.modal-task__data_files {
-			border: 1px dotted grey;
-			color: grey;
-			padding: 10px;
-			font-size: 14px;
+			position: relative;
+			height: 42px;
 
-			mat-icon {
+			.modal-task__data_files_label {
+				border: 1px dotted grey;
+				color: grey;
 				font-size: 14px;
-				height: 14px;
-				width: 14px;
+				padding: 10px;
+				height: 100%;
+				width: 100%;
+				transition: 0.5s;
+
+				mat-icon {
+					font-size: 14px;
+					height: 14px;
+					width: 14px;
+				}
+
+				&.added {
+					background: grey;
+					color: white;
+				}
+			}
+
+			input {
+				left: 0;
+				top: 0;
+				height: 100%;
+				width: 100%;
+				position: absolute;
+				cursor: pointer;
+				opacity: 0;
 			}
 		}
 
