@@ -170,6 +170,10 @@ export class ModalTaskComponent implements OnInit {
     this.updateTaskData();
   }
 
+  copyUrl() {
+    navigator.clipboard.writeText(this.router.url);
+  }
+
   fileInputChange(input: any) {
     if (!!input.files[0]) {
       this.inputFile = input.files[0].name
