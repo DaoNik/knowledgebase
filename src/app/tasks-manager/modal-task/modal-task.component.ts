@@ -55,7 +55,7 @@ export class ModalTaskComponent implements OnInit {
   });
   columns: any = []
   mockUsers: string[] = [
-    'Giovanni Gorgio', 'Bruh Bruv', 'Another User', 'Darth Vader'
+    'Никита Таранин', 'Леолид Леолидыч', 'Александр Яунберзиньш', 'Димон'
   ];
   statusVariants: string[] = ['Todo', 'In progress', 'Done'];
   typeOptions: ITypeOption[] = [{
@@ -171,7 +171,8 @@ export class ModalTaskComponent implements OnInit {
   }
 
   copyUrl() {
-    navigator.clipboard.writeText(this.router.url);
+    // console.log(this.router)
+    navigator.clipboard.writeText(window.location.href);
   }
 
   fileInputChange(input: any) {
@@ -209,7 +210,7 @@ export class ModalTaskComponent implements OnInit {
             this.taskData.patchValue({
               column: column.title
             });
-            console.log(`${column.id} == ${res.columnId} = ${column.id == res.columnId}`)
+            // console.log(`${column.id} == ${res.columnId} = ${column.id == res.columnId}`)
           }
         })
       })
@@ -218,7 +219,6 @@ export class ModalTaskComponent implements OnInit {
       startWith(''),
       map(value => this._filter(value)),
     );
-    console.log(this.data)
   }
 
   updateTaskData() {
@@ -253,5 +253,11 @@ export class ModalTaskComponent implements OnInit {
     return this.mockUsers.filter(user => (
       user.toLowerCase().includes(filterValue) && !!!this.taskData.value.assignee.includes(user)
     ));
+  }
+
+  deleteTask(id: number) {
+    this.taskManagerService.deleteTask(id)
+    .subscribe();
+    this.dialogRef.close();
   }
 }

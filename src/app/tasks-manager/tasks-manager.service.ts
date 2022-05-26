@@ -7,7 +7,7 @@ import { IBoard, IColumn, ITask } from './interfaces/taskList.interface';
   providedIn: 'root'
 })
 export class TasksManagerService {
-  private url: string = 'http://51.250.111.214';
+  private url: string = 'https://wbbase.site/api';
 
   constructor(private http: HttpClient) { }
 
@@ -48,6 +48,10 @@ export class TasksManagerService {
   }
 
   // Tasks
+
+  getTasks(): Observable<ITask[]> {
+    return this.http.get<ITask[]>(`${this.url}/tasks`)
+  }
 
   getTask(id: number): Observable<ITask> {
     return this.http.get<ITask>(`${this.url}/tasks/${id}`)

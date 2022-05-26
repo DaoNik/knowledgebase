@@ -284,7 +284,7 @@
 			       (keyup.enter)="addText($event, -1)"
 			>
 		</div>
-		
+		<button class="modal-task__text__btn-delete" mat-raised-button color="warn" (click)="deleteTask(taskData.value.id)">Delete task</button>
 	</div>
 	<div class="modal-task__assignee">
 		<div class="modal-task__assignee_line"></div>
