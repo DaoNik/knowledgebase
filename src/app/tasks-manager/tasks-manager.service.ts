@@ -49,6 +49,10 @@ export class TasksManagerService {
 
   // Tasks
 
+  getTasks(): Observable<ITask[]> {
+    return this.http.get<ITask[]>(`${this.url}/tasks`)
+  }
+
   getTask(id: number): Observable<ITask> {
     return this.http.get<ITask>(`${this.url}/tasks/${id}`)
   }

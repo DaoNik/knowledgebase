@@ -21,7 +21,7 @@ export class BreadCrumbsComponent implements OnInit {
       if (eventData instanceof RoutesRecognized) {
         this.breadcrumbs = [];
         let currentUrlPart: ActivatedRouteSnapshot = eventData.state.root;
-        console.log(currentUrlPart.children.length)
+        // console.log(currentUrlPart.children.length)
         let currUrl: string = '';
 
         while (currentUrlPart.children.length > 0) {
@@ -50,7 +50,7 @@ export class BreadCrumbsComponent implements OnInit {
           }
           currentUrlPart = currentUrlPart.children[0];
         }
-        console.log(currUrl)
+        // console.log(currUrl)
       }
     })
    }
@@ -67,7 +67,7 @@ export class BreadCrumbsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    console.log(this.breadcrumbs)
+    // console.log(this.breadcrumbs)
   }
 
 }
