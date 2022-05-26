@@ -25,9 +25,7 @@ export interface ITableTasks {
   templateUrl: './tasks-table.component.html',
   styleUrls: ['./tasks-table.component.scss'],
 })
-export class TasksTableComponent
-  implements OnInit, AfterViewInit
-{
+export class TasksTableComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = [
     'id',
     'title',
@@ -51,34 +49,33 @@ export class TasksTableComponent
   ) {}
 
   ngOnInit(): void {
-    this.tasks$.pipe(
-      map((tasks) => {
-        tasks.map((task) => {
-          this.filterTasks.push(
-           {
-              id: task.id, 
-              title: task.title, 
-              status: task.status, 
+    this.tasks$
+      .pipe(
+        map((tasks) => {
+          return tasks.map((task) => {
+            return {
+              id: task.id,
+              title: task.title,
+              status: task.status,
               respondents: task.respondents,
-              priority: task.priority
-            }
-          )
+              priority: task.priority,
+            };
+          });
         })
-      })
-    ).subscribe(() => {
-      this.dataSource = new MatTableDataSource(this.filterTasks.sort());
-
-    })
-
+      )
+      .subscribe((tasks) => {
+        this.dataSource = new MatTableDataSource(
+          tasks.sort((a, b) => a.id - b.id)
+        );
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+      });
   }
 
   ngAfterViewInit() {
     this.elRef.nativeElement.querySelector(
       '.mat-paginator-page-size-label'
     ).textContent = 'Отобразить: ';
-
-    this.dataSource.paginator = this.paginator;
-    this.dataSource.sort = this.sort;
   }
 
   applyFilter(event: Event) {
