@@ -33,10 +33,10 @@ export interface IBoard {
 }
 
 export interface IColumn {
-  boardId: number;
-  createdAt: string;
-  id: number;
-  title: string;
-  updatedAt: string;
-  tasks?: ITask[];
+    boardId: number;
+    createdAt: string;
+    id: number;
+    title: string;
+    updatedAt: string;
+    tasks?: ITask[];
 }
