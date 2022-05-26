@@ -1,7 +1,12 @@
 @import url('./normalize.scss');
 @import url('https://fonts.googleapis.com/css2?family=Rajdhani:wght@500;600&display=swap');
 
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+@font-face {
+  font-family: system;
+  font-style: normal;
+  font-weight: 300;
+  src: local(".SFNSText-Light"), local(".HelveticaNeueDeskInterface-Light"), local(".LucidaGrandeUI"), local("Ubuntu Light"), local("Segoe UI Light"), local("Roboto-Light"), local("DroidSans"), local("Tahoma");
+}
 
 * {
   box-sizing: border-box;
@@ -10,6 +15,12 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 .root {
   background-color: #fff;
   margin: 0 auto;
+  font-family: "system", sans-serif;
+
+  // Чтобы послать шрифты материала! Не трогать!
+  h1, h2, h3 {
+    font-family: "system", sans-serif;
+  }
 }
 
 .visually-hidden {
@@ -29,9 +40,6 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   background-color: #fff;
   border-radius: 15px !important;
 }
-
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 .create-article__editor {
   .angular-editor-textarea {
@@ -74,6 +82,3 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     padding: 0 0 25px 25px;
   }
 }
-
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }

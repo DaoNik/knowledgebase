@@ -84,11 +84,14 @@ export class TaskListsComponent implements OnInit {
         event.currentIndex
       );
     }
-    this.taskServ.editTask(this.taskId, columnId)
-      .subscribe();
+    const updatedData = {
+      columnId: columnId
+    };
+    this.taskServ.editTask(this.taskId, updatedData)
+    .subscribe();
   }
 
-  openTask(item: any) {
+  openTask(item: string) {
     this.modalServ.openDialog(item)
     this.router.navigate(['tasks-manager/tasks', item]);
   }

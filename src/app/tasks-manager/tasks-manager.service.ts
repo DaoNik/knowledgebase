@@ -1,6 +1,6 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
+import { catchError, Observable, throwError } from 'rxjs';
 import { IBoard, IColumn, ITask } from './interfaces/taskList.interface';
 
 @Injectable({
@@ -27,6 +27,10 @@ export class TasksManagerService {
 
   // Columns
 
+  getColumns() {
+    return this.http.get<any>(`${this.url}/columns`)
+  }
+
   getColumn(id: number): Observable<IColumn> {
     return this.http.get<IColumn>(`${this.url}/columns/${id}`)
   }
@@ -49,12 +53,16 @@ export class TasksManagerService {
     return this.http.get<ITask>(`${this.url}/tasks/${id}`)
   }
 
-  createTask(columnId: number, title: string, priority: string, status: string, description?: string, authors?: string, respondents?: string[], tags?: string[], category?: string): Observable<ITask> {
+  createTask(columnId: number, title: string, priority?: string, status?: string, description?: string, authors?: string, respondents?: string[], tags?: string[], category?: string): Observable<ITask> {
     return this.http.post<ITask>(`${this.url}/tasks`, {columnId, title, priority, status, description, authors, respondents, tags, category})
   }
 
-  editTask(id: number, columnId?: number, title?: string, priority?: string, status?: string, description?: string, authors?: string, respondents?: string[], tags?: string[], category?: string): Observable<ITask> {
-    return this.http.patch<ITask>(`${this.url}/tasks/${id}`, {columnId, title, priority, status, description, authors, respondents, tags, category})
+  editTask(id: number, updatedData: any): Observable<ITask> {
+    return this.http.patch<ITask>(`${this.url}/tasks/${id}`, updatedData).pipe(
+      catchError((error: HttpErrorResponse) => {
+        return throwError(() => error);
+      })
+    );
   }
 
   deleteTask(id: number) {
