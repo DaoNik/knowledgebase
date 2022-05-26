@@ -7,6 +7,8 @@ import { map, Observable, startWith } from 'rxjs';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { ModalTaskService } from './modal-task.service';
 import { TasksManagerService } from '../tasks-manager.service';
+import { HttpClient } from '@angular/common/http';
+import { AssigneeModalComponent } from './assignee-modal/assignee-modal.component';
 
 @Component({
   selector: 'app-modal-task',
@@ -48,16 +50,15 @@ export class ModalTaskComponent implements OnInit {
     status: [],
     column: [],
     columnId: [],
+    priority: [],
     assignee: [[]],
     text: [[]],
     dateCreated: [],
     dateUpdated: []
   });
   columns: any = []
-  mockUsers: string[] = [
-    'Никита Таранин', 'Леолид Леолидыч', 'Александр Яунберзиньш', 'Димон'
-  ];
   statusVariants: string[] = ['Todo', 'In progress', 'Done'];
+  priorityVariants: string[] = ['None', 'Low', 'Medium', 'High'];
   typeOptions: ITypeOption[] = [{
     name: 'text',
     type: '',
@@ -75,19 +76,20 @@ export class ModalTaskComponent implements OnInit {
   }]
   inputTrigger = false;
   headerTrigger = false;
+  sidebarEditTrigger = false;
   createOption: ITypeOption = {
     name: 'text',
     type: '',
     value: ''
   };
-  searchAssigneeQuery = new FormControl(['']);
-  filteredOptions!: Observable<string[]>;
   inputFile: string = '';
   fileUploaded = false;
 
   constructor(
     public dialogRef: MatDialogRef<ModalTaskComponent>,
     @Inject(MAT_DIALOG_DATA) public data: string,
+    public dialog: MatDialog,
+    private http: HttpClient,
     private fb: FormBuilder,
     private router: Router,
     private route: ActivatedRoute,
@@ -159,11 +161,11 @@ export class ModalTaskComponent implements OnInit {
     this.updateTaskData();
   }
 
-  addAssignee(option: string): void {
-    this.taskData.value.assignee.push(option);
-    this.searchAssigneeQuery.setValue('');
-    this.updateTaskData();
-  }
+  // addAssignee(option: string): void {
+  //   this.taskData.value.assignee.push(option);
+  //   this.searchAssigneeQuery.setValue('');
+  //   this.updateTaskData();
+  // }
 
   removeAssignee(index: number): void {
     this.taskData.value.assignee.splice(index, 1);
@@ -173,6 +175,27 @@ export class ModalTaskComponent implements OnInit {
   copyUrl() {
     // console.log(this.router)
     navigator.clipboard.writeText(window.location.href);
+  }
+
+  editSidebar() {
+    if (this.sidebarEditTrigger == true) this.updateTaskData();
+    this.sidebarEditTrigger = !this.sidebarEditTrigger;
+  }
+
+  showAndEditAssignee(edit: boolean) {
+    const data = [{
+      edit: edit, 
+      taskId: this.taskData.value.id,
+      taskAssignee: this.taskData.value.assignee
+    }]
+    const dialogRef = this.dialog.open(AssigneeModalComponent, {
+        panelClass: 'edit-assignee-global',
+        data: data,
+    });
+
+    dialogRef.afterClosed().subscribe(() => {
+        this.updateTaskData();
+    });
   }
 
   fileInputChange(input: any) {
@@ -194,6 +217,7 @@ export class ModalTaskComponent implements OnInit {
         assignee: res.respondents,
         status: res.status,
         columnId: res.columnId,
+        priority: res.priority,
         dateCreated: this._dateTransform(res.createdAt),
         dateUpdated: this._dateTransform(res.updatedAt)
       });
@@ -215,10 +239,6 @@ export class ModalTaskComponent implements OnInit {
         })
       })
     })
-    this.filteredOptions = this.searchAssigneeQuery.valueChanges.pipe(
-      startWith(''),
-      map(value => this._filter(value)),
-    );
   }
 
   updateTaskData() {
@@ -228,6 +248,7 @@ export class ModalTaskComponent implements OnInit {
       column: this.taskData.value.column,
       columnId: this.taskData.value.columnId,
       respondents: this.taskData.value.assignee,
+      priority: this.taskData.value.priority,
       description: JSON.stringify(this.taskData.value.text)
     }
     this.taskManagerService.editTask(Number(this.data), updatedData).subscribe(res => {
@@ -236,6 +257,7 @@ export class ModalTaskComponent implements OnInit {
         assignee: res.respondents,
         status: res.status,
         columnId: res.columnId,
+        priority: res.priority,
         dateCreated: this._dateTransform(res.createdAt),
         dateUpdated: this._dateTransform(res.updatedAt)
       });
@@ -244,15 +266,6 @@ export class ModalTaskComponent implements OnInit {
 
   private _dateTransform(date: string): string {
     return `${date.slice(0, 10)} ${date.slice(11, 19)}`
-  }
-
-  private _filter(value: string): string[] {
-    const filterValue = value.toLowerCase();
-    // const arrOfUsedNames = this.taskData.value.assignee ? this.taskData.value.assignee.map((i: string) => i) : []
-
-    return this.mockUsers.filter(user => (
-      user.toLowerCase().includes(filterValue) && !!!this.taskData.value.assignee.includes(user)
-    ));
   }
 
   deleteTask(id: number) {

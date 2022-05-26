@@ -92,14 +92,35 @@
 			height: 100%;
 			
 			.task-info {
-				margin: 0 auto;
-				border: 1px solid rgb(224, 224, 224);
-				background: rgb(241, 241, 255);
-				width: 85%;
 				height: 75%;
+				position: relative;
 
-				tr {
-					height: 30px;
+				.task-info__edit {
+					top: 5px;
+					right: calc(15% / 2 + 5px);
+					position: absolute;
+					cursor: pointer;
+					transition: 0.2s;
+
+					&:hover {
+						transform: scale(1.1);
+					}
+				}
+
+				table {
+					margin: 0 auto;
+					border: 1px solid rgb(224, 224, 224);
+					background: rgb(241, 241, 255);
+					width: 85%;
+					height: 100%;
+
+					tr {
+						height: 30px;
+
+						.tr-menu {
+							cursor: pointer;
+						}
+					}
 				}
 			}
 

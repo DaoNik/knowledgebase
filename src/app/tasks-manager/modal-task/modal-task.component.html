@@ -42,32 +42,75 @@
 	</div>
 	<div class="modal-task__sidebar">
 		<div class="modal-task__sidebar_info">
-			<table class="task-info">
-				<tr>
-					<td>Project</td>
-					<td>WH School</td>
-				</tr>
-				<tr>
-					<td>Priority</td>
-					<td>Normal</td>
-				</tr>
-				<tr>
-					<td>State</td>
-					<td>In progress</td>
-				</tr>
-				<tr>
-					<td>Assignee</td>
-					<td>Abobus Amogus</td>
-				</tr>
-				<tr>
-					<td>Ready</td>
-					<td>80%</td>
-				</tr>
-				<tr>
-					<td>Ideal days</td>
-					<td>90 days</td>
-				</tr>
-			</table>
+			<div class="task-info">
+				<div class="task-info__edit"
+					 (click)="editSidebar()">
+					<mat-icon *ngIf="!sidebarEditTrigger">edit</mat-icon>
+					<mat-icon *ngIf="sidebarEditTrigger">save</mat-icon>
+				</div>
+				<table>
+					<tr>
+						<td>Project</td>
+						<td>WH School</td>
+					</tr>
+					<tr>
+						<td>Priority</td>
+						<td *ngIf="!sidebarEditTrigger">{{taskData.value.priority}}</td>
+						<td *ngIf="sidebarEditTrigger"
+							class="tr-menu"
+							[matMenuTriggerFor]="priorityMenu"
+						>{{taskData.value.priority}} 
+						<mat-icon>expand_more</mat-icon></td>
+						<mat-menu #priorityMenu="matMenu">
+							<button mat-menu-item
+								*ngFor="let priority of priorityVariants"
+								(click)="taskData.value.priority = priority">
+								{{priority}}
+							</button>
+						</mat-menu>
+					</tr>
+					<tr>
+						<td>State</td>
+						<td *ngIf="!sidebarEditTrigger">{{taskData.value.status}}</td>
+						<td *ngIf="sidebarEditTrigger"
+							class="tr-menu"
+							[matMenuTriggerFor]="statusMenu"
+						>{{taskData.value.status}} 
+						<mat-icon>expand_more</mat-icon></td>
+						<mat-menu #statusMenu="matMenu">
+							<button mat-menu-item
+								*ngFor="let status of statusVariants"
+								(click)="taskData.value.status = status">
+								{{status}}
+							</button>
+						</mat-menu>
+					</tr>
+					<tr>
+						<td>Assignee</td>
+						<td *ngIf="!sidebarEditTrigger">
+							{{taskData.value.assignee[0]}}
+							<span 
+							*ngIf="taskData.value.assignee.length > 1"
+							(click)="showAndEditAssignee(false)">
+								<mat-icon>more_vert</mat-icon>
+							</span>
+						</td>
+						<td *ngIf="sidebarEditTrigger">
+							{{taskData.value.assignee[0]}}
+							<mat-icon (click)="showAndEditAssignee(true)"
+							>person_add</mat-icon>
+						</td>
+					</tr>
+					<tr>
+						<td>Ready</td>
+						<td>80%</td>
+					</tr>
+					<tr>
+						<td>Ideal days</td>
+						<td>90 days</td>
+					</tr>
+				</table>
+			</div>
 			<table class="task-subinfo">
 				<tr>
 					<td>watchers</td>
