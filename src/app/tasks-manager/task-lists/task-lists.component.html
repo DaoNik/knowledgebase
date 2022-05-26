@@ -1,30 +1,34 @@
-<h2 class="main-title" *ngIf="board">{{board.title}}</h2>
-<div class="board" cdkDropListGroup>
+<h2 class="board__header" *ngIf="board">{{board.title}}</h2>
+<div class="loading" *ngIf="!board">
+  No board
+</div>
+<div class="board" *ngIf="board" cdkDropListGroup>
 
-  <div class="board__column" *ngFor="let column of board.columns">
+  <div class="board__column" *ngFor="let column of board?.columns">
 
-    <div class="example-toDo-header">
-      <h3 *ngIf="!changer" (dblclick)="[changer = !changer, columnId = column.id]">{{column.title}}</h3>
-      <mat-form-field *ngIf="changer && column.id === columnId" appearance="fill">
+    <div class="board__top-wrapper">
+      <h3 class="board__column-header" *ngIf="!changerColumn.get(column.id)"
+        (click)="onColumnHeaderClick(column.id)">{{column.title}}</h3>
+      <mat-form-field *ngIf="changerColumn.get(column.id)" appearance="fill">
         <mat-label>Введите новое название</mat-label>
-        <input matInput type="text" value={{column.title}} (keydown.enter)="changeName($event, column.id)">
+        <input matInput type="text" value={{column.title}} (keydown.enter)="changeName($event, column.id, column.title)"
+          (blur)="changerColumn.set(column.id, false)" [formControl]="findFormcontrol(column.id)">
+        <button mat-button mat-raised-button *ngIf="changerColumn.get(column.id) && !column.tasks?.length"
+          (click)="deleteColumn(column.id)">Удалить</button>
+        <mat-error *ngIf="findFormcontrol(column.id).getError('minlength')">Название меньше 4 символов</mat-error>
       </mat-form-field>
-     <button mat-button mat-raised-button *ngIf="changer && column.id === columnId" (click)="deleteColumn(column.id)">Delete</button>
-    </div>
-    <div
-    *ngIf="column.tasks"
-      cdkDropList
-      [cdkDropListData]="column.tasks"
-      class="example-list"
-      (cdkDropListDropped)="drop($event, column.id)"
-    >
-      <div class="example-box" *ngFor="let task of column.tasks" cdkDrag routerLink={{task.id}} (mousedown)="taskId = task.id">
-        {{task.title}}
-      </div>
     </div>
 
-    <div class="example-box">
-      <button class="task-list__create-button" (click)="[isHidden = !isHidden, columnId = column.id]">
+    <ul *ngIf="column.tasks" cdkDropList [cdkDropListData]="column.tasks" class="board__task-list"
+      (cdkDropListDropped)="drop($event, column.id)">
+      <li class="board__task" *ngFor="let task of column.tasks" cdkDrag>
+        <p class="board__task-header" routerLink={{task.id}} (mousedown)="taskId = task.id">{{task.title}}</p>
+        <mat-icon (click)="deleteTask(task.id, column.id)" class="board__task-delete">delete</mat-icon>
+      </li>
+    </ul>
+
+    <div class="board__task board-task--new"*ngIf="!isHidden">
+      <button class="board__task-create" (click)="[isHidden = !isHidden, columnId = column.id]" >
         <mat-icon>add_circle_outline</mat-icon>
         Создать новую задачу
       </button>
@@ -35,25 +39,8 @@
       (ngSubmit)="addToDo(column.id)">
       <mat-form-field appearance="fill">
         <mat-label>Заголовок задачи</mat-label>
-        <input matInput type="text" formControlName="title">
+        <input matInput type="text" formControlName="title" (blur) = "isHidden = !isHidden">
       </mat-form-field>
-      <!-- <mat-form-field appearance="fill">
-        <mat-label>Status</mat-label>
-        <mat-select>
-          <mat-option *ngFor="let option of status" [value]="option" formControlName="status">
-            {{option}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-      <mat-form-field appearance="fill">
-        <mat-label>Приоритет</mat-label>
-        <mat-select>
-          <mat-option *ngFor="let option of priority" [value]="option" formControlName="priority">
-            {{option}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-      <button mat-raised-button class="example-createToDo" type="submit" [disabled]="form.invalid">Create</button> -->
     </form>
 
   </div>

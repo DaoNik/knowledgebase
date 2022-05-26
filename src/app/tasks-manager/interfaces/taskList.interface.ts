@@ -37,5 +37,5 @@ export interface IColumn {
     id: number;
     title: string;
     updatedAt: string;
-    tasks?: any[];
+    tasks?: ITask[];
 }

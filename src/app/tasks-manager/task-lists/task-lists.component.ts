@@ -6,7 +6,7 @@ import {
 } from '@angular/cdk/drag-drop';
 import { ModalTaskService } from '../modal-task/modal-task.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { IBoard } from '../interfaces/taskList.interface';
+import { IBoard, IColumn } from '../interfaces/taskList.interface';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TasksManagerService } from '../tasks-manager.service';
 
@@ -16,7 +16,7 @@ import { TasksManagerService } from '../tasks-manager.service';
   styleUrls: ['./task-lists.component.scss'],
 })
 export class TaskListsComponent implements OnInit {
-  changer: boolean = false;
+  changerColumn = new Map();
   isHidden: boolean = false;
   isHiddenColumn: boolean = false;
 
@@ -28,11 +28,11 @@ export class TaskListsComponent implements OnInit {
 
   public form!: FormGroup;
   public formColumns!: FormGroup;
+  public formChangeName: any[] = [];
 
   constructor(
     private modalServ: ModalTaskService,
     private router: Router,
-    private route: ActivatedRoute,
     private taskServ: TasksManagerService
   ) {
     this.form = new FormGroup({
@@ -53,8 +53,29 @@ export class TaskListsComponent implements OnInit {
             column.tasks = res.tasks;
             this.board = board;
           })
+          this.changerColumn.set(column.id, false);
+          this.formChangeName.push({
+              id: column.id,
+              control: new FormControl(column.title, Validators.minLength(4)),
+          });
         })
       })
+  }
+
+  onColumnHeaderClick(id: number): void {
+    this.changerColumn.set(id, true);
+    console.log(this.findFormcontrol(id));
+
+  }
+
+  findFormcontrol(id: number): FormControl {
+    let res: FormControl = new FormControl();
+    this.formChangeName.forEach(control => {
+      if (control.id === id) {
+        res = control.control;
+      }
+    })
+    return res;
   }
 
   getColumns(): void {
@@ -88,7 +109,7 @@ export class TaskListsComponent implements OnInit {
       columnId: columnId
     };
     this.taskServ.editTask(this.taskId, updatedData)
-    .subscribe();
+      .subscribe();
   }
 
   openTask(item: string) {
@@ -98,47 +119,75 @@ export class TaskListsComponent implements OnInit {
 
   addToDo(columnId: number) {
     this.isHidden = false;
+
     this.taskServ.createTask(columnId, this.form.value.title, this.form.value.priority, this.form.value.status)
-      .subscribe(() => {
-        this.taskServ.getColumn(columnId).subscribe(res => {
-          this.board.columns.forEach((column) => {
-            if (column.id === columnId) {
-              column.tasks = res.tasks;
-            }
-          });
+      .subscribe(task => {
+        this.board.columns.forEach((column) => {
+          if (column.id === columnId) {
+            column.tasks?.push(task);
+          }
         });
       });
     this.form.reset();
   }
 
   addColumn() {
-
-    //убрать подписку в подписке
     this.taskServ.createColumn(1, this.formColumns.value.columnName)
-      .subscribe(() => {
-        this.getColumns();
+      .subscribe((column) => {
+        this.board.columns.push(column);
+        console.log('addColumn');
       });
-    this.isHiddenColumn = false;
 
-    //или отрисовывать на фронте?
-    /*this.board.columns.push({
-      boardId: this.board.id,
-      createdAt: Date.now().toString(),
-      title: this.formColumns.value.columnName,
-      id: 1, //??
-      updatedAt: Date.now().toString(),
-    });*/
+    this.isHiddenColumn = false;
   }
 
-  changeName(event: any, id: number) {
-    this.taskServ.editColumn(id, event.target.value)
-      .subscribe();
-    this.changer = false;
+  changeName(event: any, id: number, title: string) {
+
+    if (event.target.value.trim() !== title && event.target.value.length >= 4) {
+      this.taskServ.editColumn(id, event.target.value)
+        .subscribe(() => {
+          this.board.columns[this.findColumnIdx(id)].title = event.target.value;
+          this.changerColumn.set(id, false);
+        });
+    }
   }
 
   deleteColumn(id: number) {
     this.taskServ.deleteColumn(id)
-      .subscribe();
-    this.changer = false;
+      .subscribe(id => {
+        this.board.columns.splice(this.findColumnIdx(id), 1);
+      });
+    this.changerColumn.delete(id);
+    this.formColumns.reset();
+  }
+
+  findColumnIdx(columnId: number): number {
+    let index: number = -1;
+    this.board.columns.forEach((column) => {
+      if (column.id === columnId) {
+        index = this.board.columns.indexOf(column);
+      }
+    });
+    return index;
+  }
+
+  findTaskIdx(taskId: number, columnIdx: number): number {
+    const column = this.board.columns[columnIdx];
+    let taskIdx = -1;
+
+    for (let i = 0; i< column.tasks?.length!; i++) {
+      if (column.tasks![i].id === taskId) {
+        taskIdx === i;
+      }
+    }
+    return taskIdx;
+  }
+
+  deleteTask(id: number, columnId: number) {
+    this.taskServ.deleteTask(id).subscribe((id) => {
+      const columnIdx = this.findColumnIdx(columnId);
+      const taskIdx = this.findTaskIdx(id, columnIdx);
+      this.board.columns[columnIdx].tasks?.splice(taskIdx, 1);
+    });
   }
 }

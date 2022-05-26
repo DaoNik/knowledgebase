@@ -1,5 +1,7 @@
-.main-title {
+.board__header {
   text-align: center;
+  font-size: 30px;
+  font-weight: 700;
 }
 
 .board {
@@ -17,7 +19,9 @@
   vertical-align: top;
 }
 
-.example-list {
+.board__task-list {
+  margin: 0;
+  padding: 0;
   border: solid 1px #ccc;
   min-height: 60px;
   background: white;
@@ -26,18 +30,33 @@
   display: block;
 }
 
-.example-box {
+.board__task {
   max-width: 300px;
   padding: 20px 10px;
   border-bottom: solid 1px #ccc;
   color: rgba(0, 0, 0, 0.87);
   display: flex;
-  flex-direction: row;
   align-items: center;
   box-sizing: border-box;
   cursor: pointer;
   background: white;
   font-size: 20px;
+
+  &-header {
+    width: -webkit-fill-available;
+  }
+  &-delete {
+    display: none;
+    color: #673ab7;
+  }
+
+  &:hover > .board__task-delete {
+    display: inline;
+  }
+
+  &--new {
+    border: none;
+  }
 }
 
 .cdk-drag-preview {
@@ -64,9 +83,18 @@
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
 
-.example-toDo-header {
-  display: flex;
+.board__top-wrapper {
+
+  mat-form-field {
+    width: 100%;
+  }
 }
+
+.board__column-header {
+  font-size: 20px;
+  font-weight: 700;
+}
+
 
 .example-createToDo {
   margin-left: 10px;
@@ -85,14 +113,18 @@ mat-form-field {
   margin: 5px 0;
 }
 
-.task-list__create-button {
+.board__task-create {
   border: none;
   background: none;
   font-size: 20px;
+
+  mat-icon {
+    vertical-align: middle;
+  }
 }
 
-.task-list__create-button:hover,
-.task-list__create-button:hover mat-icon {
+.board__task-create:hover,
+.board__task-create:hover mat-icon {
   font-weight: 700;
   color: black;
 }
