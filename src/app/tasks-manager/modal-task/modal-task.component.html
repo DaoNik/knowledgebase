@@ -2,44 +2,44 @@
 	<div class="modal-task__close" (click)="onNoClick()">
 		<mat-icon>close</mat-icon>
 	</div>
-	<div class="modal-task__title" [formGroup]="mockTaskData">
-		<!-- <mat-icon>task</mat-icon> -->
+	<div class="modal-task__title" [formGroup]="taskData">
 		<h2 *ngIf="!headerTrigger"
 			(click)="headerTrigger = !headerTrigger">
-			{{mockTaskData.value.title}}
+			{{taskData.value.title}}
 	</h2>
 		<input *ngIf="headerTrigger"
 			   formControlName="title"
-			   (keyup.enter)="headerTrigger = !headerTrigger"
+			   (keyup.enter)="changeTitle()"
 			   >
 		<div class="modal-task__title_status"
 			 [ngStyle]="{'background': 
-			 mockTaskData.value.status == 'In progress' ? 
+			 taskData.value.status == 'In progress' ? 
 			 '#FFB84B' : 
-			 mockTaskData.value.status == 'Todo' ? 
+			 taskData.value.status == 'Todo' ?
 			 '#FFB5B5' : '#4BFF69'}"
 			 [matMenuTriggerFor]="statusMenu"
 		>
-			<p>{{mockTaskData.value.status}}</p>
+			<p>{{taskData.value.status}}</p>
 		</div>
 		<mat-menu #statusMenu="matMenu">
 			<button mat-menu-item 
 					*ngFor="let status of statusVariants"
-					(click)="mockTaskData.value.status = status"
-					[ngStyle]="{'color': mockTaskData.value.status == status ? 'orange' : 'black'}">
+					(click)="changeStatus(status)"
+					[ngStyle]="{'color': taskData.value.status == status ? 'orange' : 'black'}">
 						{{status}}
 			</button>
 		</mat-menu>
 	</div>
 	<div class="modal-task__status">
 		<mat-icon>checklist</mat-icon>
-		<p [matMenuTriggerFor]="tableMenu">{{mockTaskData.value.column}}</p>
+		<p [matMenuTriggerFor]="tableMenu">{{taskData.value.column}}</p>
 		<mat-menu #tableMenu="matMenu">
 			<button mat-menu-item 
-					*ngFor="let column of mockColumnNames"
-					(click)="mockTaskData.value.column = column"
-					[ngStyle]="{'color': mockTaskData.value.table == column ? 'orange' : 'black'}">
-						{{column}}
+					*ngFor="let column of columns"
+					(click)="changeColumn(column)"
+					value={{column.title}}
+					[ngStyle]="{'color': taskData.value.column == column.title ? 'orange' : 'black'}">
+						{{column.title}}
 			</button>
 		</mat-menu>
 	</div>
@@ -47,10 +47,10 @@
 		<mat-icon>description</mat-icon>
 		<p>{{mockTaskData.value.description}}</p>
 	</div> -->
-	<div class="modal-task__text" [formGroup]="mockTaskData">
+	<div class="modal-task__text" [formGroup]="taskData">
 		<div formGroupName="text"
 			 class="modal-task__text_wrp"
-			 *ngFor="let item of mockTaskData.value.text; let i = index">
+			 *ngFor="let item of taskData.value.text; let i = index">
 			<mat-icon [matMenuTriggerFor]="menu" class="more">more_vert</mat-icon>
 			<mat-menu #menu="matMenu">
 				<button mat-menu-item 
@@ -66,7 +66,7 @@
 				</div>
 				<div *ngIf="item.type == 'todo'"
 					 class="todo"
-					 (click)="item.value = item.value == 'true' ? 'false' : 'true'">
+					 (click)="[item.value = item.value == 'true' ? 'false' : 'true', this.updateTaskData()]">
 					<mat-icon *ngIf="item.value == 'true'">check_box</mat-icon>
 					<mat-icon *ngIf="item.value == 'false'">check_box_outline_blank</mat-icon>
 				</div>
@@ -111,18 +111,28 @@
 			       (keyup.enter)="addText($event, -1)"
 			>
 		</div>
-		
+		<button class="modal-task__text__btn-delete" mat-raised-button color="warn" (click)="deleteTask(taskData.value.id)">Delete task</button>
 	</div>
 	<div class="modal-task__assignee">
 		<div class="modal-task__assignee_line"></div>
 		<div class="person-wrapper">
 			<div class="modal-task__assigne_person" 
-			 *ngFor="let person of mockTaskData.value.assignee">
+			 *ngFor="let person of taskData.value.assignee; let i = index">
 				<img class="modal-task__assigne_person_avatar" *ngIf="!!person.avatar" [src]="person.avatar" alt="user pic" />
 				<img class="modal-task__assigne_person_avatar" *ngIf="!person.avatar" src="assets/user-pic.jpeg" alt="user pic" />
-				<div class="modal-task__assigne_person_name">
-					{{person.name}}
+				<div class="modal-task__assigne_person_name"
+				[matMenuTriggerFor]="assigneeMenu">
+					{{person}}
 				</div>
+				<mat-menu #assigneeMenu="matMenu">
+					<button mat-menu-item
+							(click)="removeAssignee(i)">
+						Убрать исполнителя
+					</button>
+				  </mat-menu>
+			</div>
+			<div *ngIf="taskData.value.assignee.length <= 0" class="modal-task__assigne_none">
+				Исполнителей нет
 			</div>
 			<div class="modal-task__assignee_add">
 				<mat-form-field class="example-full-width" appearance="fill">
@@ -132,8 +142,8 @@
 						   [formControl]="searchAssigneeQuery"
 						   [matAutocomplete]="auto">
 					<mat-autocomplete #auto="matAutocomplete">
-					  	<mat-option *ngFor="let option of filteredOptions | async" [value]="option.name" (click)="addAssignee(option)">
-							{{option.name}}
+					  	<mat-option *ngFor="let option of filteredOptions | async" [value]="option" (click)="addAssignee(option)">
+							{{option}}
 					  	</mat-option>
 					</mat-autocomplete>
 				</mat-form-field>

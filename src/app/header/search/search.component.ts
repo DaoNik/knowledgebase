@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { map, Observable, startWith } from 'rxjs';
@@ -15,6 +15,7 @@ interface IFilter {
   styleUrls: ['./search.component.scss'],
 })
 export class SearchComponent implements OnInit {
+  @Input('bgColor') bgColor!: boolean;
   searchQuery = new FormControl();
   results: string[] = ['One', 'Two', 'Three'];
   filterOptions: IFilter[] = [
@@ -75,8 +76,8 @@ export class SearchComponent implements OnInit {
     return this.foundArticles
       ? this.foundArticles.filter(
           (result) =>
-            (result.title.toLowerCase().includes(filterValue)
-            || result.description.toLowerCase().includes(filterValue)) &&
+            (result.title.toLowerCase().includes(filterValue) ||
+              result.description.toLowerCase().includes(filterValue)) &&
             filterTags.includes(result.category)
         )
       : this.foundArticles;
