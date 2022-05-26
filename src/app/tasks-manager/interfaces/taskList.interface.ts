@@ -10,12 +10,13 @@ export interface ITask {
     createdAt: string;
     description: string;
     id: number;
-    priority: any;
+    priority: string;
     respondents: [];
-    status: any;
+    status: string;
     tags: [],
     title: string;
     updatedAt: string;
+    paginator?: any;
 }
 
 export interface IBoard {
@@ -37,5 +38,5 @@ export interface IColumn {
     id: number;
     title: string;
     updatedAt: string;
-    tasks?: any[];
+    tasks?: ITask[];
 }
