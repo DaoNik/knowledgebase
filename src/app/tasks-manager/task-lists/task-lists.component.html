@@ -1,5 +1,5 @@
 <h2 class="main-title" *ngIf="board">{{board.title}}</h2>
-<div class="main__board" cdkDropListGroup>
+<div class="main__board" *ngIf="board" cdkDropListGroup>
 
   <div class="example-container" *ngFor="let column of board.columns">
 

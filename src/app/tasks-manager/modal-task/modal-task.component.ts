@@ -53,7 +53,7 @@ export class ModalTaskComponent implements OnInit {
   });
   columns: any = []
   mockUsers: string[] = [
-    'Giovanni Gorgio', 'Bruh Bruv', 'Another User', 'Darth Vader'
+    'Никита Таранин', 'Леолид Леолидыч', 'Александр Яунберзиньш', 'Димон'
   ];
   statusVariants: string[] = ['Todo', 'In progress', 'Done'];
   typeOptions: ITypeOption[] = [{
@@ -169,7 +169,6 @@ export class ModalTaskComponent implements OnInit {
   ngOnInit(): void {
     const url = this.router.url.split('/')
     this.taskManagerService.getTask(Number(url[url.length - 1])).subscribe((res: any) => {
-      console.log(res.columnId)
       this.taskData.patchValue({
         title: res.title,
         assignee: res.respondents,
@@ -189,7 +188,7 @@ export class ModalTaskComponent implements OnInit {
             this.taskData.patchValue({
               column: column.title
             });
-            console.log(`${column.id} == ${res.columnId} = ${column.id == res.columnId}`)
+            // console.log(`${column.id} == ${res.columnId} = ${column.id == res.columnId}`)
           }
         })
       })
@@ -198,7 +197,6 @@ export class ModalTaskComponent implements OnInit {
       startWith(''),
       map(value => this._filter(value)),
     );
-    console.log(this.data)
   }
 
   updateTaskData() {
@@ -220,5 +218,11 @@ export class ModalTaskComponent implements OnInit {
     return this.mockUsers.filter(user => (
       user.toLowerCase().includes(filterValue) && !!!this.taskData.value.assignee.includes(user)
     ));
+  }
+
+  deleteTask(id: number) {
+    this.taskManagerService.deleteTask(id)
+    .subscribe();
+    this.dialogRef.close();
   }
 }
