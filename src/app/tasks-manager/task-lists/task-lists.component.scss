@@ -2,7 +2,7 @@
   text-align: center;
 }
 
-.main__board {
+.board {
   width: 100%;
   overflow-x: auto;
   margin: 0 auto;
@@ -10,7 +10,7 @@
   gap: 30px;
 }
 
-.example-container {
+.board__column {
   min-width: 300px;
   max-width: 100%;
   display: inline-block;
@@ -24,29 +24,28 @@
   border-radius: 4px;
   overflow: hidden;
   display: block;
-  margin-bottom: 20px;
 }
 
 .example-box {
+  max-width: 300px;
   padding: 20px 10px;
   border-bottom: solid 1px #ccc;
   color: rgba(0, 0, 0, 0.87);
   display: flex;
   flex-direction: row;
   align-items: center;
-  // justify-content: space-between;
   box-sizing: border-box;
   cursor: pointer;
   background: white;
-  font-size: 14px;
+  font-size: 20px;
 }
 
 .cdk-drag-preview {
   box-sizing: border-box;
   border-radius: 4px;
   box-shadow: 0 5px 5px -3px rgba(0, 0, 0, 0.2),
-              0 8px 10px 1px rgba(0, 0, 0, 0.14),
-              0 3px 14px 2px rgba(0, 0, 0, 0.12);
+    0 8px 10px 1px rgba(0, 0, 0, 0.14),
+    0 3px 14px 2px rgba(0, 0, 0, 0.12);
 }
 
 .cdk-drag-placeholder {
@@ -74,33 +73,11 @@
   font-size: 20px;
 }
 
-.example-newList {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 50px;
-  background: rgba(0,0,0,0.2);
-  border-radius: 5px;
-  padding: 15px;
+.board__new-column {
+  width: 300px;
 
-  button {
-    padding: 10px;
-    margin-right: 20px;
-    border: none;
-    background: none;
-    color: white;
-    font-weight: 200;
-    font-size: 20px;
-  }
-
-  button:hover {
-    font-size: 26px;
-    font-weight: 400;
-    color: aquamarine;
-  }
-
-  p {
-    margin: 0;
+  mat-form-field {
+    width: 100%;
   }
 }
 
@@ -108,22 +85,16 @@ mat-form-field {
   margin: 5px 0;
 }
 
-.example-button {
-  button {
-    margin-right: 20px;
-    border: none;
-    background: none;
-    color: white;
-  }
+.task-list__create-button {
+  border: none;
+  background: none;
+  font-size: 20px;
 }
 
-.example-button:hover {
-  button {
-    display: block;
-    font-size: 26px;
-    font-weight: 400;
-    color: black;
-  }
+.task-list__create-button:hover,
+.task-list__create-button:hover mat-icon {
+  font-weight: 700;
+  color: black;
 }
 
 .example-form {

@@ -1,40 +1,41 @@
 <h2 class="main-title" *ngIf="board">{{board.title}}</h2>
-<div class="main__board" cdkDropListGroup>
+<div class="board" cdkDropListGroup>
 
-  <div class="example-container" *ngFor="let column of board.columns">
+  <div class="board__column" *ngFor="let column of board.columns">
 
     <div class="example-toDo-header">
-      <h2 *ngIf="!changer" (dblclick)="[changer = !changer, columnId = column.id]">{{column.title}}</h2>
+      <h3 *ngIf="!changer" (dblclick)="[changer = !changer, columnId = column.id]">{{column.title}}</h3>
       <mat-form-field *ngIf="changer && column.id === columnId" appearance="fill">
+        <mat-label>Введите новое название</mat-label>
         <input matInput type="text" value={{column.title}} (keydown.enter)="changeName($event, column.id)">
-        <button mat-button mat-raised-button (click)="deleteColumn(column.id)">Delete</button>
       </mat-form-field>
+     <button mat-button mat-raised-button *ngIf="changer && column.id === columnId" (click)="deleteColumn(column.id)">Delete</button>
     </div>
-    
-    <div
-    *ngIf="column.tasks"
-      cdkDropList
-      [cdkDropListData]="column.tasks"
-      class="example-list"
-      (cdkDropListDropped)="drop($event, column.id)"
-    >
-      <div class="example-box" *ngFor="let task of column.tasks" cdkDrag routerLink={{task}} (mousedown)="taskId = task.id">
+
+    <div *ngIf="column.tasks" cdkDropList [cdkDropListData]="column.tasks" class="example-list"
+      (cdkDropListDropped)="drop($event, column.id)">
+      <div class="example-box" *ngFor="let task of column.tasks" cdkDrag routerLink={{task}}
+        (mousedown)="taskId = task.id">
         {{task.title}}
       </div>
     </div>
 
-    <div class="example-button">
-      <button *ngIf="isHidden === false" (click)="[isHidden = !isHidden, columnId = column.id]">+</button>
+    <div class="example-box">
+      <button class="task-list__create-button" (click)="[isHidden = !isHidden, columnId = column.id]">
+        <mat-icon>add_circle_outline</mat-icon>
+        Создать новую задачу
+      </button>
     </div>
 
     <!-- Форма создания новой таски на самой доске -->
-    <form class="example-form" [formGroup]="form" *ngIf="isHidden && column.id === columnId" (ngSubmit)="addToDo(column.id)">
+    <form class="example-form" [formGroup]="form" *ngIf="isHidden && column.id === columnId"
+      (ngSubmit)="addToDo(column.id)">
       <mat-form-field appearance="fill">
-        <mat-label>Task name</mat-label>
+        <mat-label>Заголовок задачи</mat-label>
         <input matInput type="text" formControlName="title">
       </mat-form-field>
       <mat-form-field appearance="fill">
-        <mat-label>Status</mat-label>
+        <mat-label>Статус</mat-label>
         <mat-select>
           <mat-option *ngFor="let option of status" [value]="option" formControlName="status">
             {{option}}
@@ -42,30 +43,30 @@
         </mat-select>
       </mat-form-field>
       <mat-form-field appearance="fill">
-        <mat-label>Priority</mat-label>
+        <mat-label>Приоритет</mat-label>
         <mat-select>
           <mat-option *ngFor="let option of priority" [value]="option" formControlName="priority">
             {{option}}
           </mat-option>
         </mat-select>
       </mat-form-field>
-      <button mat-raised-button class="example-createToDo" type="submit" [disabled]="form.invalid">Create</button>
+      <button mat-raised-button class="example-createToDo" type="submit" [disabled]="form.invalid">Создать</button>
     </form>
 
   </div>
 
-  <div>
-    <div class="example-newList">
-      <button (click)="isHiddenColumn = !isHiddenColumn">+</button>
-      <p>Добавить колонку</p>
-    </div>
-
+  <div class="board__new-column">
+    <button *ngIf="!isHiddenColumn" mat-raised-button color="primary" (click)="isHiddenColumn = !isHiddenColumn">
+      <mat-icon>add_circle_outline</mat-icon>
+      Добавить колонку
+    </button>
     <form [formGroup]="formColumns" (ngSubmit)="addColumn()" *ngIf="isHiddenColumn">
       <mat-form-field appearance="fill">
-        <mat-label>Column name</mat-label>
+        <mat-label>Название колонки</mat-label>
         <input matInput type="text" formControlName="columnName">
       </mat-form-field>
-      <button mat-raised-button class="example-createToDo" type="submit" [disabled]="formColumns.invalid">Create</button>
+      <button mat-raised-button color="primary" class="example-createToDo" type="submit"
+        [disabled]="formColumns.invalid">Создать</button>
     </form>
   </div>
 </div>

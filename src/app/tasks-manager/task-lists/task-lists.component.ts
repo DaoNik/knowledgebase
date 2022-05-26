@@ -47,14 +47,26 @@ export class TaskListsComponent implements OnInit {
 
   ngOnInit(): void {
     this.taskServ.getBoard()
-    .subscribe((board) => {
-      board.columns.forEach(column => {
-        this.taskServ.getColumn(column.id).subscribe(res => {
-          column.tasks = res.tasks;
-          this.board =  board;
+      .subscribe((board) => {
+        board.columns.forEach(column => {
+          this.taskServ.getColumn(column.id).subscribe(res => {
+            column.tasks = res.tasks;
+            this.board = board;
+          })
         })
       })
-    })
+  }
+
+  getColumns(): void {
+    this.taskServ.getBoard()
+      .subscribe((board) => {
+        board.columns.forEach(column => {
+          this.taskServ.getColumn(column.id).subscribe(res => {
+            column.tasks = res.tasks;
+            this.board = board;
+          })
+        })
+      });
   }
 
   drop(event: CdkDragDrop<any[]>, columnId: number) {
@@ -73,35 +85,57 @@ export class TaskListsComponent implements OnInit {
       );
     }
     this.taskServ.editTask(this.taskId, columnId)
-    .subscribe();
+      .subscribe();
   }
 
   openTask(item: any) {
     this.modalServ.openDialog(item)
     this.router.navigate(['tasks-manager/tasks', item]);
   }
+
   addToDo(columnId: number) {
     this.isHidden = false;
     this.taskServ.createTask(columnId, this.form.value.title, this.form.value.priority, this.form.value.status)
-    .subscribe();
+      .subscribe(() => {
+        this.taskServ.getColumn(columnId).subscribe(res => {
+          this.board.columns.forEach((column) => {
+            if (column.id === columnId) {
+              column.tasks = res.tasks;
+            }
+          });
+        });
+      });
     this.form.reset();
   }
 
   addColumn() {
+
+    //убрать подписку в подписке
     this.taskServ.createColumn(1, this.formColumns.value.columnName)
-    .subscribe();
+      .subscribe(() => {
+        this.getColumns();
+      });
     this.isHiddenColumn = false;
+
+    //или отрисовывать на фронте?
+    /*this.board.columns.push({
+      boardId: this.board.id,
+      createdAt: Date.now().toString(),
+      title: this.formColumns.value.columnName,
+      id: 1, //??
+      updatedAt: Date.now().toString(),
+    });*/
   }
 
   changeName(event: any, id: number) {
     this.taskServ.editColumn(id, event.target.value)
-    .subscribe();
+      .subscribe();
     this.changer = false;
   }
 
   deleteColumn(id: number) {
     this.taskServ.deleteColumn(id)
-    .subscribe();
+      .subscribe();
     this.changer = false;
   }
 }
