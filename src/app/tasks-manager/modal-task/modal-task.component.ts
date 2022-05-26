@@ -1,5 +1,5 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ITypeOption } from './modal-task-interface';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
 import { map, Observable, startWith } from 'rxjs';
