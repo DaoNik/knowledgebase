@@ -1,10 +1,9 @@
-import { Component, Inject, OnInit, ViewChild } from '@angular/core';
-import { MatDialogRef, MAT_DIALOG_DATA, MatDialog } from '@angular/material/dialog';
-import { IAssignee, ITaskData, ITypeOption } from './modal-task-interface';
+import { Component, Inject, OnInit } from '@angular/core';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { ITypeOption } from './modal-task-interface';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
-import { MatMenuTrigger } from '@angular/material/menu';
 import { map, Observable, startWith } from 'rxjs';
-import { ActivatedRoute, Params, Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ModalTaskService } from './modal-task.service';
 import { TasksManagerService } from '../tasks-manager.service';
 import { HttpClient } from '@angular/common/http';
@@ -103,7 +102,6 @@ export class ModalTaskComponent implements OnInit {
   }
 
   addText(e: any, num: number) {
-    console.log(this.taskData.value.text)
     if (num == -1) {
       if (!this.taskData.value.text) {
         this.taskData.value.text = [{
@@ -125,7 +123,6 @@ export class ModalTaskComponent implements OnInit {
       this.taskData.value.text[num].text = e.target.value;
     }
     this.inputTrigger = false;
-    console.log(this.taskData.value.text)
     this.updateTaskData();
   }
 
@@ -234,7 +231,6 @@ export class ModalTaskComponent implements OnInit {
             this.taskData.patchValue({
               column: column.title
             });
-            // console.log(`${column.id} == ${res.columnId} = ${column.id == res.columnId}`)
           }
         })
       })
