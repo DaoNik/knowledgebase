@@ -23,11 +23,11 @@ export class DeleteTaskModalComponent implements OnInit {
   deleteTask() {
     this.taskManagerService.deleteTask(this.id)
     .subscribe();
-    this.dialogRef.close(true);
+    this.dialogRef.close();
   }
 
   closeModal() {
-    this.dialogDel.close(false);
+    this.dialogDel.close();
   }
 
 }

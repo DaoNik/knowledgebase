@@ -39,9 +39,9 @@ export class AssigneeModalComponent implements OnInit, OnDestroy {
 
   updateData() {
     this.subscriptionEdit$ = this.taskManagerService.editTask(Number(this.data[0].taskId), {
-      respondents: this.data[0].taskAssignee,
+      authors: this.data[0].taskAssignee,
     }).subscribe(res => {
-      this.data[0].taskAssignee = res.departments;
+      this.data[0].taskAssignee = res.authors;
     });
   }
 

@@ -113,33 +113,11 @@
 						</td>
 					</tr>
 					<tr>
-						<td>Готовность</td>
-						<td>80%</td>
-					</tr>
-					<tr>
-						<td>Выделено дней</td>
+						<td>Дедлайн</td>
 						<td>90 days</td>
 					</tr>
 				</table>
 			</div>
-			<table class="task-subinfo">
-				<tr>
-					<td>Board</td>
-					<td class="tr-menu"
-						[matMenuTriggerFor]="boardMenu"
-					><p>
-						{{taskData.value.board}} 
-						<mat-icon>expand_more</mat-icon>
-					</p></td>
-						<mat-menu #boardMenu="matMenu">
-							<button mat-menu-item
-								*ngFor="let board of boards"
-								(click)="[taskData.value.boardId = board.id, taskData.value.board = board.title]">
-								{{board.title}}
-							</button>
-						</mat-menu>
-				</tr>
-			</table>
 		</div>
 	</div>
 	<div class="modal-task__data">

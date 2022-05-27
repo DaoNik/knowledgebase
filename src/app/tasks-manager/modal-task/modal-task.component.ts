@@ -53,17 +53,15 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
     status: [],
     column: [],
     columnId: [],
-    board: [],
     boardId: [],
     priority: [],
     assignee: [[]],
-    contact: [],
+    contact: [[]],
     text: [[]],
     dateCreated: [],
     dateUpdated: []
   });
   columns: any = []
-  boards: any = []
   statusVariants: string[] = ['Todo', 'In progress', 'Done'];
   priorityVariants: string[] = ['None', 'Low', 'Medium', 'High'];
   typeOptions: ITypeOption[] = [{
@@ -234,7 +232,7 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
       status: this.taskData.value.status == '' ? 'Todo' : this.taskData.value.status,
       column: this.taskData.value.column,
       columnId: this.taskData.value.columnId,
-      departments: this.taskData.value.assignee,
+      authors: this.taskData.value.assignee,
       priority: this.taskData.value.priority == '' ? 'None' : this.taskData.value.priority,
       contact: this.taskData.value.contact,
       description: JSON.stringify(this.taskData.value.text)
@@ -242,10 +240,11 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
     this.taskManagerService.editTask(Number(this.data), updatedData).subscribe(res => {
       this.taskData.patchValue({
         title: res.title,
-        assignee: res.departments,
+        assignee: res.authors,
         status: res.status,
         columnId: res.columnId,
         priority: res.priority,
+        contact: res.contact,
         dateCreated: this._dateTransform(res.createdAt),
         dateUpdated: this._dateTransform(res.updatedAt)
       });
@@ -258,7 +257,7 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
       console.log(res)
       this.taskData.patchValue({
         title: res.title,
-        assignee: res.departments,
+        assignee: res.authors,
         status: res.status,
         boardId: res.boardId,
         columnId: res.columnId,
@@ -284,16 +283,6 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
           });
         }
       })
-    })
-
-    this.taskManagerService.getBoard().subscribe((res: IBoard) => {
-      console.log(res)
-      this.boards = [res]
-      if (res.id === this.taskData.value.boardId) {
-        this.taskData.patchValue({
-          board: res.title
-        });
-      }
     })
   }
 
