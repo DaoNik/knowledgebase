@@ -64,7 +64,7 @@ export class FormIssueComponent {
     const formData: any = {
       authors: [this.issueForm.value.name],
       title: this.issueForm.value.title,
-      category: '',
+      // category: '',
       description: this.issueForm.value.description,
       columnId: 1,
       priority: 'Medium',
@@ -74,7 +74,7 @@ export class FormIssueComponent {
       boardId: 1
     }
     this.taskServ.createTask(formData.columnId, formData.title, formData.boardId,
-      formData.priority, formData.status, formData.description, formData.authors, formData.respondents, formData.tags, formData.category)
+      formData.priority, formData.status, formData.description, formData.authors, formData.respondents, formData.tags)
     .subscribe();
   }
 
