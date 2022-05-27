@@ -33,8 +33,7 @@ export class TasksTableComponent implements OnInit, AfterViewInit, OnDestroy {
     'respondents',
     'priority',
   ];
-  
-  // ================================================== 
+
   subscriptionTasks$!: Subscription;
 
   tasks$ = this.taskServ.getTasks();
@@ -52,7 +51,6 @@ export class TasksTableComponent implements OnInit, AfterViewInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-  // ================================================== 
     this.subscriptionTasks$ = this.tasks$
       .pipe(
         map((tasks) => {
@@ -82,11 +80,9 @@ export class TasksTableComponent implements OnInit, AfterViewInit, OnDestroy {
     ).textContent = 'Отобразить: ';
   }
 
-  // ================================================== 
   ngOnDestroy() {
     this.subscriptionTasks$.unsubscribe();
   }
-  // ================================================== 
 
   applyFilter(event: Event) {
     const filterValue = (event.target as HTMLInputElement).value;
