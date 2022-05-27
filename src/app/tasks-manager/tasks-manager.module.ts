@@ -46,7 +46,15 @@ const routes: Routes = [
     },
   ],  data: {displayName: 'Списки задач'} },
   { path: 'form', component: FormIssueComponent, data: {displayName: 'Форма заявки'}  },
-  { path: 'table', component: TasksTableComponent, data: {displayName: 'Таблица задач'}  },
+  { path: 'table', component: TasksTableComponent, children:[
+    {
+      path: ':item',
+      component: ModalTaskEntryComponent,
+      data: {
+        displayName: 'Задача',
+      },
+    },
+  ], data: {displayName: 'Таблица задач'}  },
 ];
 
 @NgModule({
