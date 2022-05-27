@@ -59,8 +59,11 @@
 						<td *ngIf="sidebarEditTrigger"
 							class="tr-menu"
 							[matMenuTriggerFor]="priorityMenu"
-						>{{taskData.value.priority}}
-						<mat-icon>expand_more</mat-icon></td>
+						>
+						<p>
+							{{taskData.value.priority}}
+							<mat-icon>expand_more</mat-icon>
+						</p></td>
 						<mat-menu #priorityMenu="matMenu">
 							<button mat-menu-item
 								*ngFor="let priority of priorityVariants"
@@ -75,8 +78,10 @@
 						<td *ngIf="sidebarEditTrigger"
 							class="tr-menu"
 							[matMenuTriggerFor]="statusMenu"
-						>{{taskData.value.status}} 
-						<mat-icon>expand_more</mat-icon></td>
+						><p>
+							{{taskData.value.status}} 
+							<mat-icon>expand_more</mat-icon>
+						</p></td>
 						<mat-menu #statusMenu="matMenu">
 							<button mat-menu-item
 								*ngFor="let status of statusVariants"
