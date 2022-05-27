@@ -9,6 +9,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { IBoard, IColumn } from '../interfaces/taskList.interface';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TasksManagerService } from '../tasks-manager.service';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-task-lists',
@@ -29,6 +30,8 @@ export class TaskListsComponent implements OnInit {
   public form!: FormGroup;
   public formColumns!: FormGroup;
   public formChangeName: any[] = [];
+
+  private urlBehavior = new BehaviorSubject<string>(this.router.url);
 
   constructor(
     private modalServ: ModalTaskService,
@@ -54,6 +57,12 @@ export class TaskListsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    const currUrl = this.router.url.split('/')
+    // if (currUrl[currUrl.length - 1] != 'lists') 
+    this.urlBehavior.subscribe(url => {
+      console.log(url)
+      this.urlBehavior.next(this.router.url)
+    })
     this.taskServ.getBoard().subscribe((board) => {
       board.columns.forEach((column) => {
         this.taskServ.getColumn(column.id).subscribe((res) => {

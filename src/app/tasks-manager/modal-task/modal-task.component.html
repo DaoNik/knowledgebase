@@ -1,4 +1,7 @@
 <div class="modal-task" [formGroup]="taskData">
+	<div class="modal-task__close" (click)="onNoClick()">
+		<mat-icon>close</mat-icon>
+	</div>
 	<div class="modal-task__header">
 		<div class="modal-task__header_btns">
 			<div class="modal-task__header_btns_wrp">

@@ -243,8 +243,9 @@ export class ModalTaskComponent implements OnInit {
 
   uploadTaskData() {
     const url = this.router.url.split('/')
+
     this.taskManagerService.getTask(Number(url[url.length - 1])).subscribe((res: any) => {
-      console.log(res)
+
       this.taskData.patchValue({
         title: res.title,
         assignee: res.respondents,
@@ -261,16 +262,16 @@ export class ModalTaskComponent implements OnInit {
           text: JSON.parse(res.description)
         });
       }
+    })
 
-      this.taskManagerService.getColumns().subscribe(columns => {
-          this.columns = columns;
-          columns.map((column: any) => {
-          if (column.id == res.columnId) {
-            this.taskData.patchValue({
-              column: column.title
-            });
-          }
-        })
+    this.taskManagerService.getColumns().subscribe(columns => {
+      this.columns = columns;
+      columns.map((column: any) => {
+        if (column.id == this.taskData.value.columnId) {
+          this.taskData.patchValue({
+            column: column.title
+          });
+        }
       })
     })
 
@@ -296,7 +297,7 @@ export class ModalTaskComponent implements OnInit {
     });
 
     dialogDel.afterClosed().subscribe((res) => {
-      if (res) this.dialogRef.close();
+      if (res) this.dialogRef.close(true);
     });
   }
 }

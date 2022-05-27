@@ -3,6 +3,33 @@
 	height: 500px;
 	padding-top: 20px;
 
+	.modal-task__close {
+		position: absolute;
+		right: 2px;
+		top: 2px;
+		height: 36px;
+		width: 36px;
+		padding: 6px;
+		border-radius: 18px;
+		transition: 0.2s;
+
+		cursor: pointer;
+
+		&:hover {
+			background: rgb(133, 133, 133);
+			color: white;
+
+			mat-icon {
+				transform: scale(1.1);
+			}
+		}
+
+		&:active {
+			background: rgb(79, 79, 79);
+			color: white;
+		}
+	}
+
 	.modal-task__header {
 		margin: 0 0 0 auto;
 		width: 60%;

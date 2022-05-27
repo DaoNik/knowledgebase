@@ -25,6 +25,7 @@ export class ModalTaskEntryComponent {
     });
     
     dialogRef.afterClosed().subscribe(result => {
+      console.log(result);
       this.router.navigate(['../'], { relativeTo: this.route });
     });
   }
