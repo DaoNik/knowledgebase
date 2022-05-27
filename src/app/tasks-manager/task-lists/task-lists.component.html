@@ -12,7 +12,7 @@
       <mat-form-field *ngIf="changerColumn.get(column.id)" appearance="fill">
         <mat-label>Введите новое название</mat-label>
         <input matInput type="text" value={{column.title}} (keydown.enter)="changeName($event, column.id, column.title)"
-          (blur)="changerColumn.set(column.id, false)" [formControl]="findFormcontrol(column.id)">
+          (blur)="changerColumn.set(column.id, false)" [formControl]="findFormcontrol(column.id)" #input>
         <button mat-button mat-raised-button *ngIf="changerColumn.get(column.id) && !column.tasks?.length"
           (click)="deleteColumn(column.id)">Удалить</button>
         <mat-error *ngIf="findFormcontrol(column.id).getError('minlength')">Название меньше 4 символов</mat-error>

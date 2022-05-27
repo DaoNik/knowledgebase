@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import {
   CdkDragDrop,
   moveItemInArray,
@@ -29,6 +29,8 @@ export class TaskListsComponent implements OnInit {
   public form!: FormGroup;
   public formColumns!: FormGroup;
   public formChangeName: any[] = [];
+
+  @ViewChild('input') input!: HTMLInputElement;
 
   constructor(
     private modalServ: ModalTaskService,
@@ -64,7 +66,7 @@ export class TaskListsComponent implements OnInit {
 
   onColumnHeaderClick(id: number): void {
     this.changerColumn.set(id, true);
-    console.log(this.findFormcontrol(id));
+    this.input.focus();
 
   }
 
