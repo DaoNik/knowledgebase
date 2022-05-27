@@ -28,8 +28,8 @@
       </li>
     </ul>
 
-    <div class="board__task board-task--new" *ngIf="isTaskAddOpen.get(column.id)">
-      <button class="board__task-create" (click)="isTaskAddOpen.set(column.id, false)" >
+    <div class="board__task board__task--new" *ngIf="isTaskAddOpen.get(column.id)">
+      <button class="board__task-create" (click)="isTaskAddOpen.set(column.id, false)">
         <mat-icon>add_circle_outline</mat-icon>
         Создать новую задачу
       </button>
