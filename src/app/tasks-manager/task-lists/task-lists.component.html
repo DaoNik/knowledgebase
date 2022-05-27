@@ -22,8 +22,8 @@
 
     <ul *ngIf="column.tasks" cdkDropList [cdkDropListData]="column.tasks" class="board__task-list"
       (cdkDropListDropped)="drop($event, column.id)">
-      <li class="board__task" *ngFor="let task of column.tasks" cdkDrag>
-        <p class="board__task-header" routerLink={{task.id}} (mousedown)="taskId = task.id">{{task.title}}</p>
+      <li class="board__task" *ngFor="let task of column.tasks" cdkDrag routerLink={{task.id}} (mousedown)="taskId = task.id">
+        <p class="board__task-header" >{{task.title}}</p>
         <mat-icon (click)="deleteTask(task.id, column.id)" class="board__task-delete">delete</mat-icon>
       </li>
     </ul>
