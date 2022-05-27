@@ -1,5 +1,228 @@
-<div class="modal-task">
-	<div class="modal-task__close" (click)="onNoClick()">
+<div class="modal-task" [formGroup]="taskData">
+	<div class="modal-task__header">
+		<div class="modal-task__header_btns">
+			<div class="modal-task__header_btns_wrp">
+				<button class="link" (click)="copyUrl()">
+					<mat-icon>share</mat-icon>
+				</button>
+				<button class="link">
+					<mat-icon>label</mat-icon>
+				</button>
+				<button class="link">
+					<mat-icon>person</mat-icon>
+				</button>
+				<button class="link">
+					<mat-icon>more_horiz</mat-icon>
+				</button>
+			</div>
+			<div class="modal-task__header_btns_wrp">
+				<button class="link">
+					<mat-icon>edit</mat-icon>
+				</button>
+				<button class="link">
+					<mat-icon>delete</mat-icon>
+				</button>
+			</div>
+		</div>
+		<div class="modal-task__header_creation">
+			<div>Created at {{taskData.value.dateCreated}}</div>
+			<div>Updated at {{taskData.value.dateUpdated}}</div>
+		</div>
+		<div class="modal-task__header_title">
+			<h2 *ngIf="!headerTrigger"
+			(click)="headerTrigger = !headerTrigger">
+				{{taskData.value.title}}
+			</h2>
+			<input *ngIf="headerTrigger"
+				formControlName="title"
+				(keyup.enter)="changeTitle()"
+			>
+		</div>
+		
+	</div>
+	<div class="modal-task__sidebar">
+		<div class="modal-task__sidebar_info">
+			<div class="task-info">
+				<div class="task-info__edit"
+					 (click)="editSidebar()">
+					<mat-icon *ngIf="!sidebarEditTrigger">edit</mat-icon>
+					<mat-icon *ngIf="sidebarEditTrigger">save</mat-icon>
+				</div>
+				<table>
+					<tr>
+						<td>Project</td>
+						<td>WH School</td>
+					</tr>
+					<tr>
+						<td><p>Priority</p></td>
+						<td *ngIf="!sidebarEditTrigger">{{taskData.value.priority}}</td>
+						<td *ngIf="sidebarEditTrigger"
+							class="tr-menu"
+							[matMenuTriggerFor]="priorityMenu"
+						>{{taskData.value.priority}}
+						<mat-icon>expand_more</mat-icon></td>
+						<mat-menu #priorityMenu="matMenu">
+							<button mat-menu-item
+								*ngFor="let priority of priorityVariants"
+								(click)="taskData.value.priority = priority">
+								{{priority}}
+							</button>
+						</mat-menu>
+					</tr>
+					<tr>
+						<td>State</td>
+						<td *ngIf="!sidebarEditTrigger">{{taskData.value.status}}</td>
+						<td *ngIf="sidebarEditTrigger"
+							class="tr-menu"
+							[matMenuTriggerFor]="statusMenu"
+						>{{taskData.value.status}} 
+						<mat-icon>expand_more</mat-icon></td>
+						<mat-menu #statusMenu="matMenu">
+							<button mat-menu-item
+								*ngFor="let status of statusVariants"
+								(click)="taskData.value.status = status">
+								{{status}}
+							</button>
+						</mat-menu>
+					</tr>
+					<tr>
+						<td>Assignee</td>
+						<td *ngIf="!sidebarEditTrigger">
+							{{taskData.value.assignee[0]}}
+							<span 
+							*ngIf="taskData.value.assignee.length > 1"
+							(click)="showAndEditAssignee(false)"
+							class="tr-more">
+								<mat-icon>more_vert</mat-icon>
+							</span>
+						</td>
+						<td *ngIf="sidebarEditTrigger">
+							{{taskData.value.assignee[0]}}
+							<mat-icon (click)="showAndEditAssignee(true)"
+							class="tr-more"
+							>person_add</mat-icon>
+						</td>
+					</tr>
+					<tr>
+						<td>Ready</td>
+						<td>80%</td>
+					</tr>
+					<tr>
+						<td>Ideal days</td>
+						<td>90 days</td>
+					</tr>
+				</table>
+			</div>
+			<table class="task-subinfo">
+				<tr>
+					<td>watchers</td>
+					<td>Stop Watching</td>
+				</tr>
+				<tr>
+					<td>Boards</td>
+					<td>Add to board</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+	<div class="modal-task__data">
+		<div class="modal-task__data_files">
+			<div *ngIf="!fileUploaded" class="modal-task__data_files_label">
+				<mat-icon>attach_files</mat-icon>
+				Drop your files here
+			</div>
+			<div *ngIf="fileUploaded"  class="modal-task__data_files_label added">
+				Загружено!
+			</div>
+			<input type="file" multiple (change)="fileInputChange(fileInput)" #fileInput>
+		</div>
+		<mat-tab-group>
+			<mat-tab label="Описание">
+				<div class="modal-task__data_description"
+				>
+					<div formGroupName="text"
+					class="text_wrp"
+					*ngFor="let item of taskData.value.text; let i = index">
+						<mat-icon [matMenuTriggerFor]="menu" class="more">more_vert</mat-icon>
+						<mat-menu #menu="matMenu">
+							<button mat-menu-item 
+								*ngFor="let option of typeOptions"
+								(click)="changeType(option, i)"
+								[ngStyle]="{'color': item.type == option.type ? 'orange' : 'black'}">
+									{{option.name}}
+							</button>
+						</mat-menu>
+						<div class="text_icon">
+							<div *ngIf="item.type.length <= 0">
+							</div>
+							<div *ngIf="item.type == 'todo'"
+								class="todo"
+								(click)="[item.value = item.value == 'true' ? 'false' : 'true', this.updateTaskData()]">
+								<mat-icon *ngIf="item.value == 'true'">check_box</mat-icon>
+								<mat-icon *ngIf="item.value == 'false'">check_box_outline_blank</mat-icon>
+							</div>
+							<div *ngIf="item.type == 'ul'">
+								●
+							</div>
+						</div>
+					
+						<div *ngIf="!inputTrigger"
+							(click)="inputTrigger = !inputTrigger"
+							class='text_input_disabled'
+							[ngClass]="{'custom-done': item.type == 'todo' && item.value == 'true'}"
+							>
+								{{item.text}}
+							
+						</div>
+						<input class='text_input' 
+								type='text'
+								value={{item.text}} 
+								*ngIf="inputTrigger"
+								name="inputTask"
+								(keyup.enter)="addText($event, i)"
+								(keyup.Delete)="deleteString(i)"
+						>
+					</div>
+					<div class="text_wrp">
+						<mat-icon [matMenuTriggerFor]="addMenu" class="more">more_vert</mat-icon>
+						<mat-menu #addMenu="matMenu">
+							<button mat-menu-item 
+									*ngFor="let option of typeOptions"
+									(click)="changeType(option, -1)"
+									[ngStyle]="{'color': createOption.type == option.type ? 'orange' : 'black'}">
+										{{option.name}}
+									</button>
+						</mat-menu>
+						<div class="text_icon">
+							<mat-icon>add</mat-icon>
+						</div>
+						<input class='text_input_new' 
+							type='text'
+							name="inputTask"
+							(keyup.enter)="addText($event, -1)"
+						>
+					</div>
+				</div>
+			</mat-tab>
+			<mat-tab label="Комментарии">
+				<div class="modal-task__data_comments">
+
+				</div>
+			</mat-tab>
+			<mat-tab *ngIf="inputFile.length > 0" label="Приложения">
+
+			</mat-tab>
+			<mat-tab *ngIf="inputFile.length == 0" label="Приложения" disabled>
+			</mat-tab>
+		  </mat-tab-group>
+
+		
+	</div>
+	
+</div>
+
+
+	<!-- <div class="modal-task__close" (click)="onNoClick()">
 		<mat-icon>close</mat-icon>
 	</div>
 	<div class="modal-task__title" [formGroup]="taskData">
@@ -43,10 +266,6 @@
 			</button>
 		</mat-menu>
 	</div>
-	<!-- <div class="modal-task__description">
-		<mat-icon>description</mat-icon>
-		<p>{{mockTaskData.value.description}}</p>
-	</div> -->
 	<div class="modal-task__text" [formGroup]="taskData">
 		<div formGroupName="text"
 			 class="modal-task__text_wrp"
@@ -62,7 +281,6 @@
 			</mat-menu>
 			<div class="modal_task__text_icon">
 				<div *ngIf="item.type.length <= 0">
-					<!-- <mat-icon>description</mat-icon> -->
 				</div>
 				<div *ngIf="item.type == 'todo'"
 					 class="todo"
@@ -150,6 +368,6 @@
 			</div>
 		</div>
 		
-	</div>
-</div>
+	</div> -->
+<!-- </div> -->
 

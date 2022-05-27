@@ -33,6 +33,8 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
   @ViewChild('categoryInput')
   categoryInput!: ElementRef<HTMLInputElement>;
 
+  public formSubmitted = false;
+  public formLoaded = false;
   public article$!: Observable<IArticle>;
   public articleId!: string;
   public isEditArticle!: boolean;
@@ -224,6 +226,9 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
 
   createArticle(): void {
     if (this.form.valid) {
+      this.formSubmitted = true;
+      this.formLoaded = true;
+
       const article: IArticle = {
         title: this.form.get('title')?.value.trim(),
         description: this.form.get('description')?.value.trim(),
@@ -248,16 +253,21 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
     }
   }
 
+  getCtrl(ctrl: string): string[] {
+    if (ctrl === 'respondents') {
+      return this.respondents;
+    } else if (ctrl === 'tags') {
+      return this.tags;
+    } else if (ctrl === 'category') {
+      return this.categories;
+    } else {
+      return this.authors;
+    }
+  }
+
   removeChip(chip: string, ctrl: string): void {
     const control = this.form.get(ctrl);
-    let chips =
-      ctrl === 'respondents'
-        ? this.respondents
-        : ctrl === 'tags'
-        ? this.tags
-        : ctrl === 'category'
-        ? this.categories
-        : this.authors;
+    let chips = this.getCtrl(ctrl);
 
     chips.push(chip);
 
@@ -273,14 +283,7 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
     chipCtrl: FormControl
   ): void {
     const control = this.form.get(ctrl);
-    let chips =
-      ctrl === 'respondents'
-        ? this.respondents
-        : ctrl === 'tags'
-        ? this.tags
-        : ctrl === 'category'
-        ? this.categories
-        : this.authors;
+    let chips = this.getCtrl(ctrl);
 
     chips.splice(chips.indexOf(event.option.viewValue), 1);
     control?.patchValue([...control?.value, event.option.viewValue]);

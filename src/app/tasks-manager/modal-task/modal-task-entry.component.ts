@@ -20,7 +20,7 @@ export class ModalTaskEntryComponent {
     const dialogRef = this.dialog.open(ModalTaskComponent, {
       panelClass: 'modal-task-global',
       data: data,
-      maxWidth: '700px',
+      maxWidth: '900px',
       width: '90%'
     });
     
