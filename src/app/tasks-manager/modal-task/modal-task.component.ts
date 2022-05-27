@@ -2,12 +2,13 @@ import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ITypeOption } from './modal-task-interface';
 import { FormBuilder, FormControl, Validators } from '@angular/forms';
-import { map, Observable, startWith } from 'rxjs';
+import { map, Observable, startWith, timeout } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ModalTaskService } from './modal-task.service';
 import { TasksManagerService } from '../tasks-manager.service';
 import { HttpClient } from '@angular/common/http';
 import { AssigneeModalComponent } from './assignee-modal/assignee-modal.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
 
 @Component({
   selector: 'app-modal-task',
@@ -93,7 +94,8 @@ export class ModalTaskComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private modalTaskServ: ModalTaskService,
-    private taskManagerService: TasksManagerService
+    private taskManagerService: TasksManagerService,
+    private _snackBar: MatSnackBar
   ) {}
   
 
@@ -153,6 +155,12 @@ export class ModalTaskComponent implements OnInit {
     this.updateTaskData();
   }
 
+  urlCopy() {
+    navigator.clipboard.writeText(window.location.href);
+    this._snackBar.open('Ссылка скопирована!');
+    setTimeout(() => {this._snackBar.dismiss()}, 1000)
+  }
+
   deleteString(i: number) {
     this.taskData.value.text.splice(i, 1);
     this.updateTaskData();
@@ -167,11 +175,6 @@ export class ModalTaskComponent implements OnInit {
   removeAssignee(index: number): void {
     this.taskData.value.assignee.splice(index, 1);
     this.updateTaskData();
-  }
-
-  copyUrl() {
-    // console.log(this.router)
-    navigator.clipboard.writeText(window.location.href);
   }
 
   editSidebar() {

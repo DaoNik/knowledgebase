@@ -2,7 +2,7 @@
 	<div class="modal-task__header">
 		<div class="modal-task__header_btns">
 			<div class="modal-task__header_btns_wrp">
-				<button class="link" (click)="copyUrl()">
+				<button class="link" (click)="urlCopy()">
 					<mat-icon>share</mat-icon>
 				</button>
 				<button class="link">
@@ -88,19 +88,21 @@
 					<tr>
 						<td>Assignee</td>
 						<td *ngIf="!sidebarEditTrigger">
-							{{taskData.value.assignee[0]}}
-							<span 
-							*ngIf="taskData.value.assignee.length > 1"
-							(click)="showAndEditAssignee(false)"
-							class="tr-more">
-								<mat-icon>more_vert</mat-icon>
-							</span>
+							<p>
+								{{taskData.value.assignee[0]}}
+								<mat-icon *ngIf="taskData.value.assignee.length > 1"
+										(click)="showAndEditAssignee(false)"
+										class="tr-more"
+								>more_vert</mat-icon>
+							</p>
 						</td>
 						<td *ngIf="sidebarEditTrigger">
-							{{taskData.value.assignee[0]}}
+							<p>
+								{{taskData.value.assignee[0]}}
 							<mat-icon (click)="showAndEditAssignee(true)"
 							class="tr-more"
 							>person_add</mat-icon>
+							</p>
 						</td>
 					</tr>
 					<tr>

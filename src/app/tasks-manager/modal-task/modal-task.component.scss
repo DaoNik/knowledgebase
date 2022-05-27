@@ -64,6 +64,8 @@
 				margin: 0;
 				font-size: 24px;
 				font-weight: bold;
+				overflow-wrap: break-word;
+				overflow: hidden;
 			}
 
 			input {
@@ -116,6 +118,24 @@
 
 					tr {
 						height: 30px;
+						font-size: 14px;
+						line-height: 14px;
+					
+						td {
+							font-size: 14px;
+							line-height: 14px;
+
+							height: 14px;
+
+							p {
+								mat-icon {
+									height: 18px;
+									width: 18px;
+									font-size: 18px;
+									margin-bottom: 0;
+								}
+							}
+						}
 
 						.tr-menu {
 							cursor: pointer;
