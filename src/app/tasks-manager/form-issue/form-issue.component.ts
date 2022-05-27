@@ -69,13 +69,23 @@ export class FormIssueComponent {
       columnId: 1,
       priority: 'Medium',
       status: 'To Do',
-      respondents: [this.issueForm.value.department],
+      departments: [this.issueForm.value.department],
       tags: [],
-      boardId: 1
-    }
-    this.taskServ.createTask(formData.columnId, formData.title, formData.boardId,
-      formData.priority, formData.status, formData.description, formData.authors, formData.respondents, formData.tags)
-    .subscribe();
+      boardId: 1,
+    };
+    this.taskServ
+      .createTask(
+        formData.columnId,
+        formData.title,
+        formData.boardId,
+        formData.priority,
+        formData.status,
+        formData.description,
+        formData.authors,
+        formData.departments,
+        formData.tags
+      )
+      .subscribe();
   }
 
   // remove(fruit: string): void {

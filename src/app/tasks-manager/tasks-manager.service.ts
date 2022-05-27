@@ -24,42 +24,46 @@ export class TasksManagerService {
   createBoard(
     title: string,
     authors?: string[],
-    respondents?: string[],
+    departments?: string[],
     tags?: string[],
     categories?: string[]
   ): Observable<IBoard> {
-    return this.http.post<IBoard>(`${this.url}/boards`, {
-      title,
-      authors,
-      respondents,
-      tags,
-      categories,
-    }).pipe(
-      catchError((error: HttpErrorResponse) => {
-        return throwError(() => error);
+    return this.http
+      .post<IBoard>(`${this.url}/boards`, {
+        title,
+        authors,
+        departments,
+        tags,
+        categories,
       })
-    );
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          return throwError(() => error);
+        })
+      );
   }
 
   editBoard(
     id: number,
     title?: string,
     authors?: string[],
-    respondents?: string[],
+    departments?: string[],
     tags?: string[],
     categories?: string[]
   ): Observable<IBoard> {
-    return this.http.post<IBoard>(`${this.url}/boards/${id}`, {
-      title,
-      authors,
-      respondents,
-      tags,
-      categories,
-    }).pipe(
-      catchError((error: HttpErrorResponse) => {
-        return throwError(() => error);
+    return this.http
+      .post<IBoard>(`${this.url}/boards/${id}`, {
+        title,
+        authors,
+        departments,
+        tags,
+        categories,
       })
-    );
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          return throwError(() => error);
+        })
+      );
   }
 
   // Columns
@@ -81,19 +85,23 @@ export class TasksManagerService {
   }
 
   createColumn(boardId: number, title: string) {
-    return this.http.post<IColumn>(`${this.url}/columns`, { boardId, title }).pipe(
-      catchError((error: HttpErrorResponse) => {
-        return throwError(() => error);
-      })
-    );
+    return this.http
+      .post<IColumn>(`${this.url}/columns`, { boardId, title })
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          return throwError(() => error);
+        })
+      );
   }
 
   editColumn(id: number, title: string) {
-    return this.http.patch<IColumn>(`${this.url}/columns/${id}`, { title }).pipe(
-      catchError((error: HttpErrorResponse) => {
-        return throwError(() => error);
-      })
-    );
+    return this.http
+      .patch<IColumn>(`${this.url}/columns/${id}`, { title })
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          return throwError(() => error);
+        })
+      );
   }
 
   deleteColumn(id: number) {
@@ -126,30 +134,34 @@ export class TasksManagerService {
     columnId: number,
     title: string,
     boardId: number,
+    author: string,
     priority?: string,
     status?: string,
     description?: string,
     authors?: string[],
-    respondents?: string[],
+    departments?: string[],
     tags?: string[],
     category?: string
   ): Observable<ITask> {
-    return this.http.post<ITask>(`${this.url}/tasks`, {
-      columnId,
-      title,
-      priority,
-      status,
-      description,
-      authors,
-      respondents,
-      tags,
-      category,
-      boardId,
-    }).pipe(
-      catchError((error: HttpErrorResponse) => {
-        return throwError(() => error);
+    return this.http
+      .post<ITask>(`${this.url}/tasks`, {
+        columnId,
+        title,
+        priority,
+        status,
+        description,
+        authors,
+        departments,
+        tags,
+        category,
+        boardId,
+        contact: author,
       })
-    );
+      .pipe(
+        catchError((error: HttpErrorResponse) => {
+          return throwError(() => error);
+        })
+      );
   }
 
   editTask(id: number, updatedData: any): Observable<ITask> {

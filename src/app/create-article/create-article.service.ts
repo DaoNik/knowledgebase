@@ -44,7 +44,7 @@ export class CreateArticleService {
     return of(['Саша Сашин', 'Петр Петрович']);
   }
 
-  getRespondents(): Observable<string[]> {
+  getDepartments(): Observable<string[]> {
     return of([
       'Отдел разработки #1',
       'Отдел разработки #2',

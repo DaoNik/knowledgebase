@@ -18,7 +18,7 @@ export interface ITableTasks {
   id: number;
   title: string;
   status: string;
-  respondents: string[];
+  departments: string[];
   priority: string;
 }
 
@@ -32,7 +32,7 @@ export class TasksTableComponent implements OnInit, AfterViewInit, OnDestroy {
     'id',
     'title',
     'status',
-    'respondents',
+    'departments',
     'priority',
   ];
 
@@ -63,7 +63,7 @@ export class TasksTableComponent implements OnInit, AfterViewInit, OnDestroy {
               id: task.id,
               title: task.title,
               status: task.status,
-              respondents: task.departments,
+              departments: task.departments,
               priority: task.priority,
             };
           });
@@ -97,5 +97,4 @@ export class TasksTableComponent implements OnInit, AfterViewInit, OnDestroy {
       this.dataSource.paginator.firstPage();
     }
   }
-
 }
