@@ -10,7 +10,7 @@ export interface ITask {
   createdAt: string;
   description: string;
   id: number;
-  contact: string[];
+  contact: string;
   priority: string;
   departments: string[];
   status: string;
