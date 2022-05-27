@@ -233,14 +233,14 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
       status: this.taskData.value.status,
       column: this.taskData.value.column,
       columnId: this.taskData.value.columnId,
-      respondents: this.taskData.value.assignee,
+      departments: this.taskData.value.assignee,
       priority: this.taskData.value.priority,
       description: JSON.stringify(this.taskData.value.text)
     }
     this.taskManagerService.editTask(Number(this.data), updatedData).subscribe(res => {
       this.taskData.patchValue({
         title: res.title,
-        assignee: res.respondents,
+        assignee: res.departments,
         status: res.status,
         columnId: res.columnId,
         priority: res.priority,
@@ -256,7 +256,7 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
       console.log(res)
       this.taskData.patchValue({
         title: res.title,
-        assignee: res.respondents,
+        assignee: res.departments,
         status: res.status,
         boardId: res.boardId,
         columnId: res.columnId,

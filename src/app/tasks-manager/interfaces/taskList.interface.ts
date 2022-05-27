@@ -11,7 +11,7 @@ export interface ITask {
   description: string;
   id: number;
   priority: string;
-  respondents: string[];
+  departments: string[];
   status: string;
   tags: string[];
   title: string;

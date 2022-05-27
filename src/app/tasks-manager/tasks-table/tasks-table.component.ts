@@ -63,7 +63,7 @@ export class TasksTableComponent implements OnInit, AfterViewInit, OnDestroy {
               id: task.id,
               title: task.title,
               status: task.status,
-              respondents: task.respondents,
+              respondents: task.departments,
               priority: task.priority,
             };
           });
