@@ -6,7 +6,7 @@ export interface IArticle {
   dateUpdate?: string;
   content: string;
   authors: string[];
-  respondents: string[];
+  departments: string[];
   tags: string[];
   category: string;
 }
