@@ -4,7 +4,7 @@ export interface ITasksList2 {
 }
 
 export interface ITask {
-  authors: [];
+  authors: any[];
   category: string;
   columnId: number;
   createdAt: string;
@@ -16,6 +16,7 @@ export interface ITask {
   tags: string[];
   title: string;
   updatedAt: string;
+  boardId: number;
   paginator?: any;
 }
 
