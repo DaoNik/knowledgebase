@@ -56,7 +56,7 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
     boardId: [],
     priority: [],
     assignee: [[]],
-    contact: [[]],
+    contact: [],
     text: [[]],
     dateCreated: [],
     dateUpdated: []
