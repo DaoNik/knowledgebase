@@ -1,0 +1,23 @@
+<div class="people">
+	<h2>Список ответственных</h2>
+	<div class="person" *ngFor="let person of data[0].taskAssignee; let i = index">
+		<mat-icon *ngIf="data[0].edit" (click)="deleteAssignee(i)">delete</mat-icon>
+		{{person}}
+	</div>
+	<div *ngIf="!data[0].taskAssignee">
+		Нет ответственных
+	</div>
+	<mat-form-field class="example-full-width" appearance="fill" *ngIf="data[0].edit">
+		<mat-label>Добавить</mat-label>
+		<input type="text"
+			   matInput
+			   [formControl]="searchAssigneeQuery"
+			   [matAutocomplete]="auto">
+		<mat-autocomplete #auto="matAutocomplete">
+			  <mat-option *ngFor="let option of filteredOptions | async" 
+			  			  [value]="option" (click)="addAssignee(option)">
+				{{option}}
+			  </mat-option>
+		</mat-autocomplete>
+	</mat-form-field>
+</div>
