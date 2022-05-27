@@ -57,6 +57,7 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
     boardId: [],
     priority: [],
     assignee: [[]],
+    contact: [],
     text: [[]],
     dateCreated: [],
     dateUpdated: []
@@ -230,11 +231,12 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
   updateTaskData() {
     const updatedData = {
       title: this.taskData.value.title,
-      status: this.taskData.value.status,
+      status: this.taskData.value.status == '' ? 'Todo' : this.taskData.value.status,
       column: this.taskData.value.column,
       columnId: this.taskData.value.columnId,
       departments: this.taskData.value.assignee,
-      priority: this.taskData.value.priority,
+      priority: this.taskData.value.priority == '' ? 'None' : this.taskData.value.priority,
+      contact: this.taskData.value.contact,
       description: JSON.stringify(this.taskData.value.text)
     }
     this.taskManagerService.editTask(Number(this.data), updatedData).subscribe(res => {
@@ -261,6 +263,7 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
         boardId: res.boardId,
         columnId: res.columnId,
         priority: res.priority,
+        contact: res.contact,
         dateCreated: this._dateTransform(res.createdAt),
         dateUpdated: this._dateTransform(res.updatedAt)
       });
