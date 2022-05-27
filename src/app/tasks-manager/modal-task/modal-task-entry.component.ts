@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ModalTaskComponent } from './modal-task.component';
@@ -20,7 +20,7 @@ export class ModalTaskEntryComponent {
     const dialogRef = this.dialog.open(ModalTaskComponent, {
       panelClass: 'modal-task-global',
       data: data,
-      maxWidth: '700px',
+      maxWidth: '900px',
       width: '90%'
     });
     

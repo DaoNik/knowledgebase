@@ -80,9 +80,9 @@
 
   &__send-btn {
     margin-right: 10px;
+  }
 
-    &:disabled {
-      background-color: rgb(182, 182, 182);
-    }
+  &__loader {
+    margin-top: 10px;
   }
 }

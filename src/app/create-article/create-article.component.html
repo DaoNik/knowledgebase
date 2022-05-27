@@ -159,10 +159,15 @@
                     хотя бы одного автора</small>
             </div>
 
-            <button class="create-article__send-btn" mat-flat-button color="primary" [disabled]="form.invalid"
-                (click)="createArticle()">{{isEditArticle ? 'Редактировать' : 'Создать'}}</button>
-            <button mat-flat-button color="warn" (click)="resetForm()">Очистить
+            <button class="create-article__send-btn" mat-flat-button color="primary"
+                [disabled]="form.invalid || formSubmitted" (click)="createArticle()">{{isEditArticle ? 'Редактировать' :
+                'Создать'}}</button>
+            <button mat-flat-button color="warn" (click)="resetForm()" [disabled]="formSubmitted">Очистить
                 форму</button>
+
+            <mat-progress-bar *ngIf="formLoaded" class="create-article__loader" color="primary" mode="indeterminate"
+                [value]="50" [bufferValue]="75">
+            </mat-progress-bar>
         </form>
     </ng-container>
 </main>

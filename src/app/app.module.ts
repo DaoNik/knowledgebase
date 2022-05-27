@@ -8,6 +8,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -84,6 +85,7 @@ const API_URL_PROVIDER: Provider = {
     MatFormFieldModule,
     HttpClientModule,
     TasksManagerModule,
+    MatProgressBarModule,
   ],
   providers: [API_URL_PROVIDER],
   bootstrap: [AppComponent],

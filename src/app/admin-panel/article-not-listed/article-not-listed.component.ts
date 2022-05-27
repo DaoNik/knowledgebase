@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { AdminPanelService } from '../admin-panel.service';
 
 const mockTopics: string[] = ['Склад', 'Базы данных'];
@@ -8,15 +8,13 @@ const mockTopics: string[] = ['Склад', 'Базы данных'];
   templateUrl: './article-not-listed.component.html',
   styleUrls: ['./article-not-listed.component.scss'],
 })
-export class ArticleNotListedComponent implements OnInit {
+export class ArticleNotListedComponent {
   topics: string[] = mockTopics;
   currentTopic: string = localStorage.getItem('categoryNotListed') || 'Склад';
 
   constructor(
     private adminPanelService: AdminPanelService
   ) {}
-
-  ngOnInit(): void {}
 
   clickTopic(topic: string): void {
     this.adminPanelService.categoryNotListed.next(topic);
