@@ -7,6 +7,8 @@ import {
 } from '@angular/forms';
 import { map, Observable, startWith } from 'rxjs';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
+import { TasksManagerService } from '../tasks-manager.service';
+import { ITask } from '../interfaces/taskList.interface';
 
 @Component({
   selector: 'app-form-issue',
@@ -22,7 +24,7 @@ export class FormIssueComponent {
 
   @ViewChild('tagInput') tagInput!: ElementRef<HTMLInputElement>;
 
-  constructor(private fb: FormBuilder) {
+  constructor(private fb: FormBuilder, private taskServ: TasksManagerService) {
     this.issueForm = this.fb.group({
       title: [
         '',
@@ -32,6 +34,8 @@ export class FormIssueComponent {
           Validators.maxLength(100),
         ],
       ],
+      name: ['', [Validators.required]],
+      department: ['', [Validators.required]],
       description: [
         '',
         [
@@ -40,7 +44,7 @@ export class FormIssueComponent {
           Validators.maxLength(1000),
         ],
       ],
-      tags: ['', [Validators.required, Validators.minLength(1)]],
+      // tags: ['', [Validators.required, Validators.minLength(1)]],
       category: ['', [Validators.required, Validators.minLength(1)]],
     });
     this.filteredTags = this.tagCtrl.valueChanges.pipe(
@@ -56,20 +60,38 @@ export class FormIssueComponent {
     this.tags = [];
   }
 
-  remove(fruit: string): void {
-    const index = this.tags.indexOf(fruit);
-
-    if (index >= 0) {
-      this.tags.splice(index, 1);
+  createTask() {
+    const formData: any = {
+      authors: [this.issueForm.value.name],
+      title: this.issueForm.value.title,
+      // category: '',
+      description: this.issueForm.value.description,
+      columnId: 1,
+      priority: 'Medium',
+      status: 'To Do',
+      respondents: [this.issueForm.value.department],
+      tags: [],
+      boardId: 1
     }
+    this.taskServ.createTask(formData.columnId, formData.title, formData.boardId,
+      formData.priority, formData.status, formData.description, formData.authors, formData.respondents, formData.tags)
+    .subscribe();
   }
 
-  selected($event: MatAutocompleteSelectedEvent): void {
-    this.tags.push($event.option.viewValue);
-    this.issueForm.get('tags')?.setValue(this.tags);
-    this.tagInput.nativeElement.value = '';
-    this.tagCtrl.setValue(null);
-  }
+  // remove(fruit: string): void {
+  //   const index = this.tags.indexOf(fruit);
+
+  //   if (index >= 0) {
+  //     this.tags.splice(index, 1);
+  //   }
+  // }
+
+  // selected($event: MatAutocompleteSelectedEvent): void {
+  //   this.tags.push($event.option.viewValue);
+  //   this.issueForm.get('tags')?.setValue(this.tags);
+  //   this.tagInput.nativeElement.value = '';
+  //   this.tagCtrl.setValue(null);
+  // }
 
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();

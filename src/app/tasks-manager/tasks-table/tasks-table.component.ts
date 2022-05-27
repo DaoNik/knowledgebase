@@ -24,6 +24,7 @@ export interface ITableTasks {
   templateUrl: './tasks-table.component.html',
   styleUrls: ['./tasks-table.component.scss'],
 })
+
 export class TasksTableComponent implements OnInit, AfterViewInit {
   displayedColumns: string[] = [
     'id',
