@@ -33,6 +33,7 @@ import { ModalTaskService } from './modal-task/modal-task.service';
 import { ModalTaskEntryComponent } from './modal-task/modal-task-entry.component';
 import { MainComponent } from '../main/main.component';
 import { AssigneeModalComponent } from './modal-task/assignee-modal/assignee-modal.component';
+import { DeleteTaskModalComponent } from './modal-task/delete-task-modal/delete-task-modal.component';
 
 const routes: Routes = [
   { path: '', redirectTo: 'lists', pathMatch: 'full' },
@@ -57,6 +58,7 @@ const routes: Routes = [
     TasksManagerComponent,
     TasksTableComponent,
     AssigneeModalComponent,
+    DeleteTaskModalComponent,
   ],
   imports: [
     DragDropModule,

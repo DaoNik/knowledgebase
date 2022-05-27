@@ -10,6 +10,7 @@ import { HttpClient } from '@angular/common/http';
 import { AssigneeModalComponent } from './assignee-modal/assignee-modal.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { IBoard } from '../interfaces/taskList.interface';
+import { DeleteTaskModalComponent } from './delete-task-modal/delete-task-modal.component';
 
 @Component({
   selector: 'app-modal-task',
@@ -192,6 +193,7 @@ export class ModalTaskComponent implements OnInit {
       taskId: this.taskData.value.id,
       taskAssignee: this.taskData.value.assignee
     }]
+
     const dialogRef = this.dialog.open(AssigneeModalComponent, {
         panelClass: 'edit-assignee-global',
         data: data,
@@ -287,9 +289,14 @@ export class ModalTaskComponent implements OnInit {
     return `${date.slice(0, 10)} ${date.slice(11, 19)}`
   }
 
-  deleteTask(id: number) {
-    this.taskManagerService.deleteTask(id)
-    .subscribe();
-    this.dialogRef.close();
+  deleteTask() {
+    const dialogDel = this.dialog.open(DeleteTaskModalComponent, {
+      panelClass: 'delete-modal-global',
+      data: this.taskData.value.id,
+    });
+
+    dialogDel.afterClosed().subscribe((res) => {
+      if (res) this.dialogRef.close();
+    });
   }
 }
