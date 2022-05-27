@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import {
   CdkDragDrop,
   moveItemInArray,
@@ -6,7 +6,7 @@ import {
 } from '@angular/cdk/drag-drop';
 import { ModalTaskService } from '../modal-task/modal-task.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { IBoard } from '../interfaces/taskList.interface';
+import { IBoard, IColumn } from '../interfaces/taskList.interface';
 import { Router } from '@angular/router';
 import { TasksManagerService } from '../tasks-manager.service';
 import { BehaviorSubject } from 'rxjs';
@@ -17,41 +17,38 @@ import { BehaviorSubject } from 'rxjs';
   styleUrls: ['./task-lists.component.scss'],
 })
 export class TaskListsComponent implements OnInit {
-  changerColumn = new Map();
-  isHidden: boolean = false;
-  isHiddenColumn: boolean = false;
+  isColumnChangeOpen = new Map();
+  isTaskAddOpen = new Map();
+  isColumnAddOpen: boolean = false;
 
   board!: IBoard;
-  priority: string[] = ['Inconsiderable', 'Medium', 'Important'];
-  status: string[] = ['To Do', 'In Progress', 'Done'];
-  columnId!: number;
+  columns!: IColumn[];
+
   taskId!: number;
 
-  public form!: FormGroup;
-  public formColumns!: FormGroup;
+  public newColumn!: FormControl;
+  public newTask!: FormControl;
+
   public formChangeName: any[] = [];
+
+  @ViewChild('input') input!: ElementRef<HTMLInputElement>;
 
   constructor(
     private modalServ: ModalTaskService,
     private router: Router,
     private taskServ: TasksManagerService
   ) {
-    this.form = new FormGroup({
-      title: new FormControl('', [
-        Validators.required,
-        Validators.minLength(4),
-        Validators.maxLength(100),
-      ]),
-      priority: new FormControl('Medium', Validators.required),
-      status: new FormControl('To Do', Validators.required),
-    });
-    this.formColumns = new FormGroup({
-      columnName: new FormControl('', [
-        Validators.required,
-        Validators.minLength(4),
-        Validators.maxLength(50),
-      ]),
-    });
+
+    this.newTask = new FormControl('', [
+      Validators.required,
+      Validators.minLength(4),
+      Validators.maxLength(100),
+    ]);
+
+    this.newColumn = new FormControl('', [
+      Validators.required,
+      Validators.minLength(4),
+      Validators.maxLength(50)]);
   }
 
   ngOnInit(): void {
@@ -61,18 +58,21 @@ export class TaskListsComponent implements OnInit {
           column.tasks = res.tasks;
           this.board = board;
         });
-        
-        this.changerColumn.set(column.id, false);
+        this.isColumnChangeOpen.set(column.id, false);
+        this.isTaskAddOpen.set(column.id, true);
         this.formChangeName.push({
           id: column.id,
           control: new FormControl(column.title, Validators.minLength(4)),
         });
+
+        console.log(this.formChangeName[0].value);
       });
     });
   }
 
   onColumnHeaderClick(id: number): void {
-    this.changerColumn.set(id, true);
+    this.isColumnChangeOpen.set(id, true);
+    this.input.nativeElement?.focus();
     console.log(this.findFormcontrol(id));
   }
 
@@ -119,15 +119,14 @@ export class TaskListsComponent implements OnInit {
   }
 
   addToDo(columnId: number) {
-    this.isHidden = false;
+
+    this.isTaskAddOpen.set(columnId, true);
 
     this.taskServ
       .createTask(
         columnId,
-        this.form.value.title,
-        this.board.id,
-        this.form.value.priority,
-        this.form.value.status
+        this.newTask.value,
+        this.board.id
       )
       .subscribe((task) => {
         this.board.columns.forEach((column) => {
@@ -136,25 +135,25 @@ export class TaskListsComponent implements OnInit {
           }
         });
       });
-    this.form.reset();
+    this.newTask.reset();
   }
 
   addColumn() {
     this.taskServ
-      .createColumn(1, this.formColumns.value.columnName)
+      .createColumn(1, this.newColumn.value)
       .subscribe((column) => {
         this.board.columns.push(column);
-        console.log('addColumn');
       });
-
-    this.isHiddenColumn = false;
+    this.newColumn.reset();
+    this.isColumnAddOpen = false;
   }
 
   changeName(event: any, id: number, title: string) {
     if (event.target.value.trim() !== title && event.target.value.length >= 4) {
       this.taskServ.editColumn(id, event.target.value).subscribe(() => {
         this.board.columns[this.findColumnIdx(id)].title = event.target.value;
-        this.changerColumn.set(id, false);
+        this.isColumnChangeOpen.set(id, false);
+        this.isTaskAddOpen.set(id, true);
       });
 
     }
@@ -164,8 +163,9 @@ export class TaskListsComponent implements OnInit {
     this.taskServ.deleteColumn(id).subscribe((id) => {
       this.board.columns.splice(this.findColumnIdx(id), 1);
     });
-    this.changerColumn.delete(id);
-    this.formColumns.reset();
+    this.isColumnChangeOpen.delete(id);
+    this.isTaskAddOpen.delete(id);
+    this.newColumn.reset();
   }
 
   findColumnIdx(columnId: number): number {
@@ -184,7 +184,7 @@ export class TaskListsComponent implements OnInit {
 
     for (let i = 0; i < column.tasks?.length!; i++) {
       if (column.tasks![i].id === taskId) {
-        taskIdx === i;
+        taskIdx = i;
       }
     }
     return taskIdx;

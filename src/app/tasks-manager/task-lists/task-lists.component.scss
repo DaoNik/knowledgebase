@@ -60,6 +60,7 @@
 
   &--new {
     border: none;
+    cursor: auto;
   }
 }
 
@@ -118,12 +119,17 @@ mat-form-field {
 }
 
 .board__task-create {
+  display: flex;
+  align-items: flex-start;
+  gap: 5px;
   border: none;
   background: none;
   font-size: 20px;
+  cursor: pointer;
 
   mat-icon {
     vertical-align: middle;
+    line-height: normal;
   }
 }
 
