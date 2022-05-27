@@ -31,8 +31,6 @@ export class TaskListsComponent implements OnInit {
   public formColumns!: FormGroup;
   public formChangeName: any[] = [];
 
-  private urlBehavior = new BehaviorSubject<string>(this.router.url);
-
   constructor(
     private modalServ: ModalTaskService,
     private router: Router,
@@ -57,12 +55,6 @@ export class TaskListsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    const currUrl = this.router.url.split('/')
-    // if (currUrl[currUrl.length - 1] != 'lists') 
-    this.urlBehavior.subscribe(url => {
-      console.log(url)
-      this.urlBehavior.next(this.router.url)
-    })
     this.taskServ.getBoard().subscribe((board) => {
       board.columns.forEach((column) => {
         this.taskServ.getColumn(column.id).subscribe((res) => {
