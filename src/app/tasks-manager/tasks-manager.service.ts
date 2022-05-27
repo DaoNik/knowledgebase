@@ -129,7 +129,7 @@ export class TasksManagerService {
     priority?: string,
     status?: string,
     description?: string,
-    authors?: string,
+    authors?: string[],
     respondents?: string[],
     tags?: string[],
     category?: string
