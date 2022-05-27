@@ -1,4 +1,4 @@
-import { Component, ViewChild, AfterViewInit, ElementRef } from '@angular/core';
+import { Component, ViewChild, AfterViewInit, ElementRef, OnInit } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
@@ -19,45 +19,45 @@ export interface IUserData {
   styleUrls: ['./tasks-table.component.scss'],
 })
 export class TasksTableComponent implements AfterViewInit {
-  displayedColumns: string[] = ['id', 'name', 'progress', 'assigne', 'priority'];
+  displayedColumns: string[] = ['id', 'title', 'status', 'respondents', 'priority'];
 
-  // articles: IUserData[] = [
-  //   {
-  //     id: '1',
-  //     name: 'Maia',
-  //     progress: 'Done',
-  //     assigne: 'Maia',
-  //     priority: 'Medium'
-  //   },
-  //   {
-  //     id: '2',
-  //     name: 'Asher',
-  //     progress: 'in Progress',
-  //     assigne: 'Asher',
-  //     priority: 'Low'
-  //   },
-  //   {
-  //     id: '30',
-  //     name: 'Atticus',
-  //     progress: 'To Do',
-  //     assigne: 'Atticus',
-  //     priority: 'Medium'
-  //   },
-  //   {
-  //     id: '4',
-  //     name: 'Olivia',
-  //     progress: 'Done',
-  //     assigne: 'Olivia',
-  //     priority: 'Low'
-  //   },
-  //   {
-  //     id: '5',
-  //     name: 'Olivia',
-  //     progress: 'in Progress',
-  //     assigne: 'Olivia',
-  //     priority: 'High'
-  //   },
-  // ]
+  articles: IUserData[] = [
+    {
+      id: '1',
+      name: 'Maia',
+      progress: 'Done',
+      assigne: 'Maia',
+      priority: 'Medium'
+    },
+    {
+      id: '2',
+      name: 'Asher',
+      progress: 'in Progress',
+      assigne: 'Asher',
+      priority: 'Low'
+    },
+    {
+      id: '3',
+      name: 'Atticus',
+      progress: 'To Do',
+      assigne: 'Atticus',
+      priority: 'Medium'
+    },
+    {
+      id: '4',
+      name: 'Olivia',
+      progress: 'Done',
+      assigne: 'Olivia',
+      priority: 'Low'
+    },
+    {
+      id: '5',
+      name: 'Olivia',
+      progress: 'in Progress',
+      assigne: 'Olivia',
+      priority: 'High'
+    },
+  ]
 
   dataSource!: MatTableDataSource<ITask>;
 
@@ -75,7 +75,7 @@ export class TasksTableComponent implements AfterViewInit {
       '.mat-paginator-page-size-label'
     ).textContent = 'Отобразить: ';
 
-    console.log(this.dataSource.sort)
+    console.log(this.dataSource)
     this.dataSource.paginator = this.paginator;
     this.dataSource.sort = this.sort;
   }
