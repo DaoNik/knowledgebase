@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import {
   CdkDragDrop,
   moveItemInArray,
@@ -6,16 +6,17 @@ import {
 } from '@angular/cdk/drag-drop';
 import { ModalTaskService } from '../modal-task/modal-task.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { IBoard, IColumn } from '../interfaces/taskList.interface';
-import { ActivatedRoute, Router } from '@angular/router';
+import { IBoard } from '../interfaces/taskList.interface';
+import { Router } from '@angular/router';
 import { TasksManagerService } from '../tasks-manager.service';
+import { Subscription } from 'rxjs';
 
 @Component({
   selector: 'app-task-lists',
   templateUrl: './task-lists.component.html',
   styleUrls: ['./task-lists.component.scss'],
 })
-export class TaskListsComponent implements OnInit {
+export class TaskListsComponent implements OnInit, OnDestroy {
   changerColumn = new Map();
   isHidden: boolean = false;
   isHiddenColumn: boolean = false;
@@ -29,6 +30,8 @@ export class TaskListsComponent implements OnInit {
   public form!: FormGroup;
   public formColumns!: FormGroup;
   public formChangeName: any[] = [];
+
+  subscription!: Subscription;
 
   constructor(
     private modalServ: ModalTaskService,
@@ -54,12 +57,14 @@ export class TaskListsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.taskServ.getBoard().subscribe((board) => {
+    const subscriptionBoard1$ = this.taskServ.getBoard().subscribe((board) => {
       board.columns.forEach((column) => {
-        this.taskServ.getColumn(column.id).subscribe((res) => {
+        const subscriptionColumn1$ = this.taskServ.getColumn(column.id).subscribe((res) => {
           column.tasks = res.tasks;
           this.board = board;
         });
+        this.subscription.add(subscriptionColumn1$);
+        
         this.changerColumn.set(column.id, false);
         this.formChangeName.push({
           id: column.id,
@@ -67,6 +72,11 @@ export class TaskListsComponent implements OnInit {
         });
       });
     });
+    this.subscription.add(subscriptionBoard1$);
+  }
+
+  ngOnDestroy() {
+    this.subscription.unsubscribe();
   }
 
   onColumnHeaderClick(id: number): void {
@@ -85,14 +95,16 @@ export class TaskListsComponent implements OnInit {
   }
 
   getColumns(): void {
-    this.taskServ.getBoard().subscribe((board) => {
+    const subscriptionBoard2$ = this.taskServ.getBoard().subscribe((board) => {
       board.columns.forEach((column) => {
-        this.taskServ.getColumn(column.id).subscribe((res) => {
+        const subscriptionColumn2$ = this.taskServ.getColumn(column.id).subscribe((res) => {
           column.tasks = res.tasks;
           this.board = board;
         });
+        this.subscription.add(subscriptionColumn2$);
       });
     });
+    this.subscription.add(subscriptionBoard2$);
   }
 
   drop(event: CdkDragDrop<any[]>, columnId: number) {
@@ -113,7 +125,8 @@ export class TaskListsComponent implements OnInit {
     const updatedData = {
       columnId: columnId,
     };
-    this.taskServ.editTask(this.taskId, updatedData).subscribe();
+    const subscriptionEdit$ = this.taskServ.editTask(this.taskId, updatedData).subscribe();
+    this.subscription.add(subscriptionEdit$);
   }
 
   openTask(item: string) {
@@ -124,7 +137,7 @@ export class TaskListsComponent implements OnInit {
   addToDo(columnId: number) {
     this.isHidden = false;
 
-    this.taskServ
+    const subscriptionCreateTask$ = this.taskServ
       .createTask(
         columnId,
         this.form.value.title,
@@ -139,33 +152,38 @@ export class TaskListsComponent implements OnInit {
           }
         });
       });
+    this.subscription.add(subscriptionCreateTask$);
     this.form.reset();
   }
 
   addColumn() {
-    this.taskServ
+    const subscriptionCreateColumn$ = this.taskServ
       .createColumn(1, this.formColumns.value.columnName)
       .subscribe((column) => {
         this.board.columns.push(column);
         console.log('addColumn');
       });
 
+    this.subscription.add(subscriptionCreateColumn$);
     this.isHiddenColumn = false;
   }
 
   changeName(event: any, id: number, title: string) {
     if (event.target.value.trim() !== title && event.target.value.length >= 4) {
-      this.taskServ.editColumn(id, event.target.value).subscribe(() => {
+      const subscriptionEditColumn$ = this.taskServ.editColumn(id, event.target.value).subscribe(() => {
         this.board.columns[this.findColumnIdx(id)].title = event.target.value;
         this.changerColumn.set(id, false);
       });
+
+      this.subscription.add(subscriptionEditColumn$);
     }
   }
 
   deleteColumn(id: number) {
-    this.taskServ.deleteColumn(id).subscribe((id) => {
+    const subscriptionDeleteColumn$ = this.taskServ.deleteColumn(id).subscribe((id) => {
       this.board.columns.splice(this.findColumnIdx(id), 1);
     });
+    this.subscription.add(subscriptionDeleteColumn$);
     this.changerColumn.delete(id);
     this.formColumns.reset();
   }
@@ -193,10 +211,11 @@ export class TaskListsComponent implements OnInit {
   }
 
   deleteTask(id: number, columnId: number) {
-    this.taskServ.deleteTask(id).subscribe((id) => {
+    const subscriptionDeleteTask$ = this.taskServ.deleteTask(id).subscribe((id) => {
       const columnIdx = this.findColumnIdx(columnId);
       const taskIdx = this.findTaskIdx(id, columnIdx);
       this.board.columns[columnIdx].tasks?.splice(taskIdx, 1);
     });
+    this.subscription.add(subscriptionDeleteTask$);
   }
 }
