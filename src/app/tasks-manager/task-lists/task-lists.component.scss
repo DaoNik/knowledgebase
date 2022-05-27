@@ -119,6 +119,9 @@ mat-form-field {
 }
 
 .board__task-create {
+  display: flex;
+  align-items: center;
+  gap: 5px;
   border: none;
   background: none;
   font-size: 20px;
@@ -126,6 +129,7 @@ mat-form-field {
 
   mat-icon {
     vertical-align: middle;
+    line-height: normal;
   }
 }
 
