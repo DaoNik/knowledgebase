@@ -6,8 +6,8 @@ import {
 } from '@angular/cdk/drag-drop';
 import { ModalTaskService } from '../modal-task/modal-task.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { IBoard, IColumn } from '../interfaces/taskList.interface';
-import { ActivatedRoute, Router } from '@angular/router';
+import { IBoard } from '../interfaces/taskList.interface';
+import { Router } from '@angular/router';
 import { TasksManagerService } from '../tasks-manager.service';
 
 @Component({
@@ -59,7 +59,6 @@ export class TaskListsComponent implements OnInit {
         });
         this.isColumnChangeOpen.set(column.id, false);
         this.isTaskAddOpen.set(column.id, true);
-
         this.formChangeName.push({
           id: column.id,
           control: new FormControl(column.title, Validators.minLength(4)),
@@ -118,11 +117,6 @@ export class TaskListsComponent implements OnInit {
     this.taskServ.editTask(this.taskId, updatedData).subscribe();
   }
 
-  openTask(item: string) {
-    this.modalServ.openDialog(item);
-    this.router.navigate(['tasks-manager/tasks', item]);
-  }
-
   addToDo(columnId: number) {
 
     this.isTaskAddOpen.set(columnId, true);
@@ -160,6 +154,7 @@ export class TaskListsComponent implements OnInit {
         this.isColumnChangeOpen.set(id, false);
         this.isTaskAddOpen.set(id, true);
       });
+
     }
   }
 

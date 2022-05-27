@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
-import { mergeMap, Observable } from 'rxjs';
+import { mergeMap, Observable, Subscription } from 'rxjs';
 import { IArticle } from 'src/app/interfaces/article';
 import { AdminPanelService } from '../../admin-panel.service';
 
@@ -10,9 +10,10 @@ import { AdminPanelService } from '../../admin-panel.service';
   templateUrl: './not-listed-table.component.html',
   styleUrls: ['./not-listed-table.component.scss'],
 })
-export class NotListedTableComponent implements OnInit {
+export class NotListedTableComponent implements OnInit, OnDestroy {
   articles: IArticle[] = [];
   article$!: Observable<IArticle[]>;
+  subscriptionNotListed$!: Subscription;
   articlesOnPage: number = 3;
   pages: number[] = [];
   category: string = ""
@@ -33,23 +34,17 @@ export class NotListedTableComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    this.adminPanelService.categoryNotListed.pipe(
+    this.subscriptionNotListed$ = this.adminPanelService.categoryNotListed.pipe(
       mergeMap(topic => this.adminPanelService.getArticles(topic))
     ).subscribe((articles) => {
       this.articles = articles;
       this.currentPageArticles = this.articles.slice(0, this.articlesOnPage);
       this.countPages();
     })
+  }
 
-    // this.adminPanelService.categoryNotListed.subscribe((topic) => {
-    //   this.category = topic;
-    // });
-
-    // this.adminPanelService.getArticles(this.category).subscribe((articles) => {
-    //   this.articles = articles;
-    //   this.currentPageArticles = this.articles.slice(0, this.articlesOnPage);
-    //   this.countPages();
-    // });
+  ngOnDestroy() {
+    this.subscriptionNotListed$.unsubscribe();    
   }
 
   countPages(): void {
@@ -79,9 +74,7 @@ export class NotListedTableComponent implements OnInit {
   }
 
   deleteSelected(articlesId: string[]): void {
-    // articlesId.forEach((id) => this.articles.filter((el) => el.id === id))
     this.articles.filter((article) => !articlesId.includes(article._id!));
-    // Здесь запрос на удаление выбранных элементов
   }
 
   checkArticle(articleId: string): void {

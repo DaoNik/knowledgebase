@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { mergeMap } from 'rxjs';
+import { mergeMap, Subscription } from 'rxjs';
 import { IArticle } from 'src/app/interfaces/article';
 import { AdminPanelService } from '../../admin-panel.service';
 
@@ -61,8 +61,9 @@ const mockArticles: adminArticle[] = [
   templateUrl: './articles-table.component.html',
   styleUrls: ['./articles-table.component.scss'],
 })
-export class ArticlesTableComponent implements OnInit {
+export class ArticlesTableComponent implements OnInit, OnDestroy {
   articles: IArticle[] = [];
+  subscriptionCategoryListed$!: Subscription;
   articlesOnPage: number = 3;
   pages: number[] = [];
 
@@ -78,13 +79,17 @@ export class ArticlesTableComponent implements OnInit {
   constructor(private adminService: AdminPanelService) { }
 
   ngOnInit(): void {
-    this.adminService.categoryListed.pipe(
+    this.subscriptionCategoryListed$ = this.adminService.categoryListed.pipe(
       mergeMap(topic => this.adminService.getArticles(topic))
     ).subscribe((articles) => {
       this.articles = articles;
       this.currentPageArticles = this.articles.slice(0, this.articlesOnPage);
       this.countPages();
     });
+  }
+
+  ngOnDestroy() {
+    this.subscriptionCategoryListed$.unsubscribe();
   }
 
   countPages(): void {
