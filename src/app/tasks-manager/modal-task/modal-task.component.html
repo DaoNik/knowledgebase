@@ -50,11 +50,11 @@
 				</div>
 				<table>
 					<tr>
-						<td>Project</td>
+						<td>проект</td>
 						<td>WH School</td>
 					</tr>
 					<tr>
-						<td><p>Priority</p></td>
+						<td>Приоритет</td>
 						<td *ngIf="!sidebarEditTrigger">{{taskData.value.priority}}</td>
 						<td *ngIf="sidebarEditTrigger"
 							class="tr-menu"
@@ -73,7 +73,7 @@
 						</mat-menu>
 					</tr>
 					<tr>
-						<td>State</td>
+						<td>Статус</td>
 						<td *ngIf="!sidebarEditTrigger">{{taskData.value.status}}</td>
 						<td *ngIf="sidebarEditTrigger"
 							class="tr-menu"
@@ -91,7 +91,7 @@
 						</mat-menu>
 					</tr>
 					<tr>
-						<td>Assignee</td>
+						<td>Ответственные</td>
 						<td *ngIf="!sidebarEditTrigger">
 							<p>
 								{{taskData.value.assignee[0]}}
@@ -111,23 +111,31 @@
 						</td>
 					</tr>
 					<tr>
-						<td>Ready</td>
+						<td>Готовность</td>
 						<td>80%</td>
 					</tr>
 					<tr>
-						<td>Ideal days</td>
+						<td>Выделено дней</td>
 						<td>90 days</td>
 					</tr>
 				</table>
 			</div>
 			<table class="task-subinfo">
 				<tr>
-					<td>watchers</td>
-					<td>Stop Watching</td>
-				</tr>
-				<tr>
-					<td>Boards</td>
-					<td>Add to board</td>
+					<td>Board</td>
+					<td class="tr-menu"
+						[matMenuTriggerFor]="boardMenu"
+					><p>
+						{{taskData.value.board}} 
+						<mat-icon>expand_more</mat-icon>
+					</p></td>
+						<mat-menu #boardMenu="matMenu">
+							<button mat-menu-item
+								*ngFor="let board of boards"
+								(click)="[taskData.value.boardId = board.id, taskData.value.board = board.title]">
+								{{board.title}}
+							</button>
+						</mat-menu>
 				</tr>
 			</table>
 		</div>

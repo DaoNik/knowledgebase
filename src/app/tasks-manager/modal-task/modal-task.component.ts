@@ -9,6 +9,7 @@ import { TasksManagerService } from '../tasks-manager.service';
 import { HttpClient } from '@angular/common/http';
 import { AssigneeModalComponent } from './assignee-modal/assignee-modal.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
+import { IBoard } from '../interfaces/taskList.interface';
 
 @Component({
   selector: 'app-modal-task',
@@ -50,6 +51,8 @@ export class ModalTaskComponent implements OnInit {
     status: [],
     column: [],
     columnId: [],
+    board: [],
+    boardId: [],
     priority: [],
     assignee: [[]],
     text: [[]],
@@ -57,6 +60,7 @@ export class ModalTaskComponent implements OnInit {
     dateUpdated: []
   });
   columns: any = []
+  boards: any = []
   statusVariants: string[] = ['Todo', 'In progress', 'Done'];
   priorityVariants: string[] = ['None', 'Low', 'Medium', 'High'];
   typeOptions: ITypeOption[] = [{
@@ -243,11 +247,13 @@ export class ModalTaskComponent implements OnInit {
         title: res.title,
         assignee: res.respondents,
         status: res.status,
+        boardId: res.boardId,
         columnId: res.columnId,
         priority: res.priority,
         dateCreated: this._dateTransform(res.createdAt),
         dateUpdated: this._dateTransform(res.updatedAt)
       });
+
       if (res.description.length > 0) {
         this.taskData.patchValue({
           text: JSON.parse(res.description)
@@ -264,6 +270,16 @@ export class ModalTaskComponent implements OnInit {
           }
         })
       })
+    })
+
+    this.taskManagerService.getBoard().subscribe((res: IBoard) => {
+      console.log(res)
+      this.boards = [res]
+      if (res.id === this.taskData.value.boardId) {
+        this.taskData.patchValue({
+          board: res.title
+        });
+      }
     })
   }
 
