@@ -3,6 +3,33 @@
 	height: 500px;
 	padding-top: 20px;
 
+	.modal-task__close {
+		position: absolute;
+		right: 2px;
+		top: 2px;
+		height: 36px;
+		width: 36px;
+		padding: 6px;
+		border-radius: 18px;
+		transition: 0.2s;
+
+		cursor: pointer;
+
+		&:hover {
+			background: rgb(133, 133, 133);
+			color: white;
+
+			mat-icon {
+				transform: scale(1.1);
+			}
+		}
+
+		&:active {
+			background: rgb(79, 79, 79);
+			color: white;
+		}
+	}
+
 	.modal-task__header {
 		margin: 0 0 0 auto;
 		width: 60%;
@@ -15,7 +42,7 @@
 			flex-direction: row;
 
 			.modal-task__header_btns_wrp {
-				margin: 0 20px;
+				margin: 0 10px 0 20px;
 
 				button {
 					border: 1px solid rgb(186, 186, 252);
@@ -59,11 +86,15 @@
 
 		.modal-task__header_title {
 			margin: 10px 20px;
+			max-height: 64px;
+			overflow: hidden;
 
 			h2 {
 				margin: 0;
 				font-size: 24px;
 				font-weight: bold;
+				overflow-wrap: break-word;
+				overflow: hidden;
 			}
 
 			input {
@@ -116,6 +147,27 @@
 
 					tr {
 						height: 30px;
+						font-size: 14px;
+						line-height: 14px;
+					
+						td {
+							font-size: 14px;
+							line-height: 14px;
+							height: 14px;
+
+							p {
+								height: 14px;
+								display: flex;
+								flex-direction: row;
+								margin: 0;
+
+								mat-icon {
+									margin-left: 3px;
+									display: block;
+									font-size: 18px;
+								}
+							}
+						}
 
 						.tr-menu {
 							cursor: pointer;
@@ -135,6 +187,29 @@
 
 				tr {
 					height: 30px;
+
+					td {
+						font-size: 14px;
+						line-height: 14px;
+						height: 14px;
+
+						p {
+							height: 14px;
+							display: flex;
+							flex-direction: row;
+							margin: 0;
+
+							mat-icon {
+								margin-left: 3px;
+								display: block;
+								font-size: 18px;
+							}
+						}
+					}
+
+					.tr-menu {
+						cursor: pointer;
+					}
 				}
 			}
 		}

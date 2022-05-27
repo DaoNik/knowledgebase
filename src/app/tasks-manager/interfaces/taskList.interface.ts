@@ -10,8 +10,9 @@ export interface ITask {
   createdAt: string;
   description: string;
   id: number;
+  contact: string;
   priority: string;
-  respondents: string[];
+  departments: string[];
   status: string;
   tags: string[];
   title: string;

@@ -26,6 +26,10 @@ export class ModalTaskService {
       maxWidth: '900px',
       width: '90%'
     });
+
+    dialogRef.afterClosed().subscribe(res => {
+      console.log(res)
+    })
   }
 
   getTasks(): Observable<any> {

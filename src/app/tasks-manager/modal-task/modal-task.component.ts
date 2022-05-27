@@ -1,13 +1,17 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ITypeOption } from './modal-task-interface';
-import { FormBuilder, Validators } from '@angular/forms';
+import { FormBuilder, FormControl, Validators } from '@angular/forms';
+import { map, Observable, startWith, timeout } from 'rxjs';
 import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ModalTaskService } from './modal-task.service';
 import { TasksManagerService } from '../tasks-manager.service';
 import { HttpClient } from '@angular/common/http';
 import { AssigneeModalComponent } from './assignee-modal/assignee-modal.component';
+import { MatSnackBar } from '@angular/material/snack-bar';
+import { IBoard } from '../interfaces/taskList.interface';
+import { DeleteTaskModalComponent } from './delete-task-modal/delete-task-modal.component';
 
 @Component({
   selector: 'app-modal-task',
@@ -49,8 +53,10 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
     status: [],
     column: [],
     columnId: [],
+    boardId: [],
     priority: [],
     assignee: [[]],
+    contact: [],
     text: [[]],
     dateCreated: [],
     dateUpdated: []
@@ -96,7 +102,8 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
     private router: Router,
     private route: ActivatedRoute,
     private modalTaskServ: ModalTaskService,
-    private taskManagerService: TasksManagerService
+    private taskManagerService: TasksManagerService,
+    private _snackBar: MatSnackBar
   ) {}
   
 
@@ -156,6 +163,12 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
     this.updateTaskData();
   }
 
+  urlCopy() {
+    navigator.clipboard.writeText(window.location.href);
+    this._snackBar.open('Ссылка скопирована!');
+    setTimeout(() => {this._snackBar.dismiss()}, 1000)
+  }
+
   deleteString(i: number) {
     this.taskData.value.text.splice(i, 1);
     this.updateTaskData();
@@ -172,11 +185,6 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
     this.updateTaskData();
   }
 
-  copyUrl() {
-    // console.log(this.router)
-    navigator.clipboard.writeText(window.location.href);
-  }
-
   editSidebar() {
     if (this.sidebarEditTrigger == true) this.updateTaskData();
     this.sidebarEditTrigger = !this.sidebarEditTrigger;
@@ -188,6 +196,7 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
       taskId: this.taskData.value.id,
       taskAssignee: this.taskData.value.assignee
     }]
+
     const dialogRef = this.dialog.open(AssigneeModalComponent, {
         panelClass: 'edit-assignee-global',
         data: data,
@@ -220,20 +229,22 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
   updateTaskData() {
     const updatedData = {
       title: this.taskData.value.title,
-      status: this.taskData.value.status,
+      status: this.taskData.value.status == '' ? 'Todo' : this.taskData.value.status,
       column: this.taskData.value.column,
       columnId: this.taskData.value.columnId,
-      respondents: this.taskData.value.assignee,
-      priority: this.taskData.value.priority,
+      authors: this.taskData.value.assignee,
+      priority: this.taskData.value.priority == '' ? 'None' : this.taskData.value.priority,
+      contact: this.taskData.value.contact,
       description: JSON.stringify(this.taskData.value.text)
     }
     this.taskManagerService.editTask(Number(this.data), updatedData).subscribe(res => {
       this.taskData.patchValue({
         title: res.title,
-        assignee: res.respondents,
+        assignee: res.authors,
         status: res.status,
         columnId: res.columnId,
         priority: res.priority,
+        contact: res.contact,
         dateCreated: this._dateTransform(res.createdAt),
         dateUpdated: this._dateTransform(res.updatedAt)
       });
@@ -246,28 +257,31 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
       console.log(res)
       this.taskData.patchValue({
         title: res.title,
-        assignee: res.respondents,
+        assignee: res.authors,
         status: res.status,
+        boardId: res.boardId,
         columnId: res.columnId,
         priority: res.priority,
+        contact: res.contact,
         dateCreated: this._dateTransform(res.createdAt),
         dateUpdated: this._dateTransform(res.updatedAt)
       });
+
       if (res.description.length > 0) {
         this.taskData.patchValue({
           text: JSON.parse(res.description)
         });
       }
+    })
 
-      this.subscriptionColumn$ = this.taskManagerService.getColumns().subscribe(columns => {
-          this.columns = columns;
-          columns.map((column: any) => {
-          if (column.id == res.columnId) {
-            this.taskData.patchValue({
-              column: column.title
-            });
-          }
-        })
+    this.subscriptionColumn$ = this.taskManagerService.getColumns().subscribe(columns => {
+        this.columns = columns;
+        columns.map((column: any) => {
+        if (column.id == this.taskData.value.columnId) {
+          this.taskData.patchValue({
+            column: column.title
+          });
+        }
       })
     })
   }
@@ -276,9 +290,14 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
     return `${date.slice(0, 10)} ${date.slice(11, 19)}`
   }
 
-  deleteTask(id: number) {
-    this.taskManagerService.deleteTask(id)
-    .subscribe();
-    this.dialogRef.close();
+  deleteTask() {
+    const dialogDel = this.dialog.open(DeleteTaskModalComponent, {
+      panelClass: 'delete-modal-global',
+      data: this.taskData.value.id,
+    });
+
+    dialogDel.afterClosed().subscribe((res) => {
+      if (res) this.dialogRef.close(true);
+    });
   }
 }

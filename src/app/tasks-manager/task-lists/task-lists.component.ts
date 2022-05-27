@@ -9,6 +9,7 @@ import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { IBoard, IColumn } from '../interfaces/taskList.interface';
 import { Router } from '@angular/router';
 import { TasksManagerService } from '../tasks-manager.service';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-task-lists',
