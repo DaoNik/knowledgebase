@@ -1,6 +1,6 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
-import { map, Observable, tap } from 'rxjs';
+import { catchError, Observable, throwError } from 'rxjs';
 import { IArticle } from '../interfaces/article';
 
 @Injectable({
@@ -13,10 +13,18 @@ export class ArticleService {
   ) {}
 
   getArticles(): Observable<IArticle[]> {
-    return this.http.get<IArticle[]>(this.apiUrl);
+    return this.http.get<IArticle[]>(this.apiUrl).pipe(
+      catchError((error: HttpErrorResponse) => {
+        return throwError(() => error);
+      })
+    );
   }
 
   getArticle(id: string): Observable<IArticle> {
-    return this.http.get<IArticle>(`${this.apiUrl}/${id}`);
+    return this.http.get<IArticle>(`${this.apiUrl}/${id}`).pipe(
+      catchError((error: HttpErrorResponse) => {
+        return throwError(() => error);
+      })
+    );
   }
 }

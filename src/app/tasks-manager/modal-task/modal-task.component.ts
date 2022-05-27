@@ -1,8 +1,8 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ITypeOption } from './modal-task-interface';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
-import { map, Observable, startWith } from 'rxjs';
+import { FormBuilder, Validators } from '@angular/forms';
+import { Subscription } from 'rxjs';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ModalTaskService } from './modal-task.service';
 import { TasksManagerService } from '../tasks-manager.service';
@@ -14,7 +14,7 @@ import { AssigneeModalComponent } from './assignee-modal/assignee-modal.componen
   templateUrl: './modal-task.component.html',
   styleUrls: ['./modal-task.component.scss']
 })
-export class ModalTaskComponent implements OnInit {
+export class ModalTaskComponent implements OnInit, OnDestroy {
   // taskData = this.fb.group({
   //   title: ['Title', Validators.minLength(4)],
   //   id: this.data,
@@ -83,6 +83,9 @@ export class ModalTaskComponent implements OnInit {
   };
   inputFile: string = '';
   fileUploaded = false;
+
+  subscriptionTask$!: Subscription;
+  subscriptionColumn$!: Subscription;
 
   constructor(
     public dialogRef: MatDialogRef<ModalTaskComponent>,
@@ -209,6 +212,11 @@ export class ModalTaskComponent implements OnInit {
     this.uploadTaskData();
   }
 
+  ngOnDestroy(): void {
+    this.subscriptionTask$.unsubscribe();
+    this.subscriptionColumn$.unsubscribe();
+  }
+
   updateTaskData() {
     const updatedData = {
       title: this.taskData.value.title,
@@ -234,7 +242,7 @@ export class ModalTaskComponent implements OnInit {
 
   uploadTaskData() {
     const url = this.router.url.split('/')
-    this.taskManagerService.getTask(Number(url[url.length - 1])).subscribe((res: any) => {
+    this.subscriptionTask$ = this.taskManagerService.getTask(Number(url[url.length - 1])).subscribe((res: any) => {
       console.log(res)
       this.taskData.patchValue({
         title: res.title,
@@ -251,7 +259,7 @@ export class ModalTaskComponent implements OnInit {
         });
       }
 
-      this.taskManagerService.getColumns().subscribe(columns => {
+      this.subscriptionColumn$ = this.taskManagerService.getColumns().subscribe(columns => {
           this.columns = columns;
           columns.map((column: any) => {
           if (column.id == res.columnId) {

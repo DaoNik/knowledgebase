@@ -6,8 +6,8 @@ import {
 } from '@angular/cdk/drag-drop';
 import { ModalTaskService } from '../modal-task/modal-task.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { IBoard, IColumn } from '../interfaces/taskList.interface';
-import { ActivatedRoute, Router } from '@angular/router';
+import { IBoard } from '../interfaces/taskList.interface';
+import { Router } from '@angular/router';
 import { TasksManagerService } from '../tasks-manager.service';
 
 @Component({
@@ -60,6 +60,7 @@ export class TaskListsComponent implements OnInit {
           column.tasks = res.tasks;
           this.board = board;
         });
+        
         this.changerColumn.set(column.id, false);
         this.formChangeName.push({
           id: column.id,
@@ -159,6 +160,7 @@ export class TaskListsComponent implements OnInit {
         this.board.columns[this.findColumnIdx(id)].title = event.target.value;
         this.changerColumn.set(id, false);
       });
+
     }
   }
 

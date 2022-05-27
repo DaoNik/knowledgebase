@@ -4,11 +4,12 @@ import {
   AfterViewInit,
   ElementRef,
   OnInit,
+  OnDestroy,
 } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { map } from 'rxjs';
+import { map, Subscription } from 'rxjs';
 import { TasksManagerService } from '../tasks-manager.service';
 
 export interface ITableTasks {
@@ -24,8 +25,7 @@ export interface ITableTasks {
   templateUrl: './tasks-table.component.html',
   styleUrls: ['./tasks-table.component.scss'],
 })
-
-export class TasksTableComponent implements OnInit, AfterViewInit {
+export class TasksTableComponent implements OnInit, AfterViewInit, OnDestroy {
   displayedColumns: string[] = [
     'id',
     'title',
@@ -33,6 +33,8 @@ export class TasksTableComponent implements OnInit, AfterViewInit {
     'respondents',
     'priority',
   ];
+
+  subscriptionTasks$!: Subscription;
 
   tasks$ = this.taskServ.getTasks();
   filterTasks: ITableTasks[] = [];
@@ -49,7 +51,7 @@ export class TasksTableComponent implements OnInit, AfterViewInit {
   ) {}
 
   ngOnInit(): void {
-    this.tasks$
+    this.subscriptionTasks$ = this.tasks$
       .pipe(
         map((tasks) => {
           return tasks.map((task) => {
@@ -76,6 +78,10 @@ export class TasksTableComponent implements OnInit, AfterViewInit {
     this.elRef.nativeElement.querySelector(
       '.mat-paginator-page-size-label'
     ).textContent = 'Отобразить: ';
+  }
+
+  ngOnDestroy() {
+    this.subscriptionTasks$.unsubscribe();
   }
 
   applyFilter(event: Event) {

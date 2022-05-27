@@ -1,7 +1,7 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
-import { map, Observable, startWith } from 'rxjs';
+import { map, Observable, startWith, Subscription } from 'rxjs';
 import { IArticle } from 'src/app/interfaces/article';
 import { SearchService } from './search.service';
 
@@ -14,7 +14,7 @@ interface IFilter {
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.scss'],
 })
-export class SearchComponent implements OnInit {
+export class SearchComponent implements OnInit, OnDestroy {
   @Input('bgColor') bgColor!: boolean;
   searchQuery = new FormControl();
   results: string[] = ['One', 'Two', 'Three'];
@@ -49,6 +49,7 @@ export class SearchComponent implements OnInit {
     },
   ];
   filteredResults!: Observable<IArticle[]>;
+  subscriptionArticles$!: Subscription;
   foundArticles!: IArticle[];
 
   constructor(private searchService: SearchService, private router: Router) {}
@@ -58,9 +59,13 @@ export class SearchComponent implements OnInit {
       startWith(''),
       map((value) => this._filter(value))
     );
-    this.searchService
+    this.subscriptionArticles$ = this.searchService
       .getArticles()
       .subscribe((articles: IArticle[]) => (this.foundArticles = articles));
+  }
+
+  ngOnDestroy() {
+    this.subscriptionArticles$.unsubscribe();
   }
 
   private _filter(value: string): IArticle[] {
