@@ -142,6 +142,16 @@
     padding: 18px 20px;
   }
 }
+
+.sidebar__item_admin {
+  display: block;
+
+  mat-icon {
+    line-height: 18px;
+    vertical-align: middle;
+  }
+}
+
 .sidebar__item:hover {
   background-color: rgba(180, 180, 180, .5);
 }
