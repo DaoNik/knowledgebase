@@ -98,8 +98,4 @@ export class TasksTableComponent implements OnInit, AfterViewInit, OnDestroy {
     }
   }
 
-  openTask(item: string) {
-    this.modalServ.openDialog(item);
-    this.router.navigate(['tasks-manager/tasks', item]);
-  }
 }

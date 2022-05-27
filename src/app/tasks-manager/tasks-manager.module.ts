@@ -45,7 +45,9 @@ const routes: Routes = [
       },
     },
   ],  data: {displayName: 'Списки задач'} },
+  
   { path: 'form', component: FormIssueComponent, data: {displayName: 'Форма заявки'}  },
+
   { path: 'table', component: TasksTableComponent, children:[
     {
       path: ':item',
