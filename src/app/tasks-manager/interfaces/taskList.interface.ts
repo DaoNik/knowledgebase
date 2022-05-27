@@ -4,7 +4,7 @@ export interface ITasksList2 {
 }
 
 export interface ITask {
-  authors: any[];
+  authors: string[];
   category: string;
   columnId: number;
   createdAt: string;
