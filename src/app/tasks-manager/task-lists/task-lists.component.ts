@@ -6,7 +6,7 @@ import {
 } from '@angular/cdk/drag-drop';
 import { ModalTaskService } from '../modal-task/modal-task.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { IBoard } from '../interfaces/taskList.interface';
+import { IBoard, IColumn } from '../interfaces/taskList.interface';
 import { Router } from '@angular/router';
 import { TasksManagerService } from '../tasks-manager.service';
 
