@@ -55,9 +55,10 @@
       <mat-form-field appearance="fill">
         <mat-label>Название колонки</mat-label>
         <input matInput type="text" [formControl]="newColumn" (blur) = "isColumnAddOpen = !isColumnAddOpen">
+        <mat-error *ngIf="newColumn.invalid && newColumn.touched">Название должно быть не короче 4 символов</mat-error>
       </mat-form-field>
       <button mat-raised-button color="primary" class="example-createToDo" type="submit"
-        [disabled]="newColumn.getError('minlength')">Создать</button>
+        [disabled]="newColumn.invalid">Создать</button>
     </form>
   </div>
 </div>
