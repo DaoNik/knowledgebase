@@ -8,15 +8,15 @@
   <div class="board__column" *ngFor="let column of board?.columns">
 
     <div class="board__top-wrapper">
-      <h3 class="board__column-header" *ngIf="!changerColumn.get(column.id)"
+      <h3 class="board__column-header" *ngIf="!isColumnChangeOpen.get(column.id)"
         (click)="onColumnHeaderClick(column.id)">{{column.title}}</h3>
-      <mat-form-field *ngIf="changerColumn.get(column.id)" appearance="fill">
+      <mat-form-field *ngIf="isColumnChangeOpen.get(column.id)" appearance="fill">
         <mat-label>Введите новое название</mat-label>
         <input matInput type="text" value={{column.title}} (keydown.enter)="changeName($event, column.id, column.title)"
-          (blur)="changerColumn.set(column.id, false)" [formControl]="findFormcontrol(column.id)" #input>
-        <button mat-button mat-raised-button *ngIf="changerColumn.get(column.id) && !column.tasks?.length"
+          (blur)="isColumnChangeOpen.set(column.id, false)" [formControl]="findFormcontrol(column.id)" #input>
+        <button mat-button mat-raised-button *ngIf="isColumnChangeOpen.get(column.id) && !column.tasks?.length"
           (click)="deleteColumn(column.id)">Удалить</button>
-        <mat-error *ngIf="findFormcontrol(column.id).getError('minlength')">Название меньше 4 символов</mat-error>
+        <mat-error >Название меньше 4 символов</mat-error>
       </mat-form-field>
     </div>
 
@@ -28,36 +28,36 @@
       </li>
     </ul>
 
-    <div class="board__task board-task--new"*ngIf="!isHidden">
-      <button class="board__task-create" (click)="[isHidden = !isHidden, columnId = column.id]" >
+    <div class="board__task board-task--new" *ngIf="isTaskAddOpen.get(column.id)">
+      <button class="board__task-create" (click)="isTaskAddOpen.set(column.id, false)" >
         <mat-icon>add_circle_outline</mat-icon>
         Создать новую задачу
       </button>
     </div>
 
     <!-- Форма создания новой таски на самой доске -->
-    <form class="example-form" [formGroup]="form" *ngIf="isHidden && column.id === columnId"
+    <form class="example-form" *ngIf="!isTaskAddOpen.get(column.id)"
       (ngSubmit)="addToDo(column.id)">
       <mat-form-field appearance="fill">
         <mat-label>Заголовок задачи</mat-label>
-        <input matInput type="text" formControlName="title" (blur) = "isHidden = !isHidden">
+        <input matInput type="text" [formControl]="newTask" (blur) = "isTaskAddOpen.set(column.id, true)">
       </mat-form-field>
     </form>
 
   </div>
 
   <div class="board__new-column">
-    <button *ngIf="!isHiddenColumn" mat-raised-button color="primary" (click)="isHiddenColumn = !isHiddenColumn">
+    <button *ngIf="!isColumnAddOpen" mat-raised-button color="primary" (click)="isColumnAddOpen = !isColumnAddOpen">
       <mat-icon>add_circle_outline</mat-icon>
       Добавить колонку
     </button>
-    <form [formGroup]="formColumns" (ngSubmit)="addColumn()" *ngIf="isHiddenColumn">
+    <form (ngSubmit)="addColumn()" *ngIf="isColumnAddOpen">
       <mat-form-field appearance="fill">
         <mat-label>Название колонки</mat-label>
-        <input matInput type="text" formControlName="columnName">
+        <input matInput type="text" [formControl]="newColumn" (blur) = "isColumnAddOpen = !isColumnAddOpen">
       </mat-form-field>
       <button mat-raised-button color="primary" class="example-createToDo" type="submit"
-        [disabled]="formColumns.invalid">Создать</button>
+        [disabled]="newColumn.getError('minlength')">Создать</button>
     </form>
   </div>
 </div>
