@@ -33,7 +33,7 @@
             </ng-container>
 
             <tr mat-header-row *matHeaderRowDef="displayedColumns" ></tr>
-            <tr class="example-box" mat-row *matRowDef="let row; columns: displayedColumns;" ></tr>
+            <tr class="example-box" mat-row *matRowDef="let row; columns: displayedColumns;" routerLink={{row.id}}></tr>
 
             <!-- Row shown when there is no matching data. -->
             
@@ -45,3 +45,4 @@
         <mat-paginator [pageSizeOptions]="[5, 10, 25, 100]" aria-label="Выбрать страницу с проблемами"></mat-paginator>
     </div>
 </div>
+<router-outlet></router-outlet>

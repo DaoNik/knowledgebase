@@ -9,7 +9,9 @@ import {
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
+import { Router } from '@angular/router';
 import { map, Subscription } from 'rxjs';
+import { ModalTaskService } from '../modal-task/modal-task.service';
 import { TasksManagerService } from '../tasks-manager.service';
 
 export interface ITableTasks {
@@ -47,7 +49,9 @@ export class TasksTableComponent implements OnInit, AfterViewInit, OnDestroy {
 
   constructor(
     private elRef: ElementRef,
-    private taskServ: TasksManagerService
+    private taskServ: TasksManagerService,
+    private modalServ: ModalTaskService,
+    private router: Router
   ) {}
 
   ngOnInit(): void {
@@ -93,4 +97,5 @@ export class TasksTableComponent implements OnInit, AfterViewInit, OnDestroy {
       this.dataSource.paginator.firstPage();
     }
   }
+
 }
