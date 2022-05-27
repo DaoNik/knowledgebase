@@ -1,6 +1,6 @@
 import { Inject, Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http'
-import { BehaviorSubject, Observable } from 'rxjs';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http'
+import { BehaviorSubject, catchError, Observable, throwError } from 'rxjs';
 import { IArticle } from '../interfaces/article';
 
 @Injectable({
@@ -17,15 +17,27 @@ export class AdminPanelService {
   ) {}
 
   getArticles(category: string): Observable<IArticle[]> {
-    return this.http.get<IArticle[]>(`${this.apiUrl}?category=${category}`);
+    return this.http.get<IArticle[]>(`${this.apiUrl}?category=${category}`).pipe(
+      catchError((error: HttpErrorResponse) => {
+        return throwError(() => error);
+      })
+    );
   }
 
   deleteArticle(id: string): Observable<string> {
-    return this.http.delete<string>(`${this.apiUrl}/${id}`);
+    return this.http.delete<string>(`${this.apiUrl}/${id}`).pipe(
+      catchError((error: HttpErrorResponse) => {
+        return throwError(() => error);
+      })
+    );
   }
 
   filterArticles(filterTags: []): Observable<IArticle[]> {
-    return this.http.get<IArticle[]>(`${this.apiUrl}`)
+    return this.http.get<IArticle[]>(`${this.apiUrl}`).pipe(
+      catchError((error: HttpErrorResponse) => {
+        return throwError(() => error);
+      })
+    );
   }
 
 }
