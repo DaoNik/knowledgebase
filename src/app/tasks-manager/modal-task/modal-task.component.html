@@ -54,12 +54,12 @@
 						<td>WH School</td>
 					</tr>
 					<tr>
-						<td>Priority</td>
+						<td><p>Priority</p></td>
 						<td *ngIf="!sidebarEditTrigger">{{taskData.value.priority}}</td>
 						<td *ngIf="sidebarEditTrigger"
 							class="tr-menu"
 							[matMenuTriggerFor]="priorityMenu"
-						>{{taskData.value.priority}} 
+						>{{taskData.value.priority}}
 						<mat-icon>expand_more</mat-icon></td>
 						<mat-menu #priorityMenu="matMenu">
 							<button mat-menu-item
@@ -91,13 +91,15 @@
 							{{taskData.value.assignee[0]}}
 							<span 
 							*ngIf="taskData.value.assignee.length > 1"
-							(click)="showAndEditAssignee(false)">
+							(click)="showAndEditAssignee(false)"
+							class="tr-more">
 								<mat-icon>more_vert</mat-icon>
 							</span>
 						</td>
 						<td *ngIf="sidebarEditTrigger">
 							{{taskData.value.assignee[0]}}
 							<mat-icon (click)="showAndEditAssignee(true)"
+							class="tr-more"
 							>person_add</mat-icon>
 						</td>
 					</tr>

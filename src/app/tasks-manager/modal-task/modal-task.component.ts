@@ -191,7 +191,7 @@ export class ModalTaskComponent implements OnInit {
     });
 
     dialogRef.afterClosed().subscribe(() => {
-        this.updateTaskData();
+        this.uploadTaskData();
     });
   }
 
@@ -206,6 +206,33 @@ export class ModalTaskComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.uploadTaskData();
+  }
+
+  updateTaskData() {
+    const updatedData = {
+      title: this.taskData.value.title,
+      status: this.taskData.value.status,
+      column: this.taskData.value.column,
+      columnId: this.taskData.value.columnId,
+      respondents: this.taskData.value.assignee,
+      priority: this.taskData.value.priority,
+      description: JSON.stringify(this.taskData.value.text)
+    }
+    this.taskManagerService.editTask(Number(this.data), updatedData).subscribe(res => {
+      this.taskData.patchValue({
+        title: res.title,
+        assignee: res.respondents,
+        status: res.status,
+        columnId: res.columnId,
+        priority: res.priority,
+        dateCreated: this._dateTransform(res.createdAt),
+        dateUpdated: this._dateTransform(res.updatedAt)
+      });
+    });
+  }
+
+  uploadTaskData() {
     const url = this.router.url.split('/')
     this.taskManagerService.getTask(Number(url[url.length - 1])).subscribe((res: any) => {
       console.log(res)
@@ -235,29 +262,6 @@ export class ModalTaskComponent implements OnInit {
         })
       })
     })
-  }
-
-  updateTaskData() {
-    const updatedData = {
-      title: this.taskData.value.title,
-      status: this.taskData.value.status,
-      column: this.taskData.value.column,
-      columnId: this.taskData.value.columnId,
-      respondents: this.taskData.value.assignee,
-      priority: this.taskData.value.priority,
-      description: JSON.stringify(this.taskData.value.text)
-    }
-    this.taskManagerService.editTask(Number(this.data), updatedData).subscribe(res => {
-      this.taskData.patchValue({
-        title: res.title,
-        assignee: res.respondents,
-        status: res.status,
-        columnId: res.columnId,
-        priority: res.priority,
-        dateCreated: this._dateTransform(res.createdAt),
-        dateUpdated: this._dateTransform(res.updatedAt)
-      });
-    });
   }
 
   private _dateTransform(date: string): string {
