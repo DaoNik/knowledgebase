@@ -9,6 +9,8 @@ import { map, Observable, startWith } from 'rxjs';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { TasksManagerService } from '../tasks-manager.service';
 import { ITask } from '../interfaces/taskList.interface';
+import { MatDialog } from '@angular/material/dialog';
+import { ModalFormComponent } from './modal-form/modal-form.component';
 
 @Component({
   selector: 'app-form-issue',
@@ -24,7 +26,7 @@ export class FormIssueComponent {
 
   @ViewChild('tagInput') tagInput!: ElementRef<HTMLInputElement>;
 
-  constructor(private fb: FormBuilder, private taskServ: TasksManagerService) {
+  constructor(private fb: FormBuilder, private taskServ: TasksManagerService, public dialog: MatDialog) {
     this.issueForm = this.fb.group({
       title: [
         '',
@@ -55,6 +57,18 @@ export class FormIssueComponent {
     );
   }
 
+  openDialog(): void {
+    const dialogRef = this.dialog.open(ModalFormComponent, {
+      panelClass: 'modal-form-global',
+      maxWidth: '500px',
+      width: '90%'
+    });
+    
+    dialogRef.afterClosed().subscribe(() => {
+      // this.router.navigate(['../'], { relativeTo: this.route });
+    });
+  }
+
   onSubmit() {
     this.issueForm.reset();
     this.tags = [];
@@ -62,7 +76,7 @@ export class FormIssueComponent {
 
   createTask() {
     const formData: any = {
-      authors: [this.issueForm.value.name],
+      author: this.issueForm.value.name,
       title: this.issueForm.value.title,
       description: this.issueForm.value.description,
       columnId: 1,
@@ -77,10 +91,11 @@ export class FormIssueComponent {
         formData.columnId,
         formData.title,
         formData.boardId,
+        formData.author,
         formData.priority,
         formData.status,
         formData.description,
-        formData.authors,
+        [formData.author],
         formData.departments,
         formData.tags
       )

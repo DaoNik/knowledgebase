@@ -64,7 +64,7 @@
       class="form-issue__submit"
       type="submit"
       [disabled]="issueForm.invalid"
-      (click)="createTask()"
+      (click)="[createTask(), openDialog()]"
     >
       Сообщить о проблеме
     </button>

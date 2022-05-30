@@ -134,7 +134,7 @@ export class TasksManagerService {
     columnId: number,
     title: string,
     boardId: number,
-    author: string,
+    contact: string,
     priority?: string,
     status?: string,
     description?: string,
@@ -155,7 +155,7 @@ export class TasksManagerService {
         tags,
         category,
         boardId,
-        contact: author,
+        contact,
       })
       .pipe(
         catchError((error: HttpErrorResponse) => {
