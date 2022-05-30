@@ -34,6 +34,7 @@ import { ModalTaskEntryComponent } from './modal-task/modal-task-entry.component
 import { MainComponent } from '../main/main.component';
 import { AssigneeModalComponent } from './modal-task/assignee-modal/assignee-modal.component';
 import { DeleteTaskModalComponent } from './modal-task/delete-task-modal/delete-task-modal.component';
+import { ModalFormComponent } from './form-issue/modal-form/modal-form.component';
 import { NotFoundComponent } from '../not-found/not-found.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
@@ -73,6 +74,7 @@ const routes: Routes = [
     TasksTableComponent,
     AssigneeModalComponent,
     DeleteTaskModalComponent,
+    ModalFormComponent,
   ],
   imports: [
     DragDropModule,
