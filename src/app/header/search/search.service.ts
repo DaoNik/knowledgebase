@@ -1,7 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { Inject, Injectable } from '@angular/core';
 import { Router } from '@angular/router';
-import { Observable } from 'rxjs';
+import { catchError, Observable, throwError } from 'rxjs';
 import { IArticle } from 'src/app/interfaces/article';
 
 @Injectable({
@@ -17,7 +17,11 @@ export class SearchService {
   ) {}
 
   getArticles(): Observable<IArticle[]> {
-    return this.http.get<IArticle[]>(this.apiUrl);
+    return this.http.get<IArticle[]>(this.apiUrl).pipe(
+      catchError((error: HttpErrorResponse) => {
+        return throwError(() => error);
+      })
+    );
   }
 
   goToSearchResults(title: string, categories: string[]) {

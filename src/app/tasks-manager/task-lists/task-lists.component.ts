@@ -7,8 +7,9 @@ import {
 import { ModalTaskService } from '../modal-task/modal-task.service';
 import { FormControl, FormGroup, Validators } from '@angular/forms';
 import { IBoard, IColumn } from '../interfaces/taskList.interface';
-import { ActivatedRoute, Router } from '@angular/router';
+import { Router } from '@angular/router';
 import { TasksManagerService } from '../tasks-manager.service';
+import { BehaviorSubject } from 'rxjs';
 
 @Component({
   selector: 'app-task-lists',
@@ -22,6 +23,7 @@ export class TaskListsComponent implements OnInit {
 
   board!: IBoard;
   columns!: IColumn[];
+  author = 'Заглушка';
 
   taskId!: number;
 
@@ -36,7 +38,6 @@ export class TaskListsComponent implements OnInit {
     private router: Router,
     private taskServ: TasksManagerService
   ) {
-
     this.newTask = new FormControl('', [
       Validators.required,
       Validators.minLength(4),
@@ -46,7 +47,8 @@ export class TaskListsComponent implements OnInit {
     this.newColumn = new FormControl('', [
       Validators.required,
       Validators.minLength(4),
-      Validators.maxLength(50)]);
+      Validators.maxLength(50),
+    ]);
   }
 
   ngOnInit(): void {
@@ -58,7 +60,6 @@ export class TaskListsComponent implements OnInit {
         });
         this.isColumnChangeOpen.set(column.id, false);
         this.isTaskAddOpen.set(column.id, true);
-
         this.formChangeName.push({
           id: column.id,
           control: new FormControl(column.title, Validators.minLength(4)),
@@ -117,21 +118,11 @@ export class TaskListsComponent implements OnInit {
     this.taskServ.editTask(this.taskId, updatedData).subscribe();
   }
 
-  openTask(item: string) {
-    this.modalServ.openDialog(item);
-    this.router.navigate(['tasks-manager/tasks', item]);
-  }
-
   addToDo(columnId: number) {
-
     this.isTaskAddOpen.set(columnId, true);
 
     this.taskServ
-      .createTask(
-        columnId,
-        this.newTask.value,
-        this.board.id
-      )
+      .createTask(columnId, this.newTask.value, this.board.id, this.author)
       .subscribe((task) => {
         this.board.columns.forEach((column) => {
           if (column.id === columnId) {
@@ -143,11 +134,9 @@ export class TaskListsComponent implements OnInit {
   }
 
   addColumn() {
-    this.taskServ
-      .createColumn(1, this.newColumn.value)
-      .subscribe((column) => {
-        this.board.columns.push(column);
-      });
+    this.taskServ.createColumn(1, this.newColumn.value).subscribe((column) => {
+      this.board.columns.push(column);
+    });
     this.newColumn.reset();
     this.isColumnAddOpen = false;
   }
@@ -193,7 +182,8 @@ export class TaskListsComponent implements OnInit {
     return taskIdx;
   }
 
-  deleteTask(id: number, columnId: number) {
+  deleteTask($event: Event, id: number, columnId: number) {
+    $event.stopPropagation();
     this.taskServ.deleteTask(id).subscribe((id) => {
       const columnIdx = this.findColumnIdx(columnId);
       const taskIdx = this.findTaskIdx(id, columnIdx);

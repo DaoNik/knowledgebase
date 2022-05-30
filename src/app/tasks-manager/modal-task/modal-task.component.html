@@ -1,8 +1,11 @@
 <div class="modal-task" [formGroup]="taskData">
+	<div class="modal-task__close" (click)="onNoClick()">
+		<mat-icon>close</mat-icon>
+	</div>
 	<div class="modal-task__header">
 		<div class="modal-task__header_btns">
 			<div class="modal-task__header_btns_wrp">
-				<button class="link" (click)="copyUrl()">
+				<button class="link" (click)="urlCopy()">
 					<mat-icon>share</mat-icon>
 				</button>
 				<button class="link">
@@ -19,7 +22,7 @@
 				<button class="link">
 					<mat-icon>edit</mat-icon>
 				</button>
-				<button class="link">
+				<button class="link" (click)="deleteTask()">
 					<mat-icon>delete</mat-icon>
 				</button>
 			</div>
@@ -50,17 +53,20 @@
 				</div>
 				<table>
 					<tr>
-						<td>Project</td>
+						<td>проект</td>
 						<td>WH School</td>
 					</tr>
 					<tr>
-						<td><p>Priority</p></td>
+						<td>Приоритет</td>
 						<td *ngIf="!sidebarEditTrigger">{{taskData.value.priority}}</td>
 						<td *ngIf="sidebarEditTrigger"
 							class="tr-menu"
 							[matMenuTriggerFor]="priorityMenu"
-						>{{taskData.value.priority}}
-						<mat-icon>expand_more</mat-icon></td>
+						>
+						<p>
+							{{taskData.value.priority}}
+							<mat-icon>expand_more</mat-icon>
+						</p></td>
 						<mat-menu #priorityMenu="matMenu">
 							<button mat-menu-item
 								*ngFor="let priority of priorityVariants"
@@ -70,13 +76,15 @@
 						</mat-menu>
 					</tr>
 					<tr>
-						<td>State</td>
+						<td>Статус</td>
 						<td *ngIf="!sidebarEditTrigger">{{taskData.value.status}}</td>
 						<td *ngIf="sidebarEditTrigger"
 							class="tr-menu"
 							[matMenuTriggerFor]="statusMenu"
-						>{{taskData.value.status}} 
-						<mat-icon>expand_more</mat-icon></td>
+						><p>
+							{{taskData.value.status}} 
+							<mat-icon>expand_more</mat-icon>
+						</p></td>
 						<mat-menu #statusMenu="matMenu">
 							<button mat-menu-item
 								*ngFor="let status of statusVariants"
@@ -86,50 +94,37 @@
 						</mat-menu>
 					</tr>
 					<tr>
-						<td>Assignee</td>
+						<td>Ответственные</td>
 						<td *ngIf="!sidebarEditTrigger">
-							{{taskData.value.assignee[0]}}
-							<span 
-							*ngIf="taskData.value.assignee.length > 1"
-							(click)="showAndEditAssignee(false)"
-							class="tr-more">
-								<mat-icon>more_vert</mat-icon>
-							</span>
+							<p>
+								{{taskData.value.assignee[0]}}
+								<mat-icon *ngIf="taskData.value.assignee.length > 1"
+										(click)="showAndEditAssignee(false)"
+										class="tr-more"
+								>more_vert</mat-icon>
+							</p>
 						</td>
 						<td *ngIf="sidebarEditTrigger">
-							{{taskData.value.assignee[0]}}
+							<p>
+								{{taskData.value.assignee[0]}}
 							<mat-icon (click)="showAndEditAssignee(true)"
-							class="tr-more"
-							>person_add</mat-icon>
+							class="tr-more">person_add</mat-icon>
+							</p>
 						</td>
 					</tr>
 					<tr>
-						<td>Ready</td>
-						<td>80%</td>
-					</tr>
-					<tr>
-						<td>Ideal days</td>
+						<td>Дедлайн</td>
 						<td>90 days</td>
 					</tr>
 				</table>
 			</div>
-			<table class="task-subinfo">
-				<tr>
-					<td>watchers</td>
-					<td>Stop Watching</td>
-				</tr>
-				<tr>
-					<td>Boards</td>
-					<td>Add to board</td>
-				</tr>
-			</table>
 		</div>
 	</div>
 	<div class="modal-task__data">
 		<div class="modal-task__data_files">
 			<div *ngIf="!fileUploaded" class="modal-task__data_files_label">
 				<mat-icon>attach_files</mat-icon>
-				Drop your files here
+				Кидаться файлами сюда
 			</div>
 			<div *ngIf="fileUploaded"  class="modal-task__data_files_label added">
 				Загружено!
