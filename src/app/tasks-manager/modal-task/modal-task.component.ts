@@ -21,6 +21,7 @@ import { IComment } from '../interfaces/comment';
   styleUrls: ['./modal-task.component.scss'],
 })
 export class ModalTaskComponent implements OnInit, OnDestroy {
+  comments!: IComment[];
   recievedData: any;
   taskData = this.fb.group({
     title: ['Title', Validators.minLength(4)],
@@ -232,13 +233,13 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
   getTaskComments() {
     this.taskManagerService
       .getTaskComments(this.taskData.value.id)
-      .subscribe((comments) => (this.taskData.value.comments = comments));
+      .subscribe((comments) => (this.comments = comments));
   }
 
   getTaskComment() {
     this.socketsService.getTaskComment().subscribe((comment) => {
       if (+this.taskData.value.id === +comment.taskId) {
-        this.taskData.value.comments.push(comment);
+        this.comments.push(comment);
       }
     });
   }
