@@ -195,7 +195,7 @@
 							<input class='text_input_new' 
 								type='text'
 								name="inputTask"
-								(keyup.enter)="addText($event, -1)"
+								(keyup.enter)="addText($event)"
 							>
 						</div>
 					</div>
@@ -206,7 +206,7 @@
 						<div class="modal-task__data_comments_list" id="commentList" #commentList>
 							<div class="modal-task__data_comments_list_item" *ngFor="let item of taskData.value.comments">
 								<div class="author">
-									by {{item.author}}
+									{{item.author}}
 								</div>
 								<div class="text">
 									{{item.text}}
@@ -214,14 +214,14 @@
 							</div>
 						</div>
 						<form class="modal-task__data_comments_input" [formGroup]="commentForm">
-							<div class="text-wrp" (keyup.enter)="sendComment()">
+							<div class="text-wrp">
 								<input type="text" class="comment" placeholder="Ваш комментарий" 
 								value={{commentForm.value.text}} formControlName="text"  />
 								<input type="text" class="author" placeholder="Ваш ник" 
 								value={{commentForm.value.author}} formControlName="author" />
 							</div>
 							<div class="btn-wrp">
-								<button mat-raised-button color="primary" (click)="sendComment()">
+								<button mat-raised-button color="primary" (click)="sendComment()" disabled={{!commentForm.valid}}>
 									<mat-icon>send</mat-icon>
 								</button>
 							</div>

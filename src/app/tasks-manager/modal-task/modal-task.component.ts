@@ -32,8 +32,8 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
     dateUpdated: []
   });
   commentForm = this.fb.group({
-    text: [''],
-    author: ['Гость']
+    text: ['', [Validators.minLength(1), Validators.maxLength(500), Validators.required]],
+    author: ['Гость', [Validators.minLength(1), Validators.maxLength(50), Validators.required]]
   })
   columns: any = []
   statusVariants: string[] = ['Todo', 'In progress', 'Done'];
@@ -83,8 +83,8 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
     this.dialogRef.close();
   }
 
-  addText(e: any, num: number) {
-    if (num == -1) {
+  addText(e: any, index?: number) {
+    if (index == undefined) {
       if (!this.taskData.value.text) {
         this.taskData.value.text = [{
           text: e.target.value, 
@@ -98,12 +98,12 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
           value: this.createOption.value
         })
       }
-      e.target.value = '';
-      this.createOption.type = '';
-      this.createOption.value = '';
     } else {
-      this.taskData.value.text[num].text = e.target.value;
+      this.taskData.value.text[index].text = e.target.value;
     }
+    e.target.value = '';
+    this.createOption.type = '';
+    this.createOption.value = '';
     this.inputTrigger = false;
     this.updateTaskData();
   }
@@ -200,6 +200,7 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
         behavior: 'smooth'
       }))
     }, 50);
+    console.log(this.taskData.value.comments)
   }
 
   ngOnInit(): void {
