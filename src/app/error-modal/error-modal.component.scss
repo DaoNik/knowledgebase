@@ -11,12 +11,12 @@ p {
 .container {
     display: flex;
     justify-content: center;
-    padding-top: 125px;
+    padding-top: 100px;
     padding-right: 15px;
     padding-left: 15px;
 
-    @media (max-width: 1024px) {
-        padding-top: 100px; 
+    @media (min-width: 1440px) {
+        padding-top: 120px;
     }
 }
 
@@ -27,7 +27,7 @@ p {
     min-height: 45px;
     max-width: 70ch;
 
-    padding: 10px 40px 10px 20px;
+    padding: 12px 40px 10px 20px;
     background: #ffdd2d;
 }
 
@@ -50,8 +50,4 @@ p {
     width: 22px;
     height: 22px;
     cursor: pointer;
-}
-
-.icon-close:hover {
-    border-radius: 20px;
 }
