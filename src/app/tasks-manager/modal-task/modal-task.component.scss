@@ -338,6 +338,17 @@
 		}
 	}
 
+	.modal-task__loading {
+		position: absolute;
+		left: 0;
+		right: 0;
+		top: 0;
+		bottom: 0;
+		margin: auto;
+		width: 100px;
+		height: 100px;
+	}
+
 	@media (max-width: 600px) {
 		.modal-task__header {
 			position: relative;

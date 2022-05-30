@@ -3,10 +3,8 @@ import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dial
 import { ITypeOption } from './modal-task-interface';
 import { FormBuilder,  Validators } from '@angular/forms';
 import { Subscription, catchError } from 'rxjs';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ModalTaskService } from './modal-task.service';
+import { Router } from '@angular/router';
 import { TasksManagerService } from '../tasks-manager.service';
-import { HttpClient } from '@angular/common/http';
 import { AssigneeModalComponent } from './assignee-modal/assignee-modal.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DeleteTaskModalComponent } from './delete-task-modal/delete-task-modal.component';
@@ -60,7 +58,7 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
   };
   inputFile: string = '';
   fileUploaded = false;
-  taskError = false;
+  taskLoaded = false;
 
   subscriptionTask$!: Subscription;
   subscriptionColumn$!: Subscription;
@@ -226,10 +224,11 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
       catchError(err => {
         this.onNoClick();
         this._snackBar.open('Такой задачи не существует!', 'OK');
-        setTimeout(() => {this._snackBar.dismiss()}, 3000)
+        setTimeout(() => {this._snackBar.dismiss()}, 3000);
         throw 'Error while getting task';
       })
     ).subscribe((res: any) => {
+      this.taskLoaded = true;
       this.taskData.patchValue({
         title: res.title,
         assignee: res.authors,
