@@ -7,7 +7,7 @@ import { IComment } from './interfaces/comment';
   providedIn: 'root',
 })
 export class SocketsService {
-  socket = io('http://localhost:3000', {
+  socket = io('https://wbbase.site', {
     path: '/api/socket',
   });
 
