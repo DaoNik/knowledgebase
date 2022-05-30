@@ -146,12 +146,6 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
     this.updateTaskData();
   }
 
-  // addAssignee(option: string): void {
-  //   this.taskData.value.assignee.push(option);
-  //   this.searchAssigneeQuery.setValue('');
-  //   this.updateTaskData();
-  // }
-
   removeAssignee(index: number): void {
     this.taskData.value.assignee.splice(index, 1);
     this.updateTaskData();
@@ -237,6 +231,7 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
         columnId: res.columnId,
         priority: res.priority,
         contact: res.contact,
+        // comments: res.comments,
         dateCreated: this._dateTransform(res.createdAt),
         dateUpdated: this._dateTransform(res.updatedAt)
       });
@@ -262,6 +257,7 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
         columnId: res.columnId,
         priority: res.priority,
         contact: res.contact,
+        // comments: res.comments,
         dateCreated: this._dateTransform(res.createdAt),
         dateUpdated: this._dateTransform(res.updatedAt)
       });

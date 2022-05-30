@@ -213,7 +213,7 @@
 								</div>
 							</div>
 						</div>
-						<div class="modal-task__data_comments_input" [formGroup]="commentForm">
+						<form class="modal-task__data_comments_input" [formGroup]="commentForm">
 							<div class="text-wrp" (keyup.enter)="sendComment()">
 								<input type="text" class="comment" placeholder="Ваш комментарий" 
 								value={{commentForm.value.text}} formControlName="text"  />
@@ -225,7 +225,7 @@
 									<mat-icon>send</mat-icon>
 								</button>
 							</div>
-						</div>
+						</form>
 					</div>
 				</mat-tab>
 
