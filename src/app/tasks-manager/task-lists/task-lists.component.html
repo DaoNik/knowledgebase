@@ -101,7 +101,6 @@
           matInput
           type="text"
           [formControl]="newColumn"
-          (blur)="isColumnAddOpen = !isColumnAddOpen"
         />
         <mat-error *ngIf="newColumn.invalid && newColumn.touched"
           >Название должно быть не короче 4 символов</mat-error
