@@ -253,7 +253,7 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
     }
   }
 
-  getCtrl(ctrl: string): string[] {
+  getChips(ctrl: string): string[] {
     if (ctrl === 'departments') {
       return this.departments;
     } else if (ctrl === 'tags') {
@@ -267,7 +267,7 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
 
   removeChip(chip: string, ctrl: string): void {
     const control = this.form.get(ctrl);
-    let chips = this.getCtrl(ctrl);
+    const chips = this.getChips(ctrl);
 
     chips.push(chip);
 
@@ -283,7 +283,7 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
     chipCtrl: FormControl
   ): void {
     const control = this.form.get(ctrl);
-    let chips = this.getCtrl(ctrl);
+    const chips = this.getChips(ctrl);
 
     chips.splice(chips.indexOf(event.option.viewValue), 1);
     control?.patchValue([...control?.value, event.option.viewValue]);
