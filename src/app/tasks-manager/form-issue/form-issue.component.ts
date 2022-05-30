@@ -44,7 +44,7 @@ export class FormIssueComponent {
           Validators.maxLength(1000),
         ],
       ],
-      // tags: ['', [Validators.required, Validators.minLength(1)]],
+      tags: ['', [Validators.required, Validators.minLength(1)]],
       category: ['', [Validators.required, Validators.minLength(1)]],
     });
     this.filteredTags = this.tagCtrl.valueChanges.pipe(
@@ -64,7 +64,6 @@ export class FormIssueComponent {
     const formData: any = {
       authors: [this.issueForm.value.name],
       title: this.issueForm.value.title,
-      // category: '',
       description: this.issueForm.value.description,
       columnId: 1,
       priority: 'Medium',
@@ -78,20 +77,20 @@ export class FormIssueComponent {
     .subscribe();
   }
 
-  // remove(fruit: string): void {
-  //   const index = this.tags.indexOf(fruit);
+  remove(fruit: string): void {
+    const index = this.tags.indexOf(fruit);
 
-  //   if (index >= 0) {
-  //     this.tags.splice(index, 1);
-  //   }
-  // }
+    if (index >= 0) {
+      this.tags.splice(index, 1);
+    }
+  }
 
-  // selected($event: MatAutocompleteSelectedEvent): void {
-  //   this.tags.push($event.option.viewValue);
-  //   this.issueForm.get('tags')?.setValue(this.tags);
-  //   this.tagInput.nativeElement.value = '';
-  //   this.tagCtrl.setValue(null);
-  // }
+  selected($event: MatAutocompleteSelectedEvent): void {
+    this.tags.push($event.option.viewValue);
+    this.issueForm.get('tags')?.setValue(this.tags);
+    this.tagInput.nativeElement.value = '';
+    this.tagCtrl.setValue(null);
+  }
 
   private _filter(value: string): string[] {
     const filterValue = value.toLowerCase();

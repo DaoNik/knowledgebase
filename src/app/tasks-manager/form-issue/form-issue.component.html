@@ -27,7 +27,7 @@
     placeholder="Опишите вашу проблему"
     formControlName="description"
   ></textarea>
-  <!-- <mat-form-field appearance="fill">
+  <mat-form-field appearance="fill">
     <mat-label>Теги проблемы*</mat-label>
     <mat-chip-list #chipList aria-label="Fruit selection">
       <mat-chip *ngFor="let tag of tags" (removed)="remove(tag)">
@@ -52,7 +52,7 @@
         {{ tag }}
       </mat-option>
     </mat-autocomplete>
-  </mat-form-field> -->
+  </mat-form-field>
   <label class="form-issue__label">Выберите категорию*</label>
   <select class="form-issue__select" formControlName="category">
     <option *ngFor="let tag of allTags">{{ tag }}</option>
