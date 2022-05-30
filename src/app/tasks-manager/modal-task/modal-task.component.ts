@@ -242,7 +242,7 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
       });
 
       if (res.description.length > 0) {
-        if (res.description.charAt[0] != '[') {
+        if (res.description[0] != '[' && res.description.length > 1) {
           this.taskData.patchValue({
             text: [
               {
@@ -257,7 +257,6 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
             text: JSON.parse(res.description)
           });
         }
-        
       }
     })
 
