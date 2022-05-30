@@ -22,6 +22,7 @@
           (keydown.enter)="changeName($event, column.id, column.title)"
           (blur)="isColumnChangeOpen.set(column.id, false)"
           [formControl]="findFormcontrol(column.id)"
+          [errorStateMatcher]="matcher"
           #input
         />
         <button
@@ -101,10 +102,10 @@
           matInput
           type="text"
           [formControl]="newColumn"
+          [errorStateMatcher]="matcher"
+          (blur)="isColumnAddOpen = !isColumnAddOpen"
         />
-        <mat-error *ngIf="newColumn.invalid && newColumn.touched"
-          >Название должно быть не короче 4 символов</mat-error
-        >
+        <mat-error>Название должно быть не короче 4 символов</mat-error>
       </mat-form-field>
       <button
         mat-raised-button

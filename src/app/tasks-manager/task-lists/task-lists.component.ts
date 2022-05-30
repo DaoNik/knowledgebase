@@ -4,12 +4,20 @@ import {
   moveItemInArray,
   transferArrayItem,
 } from '@angular/cdk/drag-drop';
-import { ModalTaskService } from '../modal-task/modal-task.service';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { IBoard, IColumn } from '../interfaces/taskList.interface';
-import { Router } from '@angular/router';
 import { TasksManagerService } from '../tasks-manager.service';
-import { BehaviorSubject } from 'rxjs';
+import { ErrorStateMatcher } from '@angular/material/core';
+
+export class LengthErrorStateMatcher implements ErrorStateMatcher {
+  isErrorState(control: FormControl): boolean {
+    if (control && control?.value.trim().length < 4) {
+      return control.invalid && (control.dirty || control.touched);
+    }
+
+    return false;
+  }
+}
 
 @Component({
   selector: 'app-task-lists',
@@ -20,7 +28,7 @@ export class TaskListsComponent implements OnInit {
   isColumnChangeOpen = new Map();
   isTaskAddOpen = new Map();
   isColumnAddOpen: boolean = false;
-
+  matcher = new LengthErrorStateMatcher();
   board!: IBoard;
   columns!: IColumn[];
   author = 'Заглушка';
@@ -34,8 +42,6 @@ export class TaskListsComponent implements OnInit {
 
 
   constructor(
-    private modalServ: ModalTaskService,
-    private router: Router,
     private taskServ: TasksManagerService
   ) {
     this.newTask = new FormControl('', [
@@ -64,16 +70,12 @@ export class TaskListsComponent implements OnInit {
           id: column.id,
           control: new FormControl(column.title, Validators.minLength(4)),
         });
-
-        console.log(this.formChangeName[0].value);
       });
     });
   }
 
   onColumnHeaderClick(id: number): void {
     this.isColumnChangeOpen.set(id, true);
-    
-    console.log(this.findFormcontrol(id));
   }
 
   findFormcontrol(id: number): FormControl {
