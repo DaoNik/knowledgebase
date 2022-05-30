@@ -15,7 +15,7 @@ export class TasksManagerService {
   // Boards
 
   getBoard(): Observable<IBoard> {
-    return this.http.get<IBoard>(`${this.url}/boards/123`).pipe(
+    return this.http.get<IBoard>(`${this.url}/boards/1`).pipe(
       catchError((error: HttpErrorResponse) => {
         this.errorService.errorMessage = error.error.message[error.error.message.length - 1]
         this.errorService.changeVisible()
