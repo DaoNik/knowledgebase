@@ -46,8 +46,6 @@ export class AssigneeModalComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    console.log(this.data[0])
-    console.log(this.mockUsers)
     this.filteredOptions = this.searchAssigneeQuery.valueChanges.pipe(
       startWith(''),
       map(value => this._filter(value)),

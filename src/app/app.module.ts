@@ -27,6 +27,7 @@ import { FeedbackComponent } from './footer/feedback/feedback.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ArticleComponent } from './article/article.component';
 import { SearchResultsComponent } from './search-results/search-results.component';
 import { BreadCrumbsComponent } from './bread-crumbs/bread-crumbs.component';
@@ -87,7 +88,8 @@ const API_URL_PROVIDER: Provider = {
     HttpClientModule,
     TasksManagerModule,
     MatProgressBarModule,
-    MatSnackBarModule
+    MatSnackBarModule,
+    MatProgressSpinnerModule
   ],
   providers: [API_URL_PROVIDER],
   bootstrap: [AppComponent],
