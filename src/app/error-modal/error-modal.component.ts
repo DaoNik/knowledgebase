@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { ErrorModalService } from './error-modal.service';
 
 @Component({
   selector: 'app-error-modal',
@@ -7,9 +8,20 @@ import { Component, OnInit } from '@angular/core';
 })
 export class ErrorModalComponent implements OnInit {
 
-  constructor() { }
+  constructor(private errorService: ErrorModalService) { }
+
+  public messageText: string = '';
 
   ngOnInit(): void {
+    this.messageText = this.errorService.errorMessage;
+
+    setTimeout(() => {
+    this.errorService.visibleError = false
+    }, 10000)
+  }
+
+  closeModal(): void {
+    this.errorService.changeVisible()
   }
 
 }
