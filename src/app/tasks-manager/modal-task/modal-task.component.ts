@@ -242,9 +242,22 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
       });
 
       if (res.description.length > 0) {
-        this.taskData.patchValue({
-          text: JSON.parse(res.description)
-        });
+        if (res.description.charAt[0] != '[') {
+          this.taskData.patchValue({
+            text: [
+              {
+                text: res.description,
+                type: '',
+                value: ''
+              }
+            ]
+          });
+        } else {
+          this.taskData.patchValue({
+            text: JSON.parse(res.description)
+          });
+        }
+        
       }
     })
 
