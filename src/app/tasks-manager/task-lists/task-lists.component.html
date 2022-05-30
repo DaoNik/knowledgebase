@@ -13,7 +13,7 @@
       <mat-form-field *ngIf="isColumnChangeOpen.get(column.id)" appearance="fill">
         <mat-label>Введите новое название</mat-label>
         <input matInput type="text" value={{column.title}} (keydown.enter)="changeName($event, column.id, column.title)"
-          (blur)="isColumnChangeOpen.set(column.id, false)" [formControl]="findFormcontrol(column.id)" #input>
+          (blur)="isColumnChangeOpen.set(column.id, false)" [formControl]="findFormcontrol(column.id)">
         <button mat-button mat-raised-button *ngIf="isColumnChangeOpen.get(column.id) && !column.tasks?.length"
           (click)="deleteColumn(column.id)">Удалить</button>
         <mat-error >Название меньше 4 символов</mat-error>
@@ -28,15 +28,15 @@
       </li>
     </ul>
 
-    <div class="board__task board-task--new" *ngIf="isTaskAddOpen.get(column.id)">
-      <button class="board__task-create" (click)="isTaskAddOpen.set(column.id, false)" >
+    <button class="board__task board__task--new" *ngIf="isTaskAddOpen.get(column.id)" (click)="isTaskAddOpen.set(column.id, false)" >
+      <p class="board__task-create">
         <mat-icon>add_circle_outline</mat-icon>
         Создать новую задачу
-      </button>
-    </div>
+      </p>
+    </button>
 
     <!-- Форма создания новой таски на самой доске -->
-    <form class="example-form" *ngIf="!isTaskAddOpen.get(column.id)"
+    <form class="board__new-task" *ngIf="!isTaskAddOpen.get(column.id)"
       (ngSubmit)="addToDo(column.id)">
       <mat-form-field appearance="fill">
         <mat-label>Заголовок задачи</mat-label>
@@ -57,7 +57,7 @@
         <input matInput type="text" [formControl]="newColumn" (blur) = "isColumnAddOpen = !isColumnAddOpen">
         <mat-error *ngIf="newColumn.invalid && newColumn.touched">Название должно быть не короче 4 символов</mat-error>
       </mat-form-field>
-      <button mat-raised-button color="primary" class="example-createToDo" type="submit"
+      <button mat-raised-button color="primary" class="board__new-column-form" type="submit"
         [disabled]="newColumn.invalid">Создать</button>
     </form>
   </div>

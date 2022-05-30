@@ -30,7 +30,6 @@ export class TaskListsComponent implements OnInit {
 
   public formChangeName: any[] = [];
 
-  @ViewChild('input') input!: ElementRef<HTMLInputElement>;
 
   constructor(
     private modalServ: ModalTaskService,
@@ -72,7 +71,7 @@ export class TaskListsComponent implements OnInit {
 
   onColumnHeaderClick(id: number): void {
     this.isColumnChangeOpen.set(id, true);
-    this.input.nativeElement?.focus();
+    
     console.log(this.findFormcontrol(id));
   }
 
