@@ -23,7 +23,7 @@ export class TasksManagerService {
       catchError((error: HttpErrorResponse) => {
         this.errorService.errorMessage =
           error.error.message[error.error.message.length - 1];
-        this.errorService.changeVisible();
+        this.errorService.onVisible();
         return throwError(() => error);
       })
     );
@@ -48,7 +48,7 @@ export class TasksManagerService {
         catchError((error: HttpErrorResponse) => {
           this.errorService.errorMessage =
             error.error.message[error.error.message.length - 1];
-          this.errorService.changeVisible();
+          this.errorService.onVisible();
           return throwError(() => error);
         })
       );
@@ -74,7 +74,7 @@ export class TasksManagerService {
         catchError((error: HttpErrorResponse) => {
           this.errorService.errorMessage =
             error.error.message[error.error.message.length - 1];
-          this.errorService.changeVisible();
+          this.errorService.onVisible();
           return throwError(() => error);
         })
       );
@@ -87,7 +87,7 @@ export class TasksManagerService {
       catchError((error: HttpErrorResponse) => {
         this.errorService.errorMessage =
           error.error.message[error.error.message.length - 1];
-        this.errorService.changeVisible();
+        this.errorService.onVisible();
         return throwError(() => error);
       })
     );
@@ -98,7 +98,7 @@ export class TasksManagerService {
       catchError((error: HttpErrorResponse) => {
         this.errorService.errorMessage =
           error.error.message[error.error.message.length - 1];
-        this.errorService.changeVisible();
+        this.errorService.onVisible();
         return throwError(() => error);
       })
     );
@@ -111,7 +111,7 @@ export class TasksManagerService {
         catchError((error: HttpErrorResponse) => {
           this.errorService.errorMessage =
             error.error.message[error.error.message.length - 1];
-          this.errorService.changeVisible();
+          this.errorService.onVisible();
           return throwError(() => error);
         })
       );
@@ -124,7 +124,7 @@ export class TasksManagerService {
         catchError((error: HttpErrorResponse) => {
           this.errorService.errorMessage =
             error.error.message[error.error.message.length - 1];
-          this.errorService.changeVisible();
+          this.errorService.onVisible();
           return throwError(() => error);
         })
       );
@@ -135,7 +135,7 @@ export class TasksManagerService {
       catchError((error: HttpErrorResponse) => {
         this.errorService.errorMessage =
           error.error.message[error.error.message.length - 1];
-        this.errorService.changeVisible();
+        this.errorService.onVisible();
         return throwError(() => error);
       })
     );
@@ -148,7 +148,7 @@ export class TasksManagerService {
       catchError((error: HttpErrorResponse) => {
         this.errorService.errorMessage =
           error.error.message[error.error.message.length - 1];
-        this.errorService.changeVisible();
+        this.errorService.onVisible();
         return throwError(() => error);
       })
     );
@@ -159,7 +159,7 @@ export class TasksManagerService {
       catchError((error: HttpErrorResponse) => {
         this.errorService.errorMessage =
           error.error.message[error.error.message.length - 1];
-        this.errorService.changeVisible();
+        this.errorService.onVisible();
         return throwError(() => error);
       })
     );
@@ -196,7 +196,7 @@ export class TasksManagerService {
         catchError((error: HttpErrorResponse) => {
           this.errorService.errorMessage =
             error.error.message[error.error.message.length - 1];
-          this.errorService.changeVisible();
+          this.errorService.onVisible();
           return throwError(() => error);
         })
       );
@@ -207,7 +207,7 @@ export class TasksManagerService {
       catchError((error: HttpErrorResponse) => {
         this.errorService.errorMessage =
           error.error.message[error.error.message.length - 1];
-        this.errorService.changeVisible();
+        this.errorService.onVisible();
         return throwError(() => error);
       })
     );
@@ -218,7 +218,7 @@ export class TasksManagerService {
       catchError((error: HttpErrorResponse) => {
         this.errorService.errorMessage =
           error.error.message[error.error.message.length - 1];
-        this.errorService.changeVisible();
+        this.errorService.onVisible();
         return throwError(() => error);
       })
     );
@@ -229,7 +229,7 @@ export class TasksManagerService {
       catchError((error: HttpErrorResponse) => {
         this.errorService.errorMessage =
           error.error.message[error.error.message.length - 1];
-        this.errorService.changeVisible();
+        this.errorService.onVisible();
         return throwError(() => error);
       })
     );
