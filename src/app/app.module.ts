@@ -37,6 +37,7 @@ import localeRu from '@angular/common/locales/ru';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { ClickAwayDirective } from './direct/click-away.directive';
 import { ModalTaskEntryComponent } from './tasks-manager/modal-task/modal-task-entry.component';
+import { ErrorModalComponent } from './error-modal/error-modal.component';
 registerLocaleData(localeRu);
 
 const API_URL_PROVIDER: Provider = {
@@ -60,6 +61,7 @@ const API_URL_PROVIDER: Provider = {
     NotFoundComponent,
     ClickAwayDirective,
     ModalTaskEntryComponent,
+    ErrorModalComponent,
   ],
   imports: [
     BrowserModule,
