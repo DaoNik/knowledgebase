@@ -2,7 +2,7 @@ import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ITypeOption } from './modal-task-interface';
 import { FormBuilder,  Validators } from '@angular/forms';
-import { Subscription, catchError } from 'rxjs';
+import { Subscription, catchError, timeout } from 'rxjs';
 import { Router } from '@angular/router';
 import { TasksManagerService } from '../tasks-manager.service';
 import { AssigneeModalComponent } from './assignee-modal/assignee-modal.component';
@@ -27,9 +27,14 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
     assignee: [[]],
     contact: [],
     text: [[]],
+    comments: [[{text: 'Мой коммент', author: 'Вова'}, {text: 'Коммент #2', author: 'Петя'}, {text: 'третий', author: 'Саня'}, {text: 'Коммент #2', author: 'Петя'}, {text: 'Коммент #2', author: 'Петя'}, {text: 'Коммент #2', author: 'Петя'}, {text: 'Коммент #2', author: 'Петя'},]],
     dateCreated: [],
     dateUpdated: []
   });
+  commentForm = this.fb.group({
+    text: [''],
+    author: ['Гость']
+  })
   columns: any = []
   statusVariants: string[] = ['Todo', 'In progress', 'Done'];
   priorityVariants: string[] = ['None', 'Low', 'Medium', 'High'];
@@ -141,12 +146,6 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
     this.updateTaskData();
   }
 
-  // addAssignee(option: string): void {
-  //   this.taskData.value.assignee.push(option);
-  //   this.searchAssigneeQuery.setValue('');
-  //   this.updateTaskData();
-  // }
-
   removeAssignee(index: number): void {
     this.taskData.value.assignee.splice(index, 1);
     this.updateTaskData();
@@ -184,6 +183,25 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
     }
   }
 
+  sendComment() {
+    let tmpArr = this.taskData.value.comments;
+    tmpArr.push({
+      text: this.commentForm.value.text,
+      author: this.commentForm.value.author
+    })
+    this.taskData.patchValue({
+      comments: tmpArr
+    })
+    this.updateTaskData();
+    this.commentForm.controls['text'].reset()
+    setTimeout(() => {
+      document.getElementById('commentList')?.scrollTo(({
+        top: 10000,
+        behavior: 'smooth'
+      }))
+    }, 50);
+  }
+
   ngOnInit(): void {
     this.uploadTaskData();
   }
@@ -202,6 +220,7 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
       authors: this.taskData.value.assignee,
       priority: this.taskData.value.priority == '' ? 'None' : this.taskData.value.priority,
       contact: this.taskData.value.contact,
+      // comments: this.taskData.value.comments,
       description: JSON.stringify(this.taskData.value.text)
     }
     this.taskManagerService.editTask(Number(this.data), updatedData).subscribe(res => {
@@ -212,6 +231,7 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
         columnId: res.columnId,
         priority: res.priority,
         contact: res.contact,
+        // comments: res.comments,
         dateCreated: this._dateTransform(res.createdAt),
         dateUpdated: this._dateTransform(res.updatedAt)
       });
@@ -237,6 +257,7 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
         columnId: res.columnId,
         priority: res.priority,
         contact: res.contact,
+        // comments: res.comments,
         dateCreated: this._dateTransform(res.createdAt),
         dateUpdated: this._dateTransform(res.updatedAt)
       });
