@@ -1,16 +1,12 @@
 import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ITypeOption } from './modal-task-interface';
-import { FormBuilder, FormControl, Validators } from '@angular/forms';
-import { map, Observable, startWith, timeout } from 'rxjs';
-import { Subscription } from 'rxjs';
-import { ActivatedRoute, Router } from '@angular/router';
-import { ModalTaskService } from './modal-task.service';
+import { FormBuilder,  Validators } from '@angular/forms';
+import { Subscription, catchError } from 'rxjs';
+import { Router } from '@angular/router';
 import { TasksManagerService } from '../tasks-manager.service';
-import { HttpClient } from '@angular/common/http';
 import { AssigneeModalComponent } from './assignee-modal/assignee-modal.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
-import { IBoard } from '../interfaces/taskList.interface';
 import { DeleteTaskModalComponent } from './delete-task-modal/delete-task-modal.component';
 
 @Component({
@@ -19,33 +15,6 @@ import { DeleteTaskModalComponent } from './delete-task-modal/delete-task-modal.
   styleUrls: ['./modal-task.component.scss']
 })
 export class ModalTaskComponent implements OnInit, OnDestroy {
-  // taskData = this.fb.group({
-  //   title: ['Title', Validators.minLength(4)],
-  //   id: this.data,
-  //   status: ['In progress'],
-  //   column: ['Третий столбец'],
-  //   assignee: 
-  //     [[{
-  //       name: 'Giovanni Gorgio', 
-  //       id: 1,
-  //       avatar: ''
-  //     },{
-  //       name: 'Bruh Bruv', 
-  //       id: 2,
-  //       avatar: ''
-  //     }]]
-  //   ,
-  //   description: ['Короткое описание задачи'],
-  //   text: [[{
-  //     text: 'Пункт 1', 
-  //     type: 'ul',
-  //     value: 'false'
-  //   },{
-  //     text: 'Пункт 2', 
-  //     type: 'todo',
-  //     value: 'true'
-  //   }]]
-  // });
   recievedData: any;
   taskData = this.fb.group({
     title: ['Title', Validators.minLength(4)],
@@ -89,6 +58,7 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
   };
   inputFile: string = '';
   fileUploaded = false;
+  taskLoaded = false;
 
   subscriptionTask$!: Subscription;
   subscriptionColumn$!: Subscription;
@@ -97,11 +67,8 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
     public dialogRef: MatDialogRef<ModalTaskComponent>,
     @Inject(MAT_DIALOG_DATA) public data: string,
     public dialog: MatDialog,
-    private http: HttpClient,
     private fb: FormBuilder,
     private router: Router,
-    private route: ActivatedRoute,
-    private modalTaskServ: ModalTaskService,
     private taskManagerService: TasksManagerService,
     private _snackBar: MatSnackBar
   ) {}
@@ -253,8 +220,15 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
 
   uploadTaskData() {
     const url = this.router.url.split('/')
-    this.subscriptionTask$ = this.taskManagerService.getTask(Number(url[url.length - 1])).subscribe((res: any) => {
-      console.log(res)
+    this.subscriptionTask$ = this.taskManagerService.getTask(Number(url[url.length - 1])).pipe(
+      catchError(err => {
+        this.onNoClick();
+        this._snackBar.open('Такой задачи не существует!', 'OK');
+        setTimeout(() => {this._snackBar.dismiss()}, 3000);
+        throw 'Error while getting task';
+      })
+    ).subscribe((res: any) => {
+      this.taskLoaded = true;
       this.taskData.patchValue({
         title: res.title,
         assignee: res.authors,
@@ -268,13 +242,30 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
       });
 
       if (res.description.length > 0) {
-        this.taskData.patchValue({
-          text: JSON.parse(res.description)
-        });
+        if (res.description.charAt[0] != '[') {
+          this.taskData.patchValue({
+            text: [
+              {
+                text: res.description,
+                type: '',
+                value: ''
+              }
+            ]
+          });
+        } else {
+          this.taskData.patchValue({
+            text: JSON.parse(res.description)
+          });
+        }
+        
       }
     })
 
-    this.subscriptionColumn$ = this.taskManagerService.getColumns().subscribe(columns => {
+    this.subscriptionColumn$ = this.taskManagerService.getColumns().pipe(
+      catchError(err => {
+        throw 'Column doesn\'t exist';
+      })
+    ).subscribe(columns => {
         this.columns = columns;
         columns.map((column: any) => {
         if (column.id == this.taskData.value.columnId) {
