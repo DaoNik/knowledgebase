@@ -16,12 +16,12 @@ export class ErrorModalComponent implements OnInit {
     this.messageText = this.errorService.errorMessage;
 
     setTimeout(() => {
-    this.errorService.visibleError = false
+    this.errorService.offVisible()
     }, 10000)
   }
 
   closeModal(): void {
-    this.errorService.changeVisible()
+    this.errorService.offVisible()
   }
 
 }

@@ -24,34 +24,34 @@ p {
     position: relative;
     border-radius: 20px;
     min-width: 300px;
-    min-height: 46px;
+    min-height: 45px;
     max-width: 70ch;
 
     padding: 10px 40px 10px 20px;
-    background: #eff3f6;
+    background: #ffdd2d;
 }
 
 .message__text {
     display: inline-block;
-    font-size: 22px;
-    line-height: 26px;
+    font-size: 18px;
+    line-height: 22px;
 
     @media (max-width: 1024px) {
-        font-size: 18px;
-        line-height: 22px;
+        font-size: 14px;
+        line-height: 18px;
     }
 }
 
 .icon-close {
     position: absolute;
     right: 7px;
-    top: 10px;
-    font-size: 28px;
-    width: 28px;
-    height: 28px;
+    top: 12px;
+    font-size: 22px;
+    width: 22px;
+    height: 22px;
+    cursor: pointer;
 }
 
 .icon-close:hover {
-    background: rgb(158, 158, 158);
     border-radius: 20px;
 }
