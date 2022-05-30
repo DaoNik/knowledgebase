@@ -1,0 +1,57 @@
+p {
+    margin: 0;
+}
+
+.error {
+    position: absolute;
+	top: 0;
+	right: 0;
+}
+
+.container {
+    display: flex;
+    justify-content: center;
+    padding-top: 125px;
+    padding-right: 15px;
+    padding-left: 15px;
+
+    @media (max-width: 1024px) {
+        padding-top: 100px; 
+    }
+}
+
+.message {
+    position: relative;
+    border-radius: 20px;
+    min-width: 300px;
+    min-height: 46px;
+    max-width: 70ch;
+
+    padding: 10px 40px 10px 20px;
+    background: #eff3f6;
+}
+
+.message__text {
+    display: inline-block;
+    font-size: 22px;
+    line-height: 26px;
+
+    @media (max-width: 1024px) {
+        font-size: 18px;
+        line-height: 22px;
+    }
+}
+
+.icon-close {
+    position: absolute;
+    right: 7px;
+    top: 10px;
+    font-size: 28px;
+    width: 28px;
+    height: 28px;
+}
+
+.icon-close:hover {
+    background: rgb(158, 158, 158);
+    border-radius: 20px;
+}
