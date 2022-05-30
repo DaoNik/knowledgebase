@@ -10,8 +10,9 @@ export interface ITask {
   createdAt: string;
   description: string;
   id: number;
+  contact: string;
   priority: string;
-  respondents: string[];
+  departments: string[];
   status: string;
   tags: string[];
   title: string;
@@ -27,17 +28,17 @@ export interface IBoard {
   createdAt: string;
   description: string;
   id: number;
-  respondents: string[];
+  departments: string[];
   tags: string[];
   title: string;
   updatedAt: string;
 }
 
 export interface IColumn {
-    boardId: number;
-    createdAt: string;
-    id: number;
-    title: string;
-    updatedAt: string;
-    tasks?: ITask[];
+  boardId: number;
+  createdAt: string;
+  id: number;
+  title: string;
+  updatedAt: string;
+  tasks?: ITask[];
 }

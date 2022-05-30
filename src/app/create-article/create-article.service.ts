@@ -1,7 +1,7 @@
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { IArticle } from './../interfaces/article';
 import { Inject, Injectable } from '@angular/core';
-import { Observable, of } from 'rxjs';
+import { catchError, Observable, of, throwError } from 'rxjs';
 
 @Injectable({
   providedIn: 'root',
@@ -13,15 +13,27 @@ export class CreateArticleService {
   ) {}
 
   getArticle(id: string): Observable<IArticle> {
-    return this.http.get<IArticle>(`${this.apiUrl}/${id}`);
+    return this.http.get<IArticle>(`${this.apiUrl}/${id}`).pipe(
+      catchError((error: HttpErrorResponse) => {
+        return throwError(() => error);
+      })
+    );
   }
 
   createArticle(article: IArticle): Observable<IArticle> {
-    return this.http.post<IArticle>(`${this.apiUrl}`, article);
+    return this.http.post<IArticle>(`${this.apiUrl}`, article).pipe(
+      catchError((error: HttpErrorResponse) => {
+        return throwError(() => error);
+      })
+    );
   }
 
   editArticle(id: string, article: IArticle): Observable<IArticle> {
-    return this.http.patch<IArticle>(`${this.apiUrl}/${id}`, article);
+    return this.http.patch<IArticle>(`${this.apiUrl}/${id}`, article).pipe(
+      catchError((error: HttpErrorResponse) => {
+        return throwError(() => error);
+      })
+    );
   }
 
   getTags(): Observable<string[]> {
@@ -32,7 +44,7 @@ export class CreateArticleService {
     return of(['Саша Сашин', 'Петр Петрович']);
   }
 
-  getRespondents(): Observable<string[]> {
+  getDepartments(): Observable<string[]> {
     return of([
       'Отдел разработки #1',
       'Отдел разработки #2',

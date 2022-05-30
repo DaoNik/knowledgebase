@@ -24,8 +24,8 @@ import { IArticle } from '../interfaces/article';
   styleUrls: ['./create-article.component.scss'],
 })
 export class CreateArticleComponent implements OnInit, OnDestroy {
-  @ViewChild('respondentsInput')
-  respondentsInput!: ElementRef<HTMLInputElement>;
+  @ViewChild('departmentsInput')
+  departmentsInput!: ElementRef<HTMLInputElement>;
   @ViewChild('tagsInput')
   tagsInput!: ElementRef<HTMLInputElement>;
   @ViewChild('authorsInput')
@@ -40,10 +40,10 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
   public isEditArticle!: boolean;
   public form!: FormGroup;
   public authors!: string[];
-  public respondents!: string[];
+  public departments!: string[];
   public categories!: string[];
   public tags!: string[];
-  public respondentsCtrl = new FormControl('', Validators.required);
+  public departmentsCtrl = new FormControl('', Validators.required);
   public tagsCtrl = new FormControl('', Validators.required);
   public categoryCtrl = new FormControl('', Validators.required);
   public authorsCtrl = new FormControl('', Validators.required);
@@ -97,7 +97,7 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
           description: '',
           content: '',
           authors: [],
-          respondents: [],
+          departments: [],
           category: '',
           tags: [],
         });
@@ -108,7 +108,7 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
   createForm(): void {
     forkJoin([
       this.createArticleService.getAuthors(),
-      this.createArticleService.getRespondents(),
+      this.createArticleService.getDepartments(),
       this.createArticleService.getTags(),
       this.createArticleService.getCategories(),
       this.article$,
@@ -116,7 +116,7 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
       .pipe(
         map((data) => {
           this.authors = data[0];
-          this.respondents = data[1];
+          this.departments = data[1];
           this.tags = data[2];
           this.categories = data[3];
 
@@ -128,8 +128,8 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
           this.authors = this.authors.filter((author) => author !== editAuthor);
         });
 
-        article.respondents.forEach((editRespondent) => {
-          this.respondents = this.respondents.filter(
+        article.departments.forEach((editRespondent) => {
+          this.departments = this.departments.filter(
             (respondent) => respondent !== editRespondent
           );
         });
@@ -164,7 +164,7 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
             Validators.required,
             Validators.minLength(1),
           ]),
-          respondents: new FormControl(article.respondents, [
+          departments: new FormControl(article.departments, [
             Validators.required,
             Validators.minLength(1),
           ]),
@@ -199,8 +199,8 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
         chipsCtrl = this.categoryCtrl;
         chips = this.categories;
       } else {
-        chipsCtrl = this.respondentsCtrl;
-        chips = this.respondents;
+        chipsCtrl = this.departmentsCtrl;
+        chips = this.departments;
       }
 
       this.chipsLoaded = true;
@@ -235,7 +235,7 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
         content: this.form.get('content')?.value.trim(),
         authors: this.form.get('authors')?.value,
         category: this.form.get('category')?.value[0],
-        respondents: this.form.get('respondents')?.value,
+        departments: this.form.get('departments')?.value,
         tags: this.form.get('tags')?.value,
       };
 
@@ -253,9 +253,9 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
     }
   }
 
-  getCtrl(ctrl: string): string[] {
-    if (ctrl === 'respondents') {
-      return this.respondents;
+  getChips(ctrl: string): string[] {
+    if (ctrl === 'departments') {
+      return this.departments;
     } else if (ctrl === 'tags') {
       return this.tags;
     } else if (ctrl === 'category') {
@@ -267,7 +267,7 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
 
   removeChip(chip: string, ctrl: string): void {
     const control = this.form.get(ctrl);
-    let chips = this.getCtrl(ctrl);
+    const chips = this.getChips(ctrl);
 
     chips.push(chip);
 
@@ -283,7 +283,7 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
     chipCtrl: FormControl
   ): void {
     const control = this.form.get(ctrl);
-    let chips = this.getCtrl(ctrl);
+    const chips = this.getChips(ctrl);
 
     chips.splice(chips.indexOf(event.option.viewValue), 1);
     control?.patchValue([...control?.value, event.option.viewValue]);
@@ -311,17 +311,17 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
   resetForm(): void {
     const category = this.form.get('category')?.value;
     const tags = this.form.get('tags')?.value;
-    const respondents = this.form.get('respondents')?.value;
+    const departments = this.form.get('departments')?.value;
     const authors = this.form.get('authors')?.value;
 
     this.categories = [...this.categories, ...category];
     this.tags = [...this.tags, ...tags];
-    this.respondents = [...this.respondents, ...respondents];
+    this.departments = [...this.departments, ...departments];
     this.authors = [...this.authors, ...authors];
 
     this.categoryCtrl.reset();
     this.tagsCtrl.reset();
-    this.respondentsCtrl.reset();
+    this.departmentsCtrl.reset();
     this.authorsCtrl.reset();
 
     this.form.reset({
@@ -330,7 +330,7 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
       content: '',
       category: [],
       tags: [],
-      respondents: [],
+      departments: [],
       authors: [],
     });
   }

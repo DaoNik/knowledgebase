@@ -24,7 +24,7 @@ export class ModalTaskEntryComponent {
       width: '90%'
     });
     
-    dialogRef.afterClosed().subscribe(result => {
+    dialogRef.afterClosed().subscribe(() => {
       this.router.navigate(['../'], { relativeTo: this.route });
     });
   }

@@ -1,6 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { mergeMap } from 'rxjs';
+import { mergeMap, Subscription } from 'rxjs';
 import { IArticle } from 'src/app/interfaces/article';
 import { AdminPanelService } from '../../admin-panel.service';
 
@@ -9,12 +9,13 @@ interface adminArticle {
   header: string;
   tags: string[];
   teamlead: string[];
-};
+}
 
 const mockArticles: adminArticle[] = [
   {
     id: 'id10',
-    header: 'A 100 способов сделать это...100 способов сделать это...100 способов сделать это...',
+    header:
+      'A 100 способов сделать это...100 способов сделать это...100 способов сделать это...',
     tags: ['тег1', 'тег2'],
     teamlead: ['username', 'username2', 'username3'],
   },
@@ -53,7 +54,7 @@ const mockArticles: adminArticle[] = [
     header: '100 способов сделать это...',
     tags: ['тег1', 'тег2', 'тег4'],
     teamlead: ['username'],
-  }
+  },
 ];
 
 @Component({
@@ -61,8 +62,9 @@ const mockArticles: adminArticle[] = [
   templateUrl: './articles-table.component.html',
   styleUrls: ['./articles-table.component.scss'],
 })
-export class ArticlesTableComponent implements OnInit {
+export class ArticlesTableComponent implements OnInit, OnDestroy {
   articles: IArticle[] = [];
+  subscriptionCategoryListed$!: Subscription;
   articlesOnPage: number = 3;
   pages: number[] = [];
 
@@ -75,21 +77,25 @@ export class ArticlesTableComponent implements OnInit {
   search: FormControl = new FormControl('');
   tagInput: FormControl = new FormControl('');
 
-  constructor(private adminService: AdminPanelService) { }
+  constructor(private adminService: AdminPanelService) {}
 
   ngOnInit(): void {
-    this.adminService.categoryListed.pipe(
-      mergeMap(topic => this.adminService.getArticles(topic))
-    ).subscribe((articles) => {
-      this.articles = articles;
-      this.currentPageArticles = this.articles.slice(0, this.articlesOnPage);
-      this.countPages();
-    });
+    this.subscriptionCategoryListed$ = this.adminService.categoryListed
+      .pipe(mergeMap((topic) => this.adminService.getArticles(topic)))
+      .subscribe((articles) => {
+        this.articles = articles;
+        this.currentPageArticles = this.articles.slice(0, this.articlesOnPage);
+        this.countPages();
+      });
+  }
+
+  ngOnDestroy() {
+    this.subscriptionCategoryListed$.unsubscribe();
   }
 
   countPages(): void {
     this.pages = [];
-    for (let i = 0; i < (this.articles.length / this.articlesOnPage); i++) {
+    for (let i = 0; i < this.articles.length / this.articlesOnPage; i++) {
       this.pages.push(i + 1);
     }
   }
@@ -97,18 +103,23 @@ export class ArticlesTableComponent implements OnInit {
   pageClick(page: number): void {
     this.currentPage = page;
     const startArticle: number = (page - 1) * this.articlesOnPage;
-    this.currentPageArticles = this.articles.slice(startArticle, startArticle + this.articlesOnPage);
+    this.currentPageArticles = this.articles.slice(
+      startArticle,
+      startArticle + this.articlesOnPage
+    );
   }
 
   deleteArticle(articleId: string) {
-    this.articles.splice(this.articles.findIndex(article => article._id === articleId), 1);
+    this.articles.splice(
+      this.articles.findIndex((article) => article._id === articleId),
+      1
+    );
     this.pageClick(this.currentPage);
     this.countPages();
     this.adminService.deleteArticle(articleId).subscribe();
   }
 
   deleteCheckedArticles() {
-    
     this.checkedArticles.forEach((article) => {
       this.deleteArticle(article);
     });
@@ -132,16 +143,16 @@ export class ArticlesTableComponent implements OnInit {
     return prev.authors[0] < next.authors[0]
       ? -1
       : prev.authors[0] > next.authors[0]
-        ? 1
-        : 0;
+      ? 1
+      : 0;
   }
 
-  sortByRespondents(prev: IArticle, next: IArticle): number {
-    return prev.respondents[0] < next.respondents[0]
+  sortByDepartments(prev: IArticle, next: IArticle): number {
+    return prev.departments[0] < next.departments[0]
       ? -1
-      : prev.respondents[0] > next.respondents[0]
-        ? 1
-        : 0;
+      : prev.departments[0] > next.departments[0]
+      ? 1
+      : 0;
   }
 
   sortByTags(prev: adminArticle, next: adminArticle): number {
@@ -156,8 +167,8 @@ export class ArticlesTableComponent implements OnInit {
 
   sortByFlag(flag: string): void {
     switch (flag) {
-      case 'respondents':
-        this.articles = this.articles.sort(this.sortByRespondents);
+      case 'departments':
+        this.articles = this.articles.sort(this.sortByDepartments);
         break;
       case 'header':
         this.articles = this.articles.sort(this.sortByAlphabet);
@@ -174,5 +185,4 @@ export class ArticlesTableComponent implements OnInit {
     this.pageClick(this.currentPage);
     this.countPages();
   }
-
 }

@@ -1,14 +1,23 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import {
   CdkDragDrop,
   moveItemInArray,
   transferArrayItem,
 } from '@angular/cdk/drag-drop';
-import { ModalTaskService } from '../modal-task/modal-task.service';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
+import { FormControl, Validators } from '@angular/forms';
 import { IBoard, IColumn } from '../interfaces/taskList.interface';
-import { ActivatedRoute, Router } from '@angular/router';
 import { TasksManagerService } from '../tasks-manager.service';
+import { ErrorStateMatcher } from '@angular/material/core';
+
+export class LengthErrorStateMatcher implements ErrorStateMatcher {
+  isErrorState(control: FormControl): boolean {
+    if (control && control?.value.trim().length < 4) {
+      return control.invalid && (control.dirty || control.touched);
+    }
+    
+    return false;
+  }
+}
 
 @Component({
   selector: 'app-task-lists',
@@ -16,41 +25,37 @@ import { TasksManagerService } from '../tasks-manager.service';
   styleUrls: ['./task-lists.component.scss'],
 })
 export class TaskListsComponent implements OnInit {
-  changerColumn = new Map();
-  isHidden: boolean = false;
-  isHiddenColumn: boolean = false;
-
+  isColumnChangeOpen = new Map();
+  isTaskAddOpen = new Map();
+  isColumnAddOpen: boolean = false;
+  matcher = new LengthErrorStateMatcher();
   board!: IBoard;
-  priority: string[] = ['Inconsiderable', 'Medium', 'Important'];
-  status: string[] = ['To Do', 'In Progress', 'Done'];
-  columnId!: number;
+  columns!: IColumn[];
+  author = 'Заглушка';
+
   taskId!: number;
 
-  public form!: FormGroup;
-  public formColumns!: FormGroup;
+  public newColumn!: FormControl;
+  public newTask!: FormControl;
+
   public formChangeName: any[] = [];
 
+  @ViewChild('input') input!: ElementRef<HTMLInputElement>;
+
   constructor(
-    private modalServ: ModalTaskService,
-    private router: Router,
     private taskServ: TasksManagerService
   ) {
-    this.form = new FormGroup({
-      title: new FormControl('', [
-        Validators.required,
-        Validators.minLength(4),
-        Validators.maxLength(100),
-      ]),
-      priority: new FormControl('Medium', Validators.required),
-      status: new FormControl('To Do', Validators.required),
-    });
-    this.formColumns = new FormGroup({
-      columnName: new FormControl('', [
-        Validators.required,
-        Validators.minLength(4),
-        Validators.maxLength(50),
-      ]),
-    });
+    this.newTask = new FormControl('', [
+      Validators.required,
+      Validators.minLength(4),
+      Validators.maxLength(100),
+    ]);
+
+    this.newColumn = new FormControl('', [
+      Validators.required,
+      Validators.minLength(4),
+      Validators.maxLength(50),
+    ]);
   }
 
   ngOnInit(): void {
@@ -60,7 +65,8 @@ export class TaskListsComponent implements OnInit {
           column.tasks = res.tasks;
           this.board = board;
         });
-        this.changerColumn.set(column.id, false);
+        this.isColumnChangeOpen.set(column.id, false);
+        this.isTaskAddOpen.set(column.id, true);
         this.formChangeName.push({
           id: column.id,
           control: new FormControl(column.title, Validators.minLength(4)),
@@ -70,8 +76,8 @@ export class TaskListsComponent implements OnInit {
   }
 
   onColumnHeaderClick(id: number): void {
-    this.changerColumn.set(id, true);
-    console.log(this.findFormcontrol(id));
+    this.isColumnChangeOpen.set(id, true);
+    this.input.nativeElement?.focus();
   }
 
   findFormcontrol(id: number): FormControl {
@@ -116,22 +122,11 @@ export class TaskListsComponent implements OnInit {
     this.taskServ.editTask(this.taskId, updatedData).subscribe();
   }
 
-  openTask(item: string) {
-    this.modalServ.openDialog(item);
-    this.router.navigate(['tasks-manager/tasks', item]);
-  }
-
   addToDo(columnId: number) {
-    this.isHidden = false;
+    this.isTaskAddOpen.set(columnId, true);
 
     this.taskServ
-      .createTask(
-        columnId,
-        this.form.value.title,
-        this.board.id,
-        this.form.value.priority,
-        this.form.value.status
-      )
+      .createTask(columnId, this.newTask.value, this.board.id, this.author)
       .subscribe((task) => {
         this.board.columns.forEach((column) => {
           if (column.id === columnId) {
@@ -139,25 +134,23 @@ export class TaskListsComponent implements OnInit {
           }
         });
       });
-    this.form.reset();
+    this.newTask.reset();
   }
 
   addColumn() {
-    this.taskServ
-      .createColumn(1, this.formColumns.value.columnName)
-      .subscribe((column) => {
-        this.board.columns.push(column);
-        console.log('addColumn');
-      });
-
-    this.isHiddenColumn = false;
+    this.taskServ.createColumn(1, this.newColumn.value).subscribe((column) => {
+      this.board.columns.push(column);
+    });
+    this.newColumn.reset();
+    this.isColumnAddOpen = false;
   }
 
   changeName(event: any, id: number, title: string) {
     if (event.target.value.trim() !== title && event.target.value.length >= 4) {
       this.taskServ.editColumn(id, event.target.value).subscribe(() => {
         this.board.columns[this.findColumnIdx(id)].title = event.target.value;
-        this.changerColumn.set(id, false);
+        this.isColumnChangeOpen.set(id, false);
+        this.isTaskAddOpen.set(id, true);
       });
     }
   }
@@ -166,8 +159,9 @@ export class TaskListsComponent implements OnInit {
     this.taskServ.deleteColumn(id).subscribe((id) => {
       this.board.columns.splice(this.findColumnIdx(id), 1);
     });
-    this.changerColumn.delete(id);
-    this.formColumns.reset();
+    this.isColumnChangeOpen.delete(id);
+    this.isTaskAddOpen.delete(id);
+    this.newColumn.reset();
   }
 
   findColumnIdx(columnId: number): number {
@@ -186,13 +180,14 @@ export class TaskListsComponent implements OnInit {
 
     for (let i = 0; i < column.tasks?.length!; i++) {
       if (column.tasks![i].id === taskId) {
-        taskIdx === i;
+        taskIdx = i;
       }
     }
     return taskIdx;
   }
 
-  deleteTask(id: number, columnId: number) {
+  deleteTask($event: Event, id: number, columnId: number) {
+    $event.stopPropagation();
     this.taskServ.deleteTask(id).subscribe((id) => {
       const columnIdx = this.findColumnIdx(columnId);
       const taskIdx = this.findTaskIdx(id, columnIdx);
