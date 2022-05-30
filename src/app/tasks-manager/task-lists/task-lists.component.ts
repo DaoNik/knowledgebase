@@ -65,8 +65,6 @@ export class TaskListsComponent implements OnInit {
           id: column.id,
           control: new FormControl(column.title, Validators.minLength(4)),
         });
-
-        console.log(this.formChangeName[0].value);
       });
     });
   }
