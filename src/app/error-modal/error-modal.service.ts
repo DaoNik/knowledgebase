@@ -10,8 +10,12 @@ export class ErrorModalService {
   public visibleError: boolean = false;
   public errorMessage: string = '';
 
-  public changeVisible(): boolean {
-    return this.visibleError = !this.visibleError;
+  public offVisible(): boolean {
+    return this.visibleError = false;
+  }
+
+  public onVisible(): boolean {
+    return this.visibleError = true;
   }
 
   public changeErrorMessage(message: string): string {
