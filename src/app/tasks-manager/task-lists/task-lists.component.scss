@@ -179,7 +179,7 @@ mat-form-field {
   animation: animateC 2s linear infinite;
 }
 
-span {
+.ring-animate {
   display: block;
   position: absolute;
   top: calc(50% - 2px);
@@ -191,7 +191,7 @@ span {
   animation: animate 2s linear infinite;
 }
 
-span:before {
+.ring-animate:before {
   content: '';
   position: absolute;
   width: 16px;

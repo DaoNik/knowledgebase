@@ -1,4 +1,4 @@
-<div class="loading ring" *ngIf="!board  && (loading$ | async)">Loading<span></span></div>
+<div class="loading ring" *ngIf="!board  && (loading$ | async)">Loading<span class="ring-animate"></span></div>
 <div *ngIf="!board">No board</div>
 
 <h2 class="board__header" *ngIf="board">{{ board.title }}</h2>
