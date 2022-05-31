@@ -264,7 +264,9 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
           : this.taskData.value.priority,
       contact: this.taskData.value.contact,
       // comments: this.taskData.value.comments,
-      description: JSON.stringify(this.taskData.value.text),
+      description: this.taskData.value.text.map((element: any) =>
+        JSON.stringify(element)
+      ),
     };
     this.taskManagerService
       .editTask(Number(this.data), updatedData)
@@ -313,21 +315,9 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
         });
 
         if (res.description.length > 0) {
-          if (res.description[0] != '[' && res.description.length > 1) {
-            this.taskData.patchValue({
-              text: [
-                {
-                  text: res.description,
-                  type: '',
-                  value: '',
-                },
-              ],
-            });
-          } else {
-            this.taskData.patchValue({
-              text: JSON.parse(res.description),
-            });
-          }
+          this.taskData.patchValue({
+            text: res.description.map((element: any) => JSON.parse(element)),
+          });
         }
       });
 
