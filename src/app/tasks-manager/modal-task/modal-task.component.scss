@@ -336,6 +336,68 @@
 				width: 90%;
 			}
 		}
+
+		.modal-task__data_comments {
+			position: relative;
+
+			.modal-task__data_comments_list {
+				display: flex;
+				flex-direction: column;
+				height: 190px;
+				overflow: auto;
+
+				.modal-task__data_comments_list_item {
+					width: 95%;
+					background: rgb(201, 201, 255);
+					margin: 5px 0;
+					border-radius: 3px;
+
+					.author {
+						font-size: 12px;
+						text-align: right;
+						padding: 3px;
+					}
+
+					.text {
+						padding: 3px;
+					}
+				}
+			}
+
+			.modal-task__data_comments_input {
+				margin: 2px 0;
+				width: 100%;
+				height: 48px;
+				display: flex;
+				flex-direction: row;
+
+				.text-wrp {
+					width: calc(100% - 60px);
+					display: flex;
+					flex-direction: column;
+					margin-right: 10px;
+
+					.comment {
+						width: 100%;
+					}
+
+					.author {
+						width: 50%;
+						min-width: 50px;
+						margin: auto 0 0 auto;
+					}
+				}
+
+				.btn-wrp {
+					height: 48px;
+					
+					button {
+						line-height: 48px;
+					}
+				}
+				
+			}
+		}
 	}
 
 	.modal-task__loading {
@@ -364,7 +426,6 @@
 		.modal-task__data {
 			position: relative;
 			width: 100%;
-			// height: fit-content;
 		}
 	}
 }

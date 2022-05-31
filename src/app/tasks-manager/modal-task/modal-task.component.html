@@ -203,6 +203,29 @@
 
 				<mat-tab label="Комментарии">
 					<div class="modal-task__data_comments">
+						<div class="modal-task__data_comments_list" id="commentList" #commentList>
+							<div class="modal-task__data_comments_list_item" *ngFor="let item of taskData.value.comments">
+								<div class="author">
+									by {{item.author}}
+								</div>
+								<div class="text">
+									{{item.text}}
+								</div>
+							</div>
+						</div>
+						<form class="modal-task__data_comments_input" [formGroup]="commentForm">
+							<div class="text-wrp" (keyup.enter)="sendComment()">
+								<input type="text" class="comment" placeholder="Ваш комментарий" 
+								value={{commentForm.value.text}} formControlName="text"  />
+								<input type="text" class="author" placeholder="Ваш ник" 
+								value={{commentForm.value.author}} formControlName="author" />
+							</div>
+							<div class="btn-wrp">
+								<button mat-raised-button color="primary" (click)="sendComment()">
+									<mat-icon>send</mat-icon>
+								</button>
+							</div>
+						</form>
 					</div>
 				</mat-tab>
 
