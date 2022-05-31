@@ -38,8 +38,6 @@ export class TaskListsComponent implements OnInit {
   public newColumn!: FormControl;
   public newTask!: FormControl;
 
-  public formChangeName: any[] = [];
-
 
   constructor(
     private taskServ: TasksManagerService
@@ -59,33 +57,20 @@ export class TaskListsComponent implements OnInit {
 
   ngOnInit(): void {
     this.taskServ.getBoard().subscribe((board) => {
+      this.board = board;
+      console.log(this.board);
       board.columns.forEach((column) => {
         this.taskServ.getColumn(column.id).subscribe((res) => {
           column.tasks = res.tasks;
-          this.board = board;
         });
         this.isColumnChangeOpen.set(column.id, false);
         this.isTaskAddOpen.set(column.id, true);
-        this.formChangeName.push({
-          id: column.id,
-          control: new FormControl(column.title, Validators.minLength(4)),
-        });
       });
     });
   }
 
   onColumnHeaderClick(id: number): void {
     this.isColumnChangeOpen.set(id, true);
-  }
-
-  findFormcontrol(id: number): FormControl {
-    let res: FormControl = new FormControl();
-    this.formChangeName.forEach((control) => {
-      if (control.id === id) {
-        res = control.control;
-      }
-    });
-    return res;
   }
 
   getColumns(): void {

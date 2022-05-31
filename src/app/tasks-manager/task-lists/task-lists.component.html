@@ -21,7 +21,6 @@
           value="{{ column.title }}"
           (keydown.enter)="changeName($event, column.id, column.title)"
           (blur)="isColumnChangeOpen.set(column.id, false)"
-          [formControl]="findFormcontrol(column.id)"
           [errorStateMatcher]="matcher"
           #input
         />
