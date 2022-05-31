@@ -10,7 +10,7 @@ export class ModalFormComponent {
 
   constructor(
     public dialogRef: MatDialogRef<ModalFormComponent>,
-    @Inject(MAT_DIALOG_DATA) public data: any,
+    @Inject(MAT_DIALOG_DATA) public error: string,
   ) {}
 
   closeModal(): void {

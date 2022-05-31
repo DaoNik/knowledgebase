@@ -83,7 +83,7 @@ export class TasksManagerService {
   // Columns
 
   getColumns() {
-    return this.http.get<any>(`${this.url}/columns`).pipe(
+    return this.http.get<IColumn[]>(`${this.url}/columns`).pipe(
       catchError((error: HttpErrorResponse) => {
         this.errorService.errorMessage =
           error.error.message[error.error.message.length - 1];
