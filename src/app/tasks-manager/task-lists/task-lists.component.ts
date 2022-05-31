@@ -8,6 +8,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { IBoard, IColumn } from '../interfaces/taskList.interface';
 import { TasksManagerService } from '../tasks-manager.service';
 import { ErrorStateMatcher } from '@angular/material/core';
+import { delay, Observable } from 'rxjs';
 
 export class LengthErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl): boolean {
@@ -38,6 +39,8 @@ export class TaskListsComponent implements OnInit {
   public newColumn!: FormControl;
   public newTask!: FormControl;
 
+  public loading$!: Observable<boolean>;
+  public board$!: Observable<IBoard>;
   public formChangeName: any[] = [];
 
   @ViewChild('input') input!: ElementRef<HTMLInputElement>;
@@ -59,10 +62,14 @@ export class TaskListsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.loading$ = this.taskServ.loading$.pipe(
+      delay(500)
+    )
     this.taskServ.getBoard().subscribe((board) => {
       board.columns.forEach((column) => {
         this.taskServ.getColumn(column.id).subscribe((res) => {
           column.tasks = res.tasks;
+          this.taskServ.loading$.next(false)
           this.board = board;
         });
         this.isColumnChangeOpen.set(column.id, false);

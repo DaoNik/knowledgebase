@@ -14,6 +14,11 @@ export class ErrorModalService {
     return this.visibleError = false;
   }
 
+  public visibleForError(message: string): void {
+    this.changeErrorMessage(message);
+    this.onVisible();
+  }
+
   public onVisible(): boolean {
     return this.visibleError = true;
   }
