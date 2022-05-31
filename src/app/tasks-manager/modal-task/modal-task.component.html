@@ -40,6 +40,8 @@
 				<input *ngIf="headerTrigger"
 					formControlName="title"
 					(keyup.enter)="changeTitle()"
+					(change)="titleOutlineRed = false"
+					[ngStyle]="{'border-bottom': titleOutlineRed ? '1px solid red' : ''}"
 				>
 			</div>
 			
