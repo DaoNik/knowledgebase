@@ -203,24 +203,11 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
   }
 
   sendComment() {
-    // let tmpArr = this.taskData.value.comments;
-    // tmpArr.push({
-    //   text: this.commentForm.value.text,
-    //   author: this.commentForm.value.author,
-    // });
-    // this.taskData.patchValue({
-    //   comments: tmpArr,
-    // });
-    // this.updateTaskData();
-
     this.socketsService.createTaskComment({
       text: this.commentForm.value.text,
       author: this.commentForm.value.author,
       taskId: this.taskData.value.id,
     });
-
-    console.log(this.commentForm.value.text)
-    console.log(this.commentForm.value.text.length)
 
     this.commentForm.controls['text'].reset();
     setTimeout(() => {
@@ -229,7 +216,6 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
         behavior: 'smooth',
       });
     }, 50);
-    console.log(this.taskData.value.comments)
   }
 
   ngOnInit(): void {
@@ -315,28 +301,13 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
           columnId: res.columnId,
           priority: res.priority,
           contact: res.contact,
-          // comments: res.comments,
           dateCreated: this._dateTransform(res.createdAt),
           dateUpdated: this._dateTransform(res.updatedAt),
         });
 
-        if (res.description.length > 0) {
-          if (res.description[0] != '[' && res.description.length > 1) {
-            this.taskData.patchValue({
-              text: [
-                {
-                  text: res.description,
-                  type: '',
-                  value: '',
-                },
-              ],
-            });
-          } else {
-            this.taskData.patchValue({
-              text: JSON.parse(res.description),
-            });
-          }
-        }
+        this.taskData.patchValue({
+          text: JSON.parse(res.description),
+        });
       });
 
     this.subscriptionColumn$ = this.taskManagerService
