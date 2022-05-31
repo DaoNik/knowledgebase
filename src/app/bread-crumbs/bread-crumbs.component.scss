@@ -1,0 +1,40 @@
+.bread-crumbs {
+  display: flex;
+  flex-wrap: wrap;
+  padding: 60px 10px 0;
+  margin: 0;
+  list-style: none;
+  background: #eff3f6;
+
+  @media screen and (min-width: 768px) {
+    padding: 60px 20px 0;
+  }
+
+  @media screen and (min-width: 1440px) {
+    padding: 80px 20px 0;
+  }
+}
+
+.bread-crumbs__item {
+  display: flex;
+  align-items: flex-end;
+  padding: 2px 0;
+  color: #000;
+
+  mat-icon {
+    display: block;
+    font-size: 21px;
+    height: 21px;
+  }
+}
+
+.bread-crumbs__link {
+  cursor: pointer;
+  text-decoration: none;
+  line-height: 21px;
+
+  &:hover {
+    opacity: 0.8;
+  }
+}
+

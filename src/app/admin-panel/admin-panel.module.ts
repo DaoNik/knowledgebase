@@ -14,17 +14,31 @@ import { ArticleNotListedComponent } from './article-not-listed/article-not-list
 import { NotListedTableComponent } from './article-not-listed/not-listed-table/not-listed-table.component';
 
 export const adminRoutes: Routes = [
+  { path: '', redirectTo: 'moderate', pathMatch: 'full' },
   {
-    path: '',
-    component: AdminPanelComponent,
-    children: [
-      { path: '', redirectTo: 'moderate', pathMatch: 'full' },
-      { path: 'moderate', component: ArticleTableModerationComponent },
-      { path: 'roles', component: RoleModerationComponent },
-      { path: 'create', component: CreateArticleComponent },
-      { path: 'edit/:id', component: CreateArticleComponent },
-      { path: 'not-listed', component: ArticleNotListedComponent },
-    ],
+    path: 'moderate',
+    component: ArticleTableModerationComponent,
+    data: { displayName: 'Модерирование статей' },
+  },
+  {
+    path: 'roles',
+    component: RoleModerationComponent,
+    data: { displayName: 'Назначение ролей' },
+  },
+  {
+    path: 'create',
+    component: CreateArticleComponent,
+    data: { displayName: 'Создать статью' },
+  },
+  {
+    path: 'edit/:id',
+    component: CreateArticleComponent,
+    data: { displayName: 'Редактировать статью' },
+  },
+  {
+    path: 'not-listed',
+    component: ArticleNotListedComponent,
+    data: { displayName: 'В ожидании одобрения' },
   },
 ];
 

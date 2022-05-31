@@ -1,42 +1,37 @@
-<section>
+<section class="container">
   <div class="article" *ngIf="article$ | async as article; else loading">
     <header class="article__header">
-      <h1 name="title">{{ article.title }}</h1>
-      <h2 name="category">Категория: {{ article.category }}</h2>
-      <div class="article__header__dates">
-        <p>
-          <b>Дата создания:</b>
-          {{ article.dateCreate | date: "dd/MM/yyyy HH:mm:ss" }}
-        </p>
-        <p>
-          <b>Дата обновления:</b>
-          {{ article.dateUpdate | date: "dd/MM/yyyy HH:mm:ss" }}
-        </p>
-      </div>
-      <div class="article__header__team">
-        <div class="article__header__team__authors">
-          <ul>
-            <h3>Создатели</h3>
-            <li *ngFor="let author of article.authors">
-              {{ author }}
-            </li>
-          </ul>
-        </div>
-        <div class="article__header__team__respondents">
-          <ul>
-            <h3>Отдел</h3>
-            <li *ngFor="let respondent of article.respondents">
-              {{ respondent }}
-            </li>
-          </ul>
-        </div>
-      </div>
+      <h2 class="article__title">{{ article.title }}</h2>
+      <p class="article__category">Категория: {{ article.category }}</p>
+      <!-- <p>
+            Cоздано:
+            {{ article.dateCreate | date: "dd/MM/yyyy HH:mm" }}
+          </p> -->
+      <p class="article__date">
+        Последнее обновление
+        {{ article.dateUpdate | date: "d MMMM y":"":"ru" }}
+      </p>
     </header>
-    <hr />
+
     <main class="article__main">
-      <h3>Описание</h3>
-      <p [innerHtml]="article.content"></p>
+      <h3 class="article__main-title">Описание</h3>
+      <p class="article__main-description" [innerHtml]="article.content"></p>
     </main>
+
+    <div class="article__lists">
+      <ul class="article__list">
+        <h3 class="article__list-title">Создатели</h3>
+        <li *ngFor="let author of article.authors">
+          {{ author }}
+        </li>
+      </ul>
+      <ul class="article__list">
+        <h3 class="article__list-title">Отдел</h3>
+        <li *ngFor="let respondent of article.departments">
+          {{ respondent }}
+        </li>
+      </ul>
+    </div>
   </div>
   <ng-template #loading> Loading </ng-template>
 </section>

@@ -1,0 +1,11 @@
+.delete {
+	display: flex;
+	flex-direction: column;
+	.delete__btn-wrp {
+		margin: 0 auto;
+
+		button {
+			margin: 0 5px;
+		}
+	}
+}

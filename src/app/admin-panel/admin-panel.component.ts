@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 
 interface AdminFunc {
   name: string;
@@ -37,13 +37,8 @@ const mockAdminPages: AdminFunc[] = [
   templateUrl: './admin-panel.component.html',
   styleUrls: ['./admin-panel.component.scss']
 })
-export class AdminPanelComponent implements OnInit {
+export class AdminPanelComponent {
 
   adminPages: AdminFunc[] = mockAdminPages;
-
-  constructor() { }
-
-  ngOnInit(): void {
-  }
 
 }

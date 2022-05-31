@@ -1,11 +1,14 @@
-import { Component, OnInit, ViewChild } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component, OnDestroy, OnInit } from '@angular/core';
+import { FormControl } from '@angular/forms';
+import { mergeMap, Subscription } from 'rxjs';
+import { IArticle } from 'src/app/interfaces/article';
+import { AdminPanelService } from '../../admin-panel.service';
 
 interface adminArticle {
   id: string;
   header: string;
   tags: string[];
-  teamlead: string;
+  teamlead: string[];
 }
 
 const mockArticles: adminArticle[] = [
@@ -13,44 +16,44 @@ const mockArticles: adminArticle[] = [
     id: 'id10',
     header:
       'A 100 способов сделать это...100 способов сделать это...100 способов сделать это...',
-    tags: ['тег1', 'тег2', 'тег3'],
-    teamlead: 'username',
+    tags: ['тег1', 'тег2'],
+    teamlead: ['username', 'username2', 'username3'],
   },
   {
     id: 'id20',
     header: 'B 100 способов сделать это...',
-    tags: ['тег1', 'тег2', 'тег3'],
-    teamlead: 'username',
+    tags: ['тег1', 'тег3'],
+    teamlead: ['username'],
   },
   {
     id: 'id30',
     header: 'A 100 способов сделать это...',
     tags: ['тег1', 'тег2', 'тег3'],
-    teamlead: 'username',
+    teamlead: ['username'],
   },
   {
     id: 'id40',
     header: '100 способов сделать это...',
     tags: ['тег1', 'тег2', 'тег3'],
-    teamlead: 'username',
+    teamlead: ['username'],
   },
   {
     id: 'id50',
     header: '100 способов сделать это...',
-    tags: ['тег1', 'тег2', 'тег3'],
-    teamlead: 'username',
+    tags: ['тег1', 'тег2'],
+    teamlead: ['username'],
   },
   {
     id: 'id60',
     header: '100 способов сделать это...',
-    tags: ['тег1', 'тег2', 'тег3'],
-    teamlead: 'username',
+    tags: ['тег2', 'тег3'],
+    teamlead: ['username', 'username2'],
   },
   {
     id: 'id70',
     header: '100 способов сделать это...',
-    tags: ['тег1', 'тег2', 'тег3'],
-    teamlead: 'username',
+    tags: ['тег1', 'тег2', 'тег4'],
+    teamlead: ['username'],
   },
 ];
 
@@ -59,23 +62,35 @@ const mockArticles: adminArticle[] = [
   templateUrl: './articles-table.component.html',
   styleUrls: ['./articles-table.component.scss'],
 })
-export class ArticlesTableComponent implements OnInit {
-  articles: adminArticle[] = mockArticles;
+export class ArticlesTableComponent implements OnInit, OnDestroy {
+  articles: IArticle[] = [];
+  subscriptionCategoryListed$!: Subscription;
   articlesOnPage: number = 3;
   pages: number[] = [];
 
-  currentPageArticles: adminArticle[] = this.articles.slice(
-    0,
-    this.articlesOnPage
-  );
+  currentPageArticles: IArticle[] = this.articles.slice(0, this.articlesOnPage);
   currentPage: number = 1;
 
   checkedArticles: string[] = [];
+  filterTags: string[] = [];
 
-  constructor(private router: Router) {}
+  search: FormControl = new FormControl('');
+  tagInput: FormControl = new FormControl('');
+
+  constructor(private adminService: AdminPanelService) {}
 
   ngOnInit(): void {
-    this.countPages();
+    this.subscriptionCategoryListed$ = this.adminService.categoryListed
+      .pipe(mergeMap((topic) => this.adminService.getArticles(topic)))
+      .subscribe((articles) => {
+        this.articles = articles;
+        this.currentPageArticles = this.articles.slice(0, this.articlesOnPage);
+        this.countPages();
+      });
+  }
+
+  ngOnDestroy() {
+    this.subscriptionCategoryListed$.unsubscribe();
   }
 
   countPages(): void {
@@ -96,12 +111,20 @@ export class ArticlesTableComponent implements OnInit {
 
   deleteArticle(articleId: string) {
     this.articles.splice(
-      this.articles.findIndex((article) => article.id === articleId),
+      this.articles.findIndex((article) => article._id === articleId),
       1
     );
     this.pageClick(this.currentPage);
     this.countPages();
-    //здесь запросик на удаление статьи
+    this.adminService.deleteArticle(articleId).subscribe();
+  }
+
+  deleteCheckedArticles() {
+    this.checkedArticles.forEach((article) => {
+      this.deleteArticle(article);
+    });
+    this.checkedArticles = [];
+    this.resetPage();
   }
 
   checkArticle(articleId: string): void {
@@ -112,18 +135,22 @@ export class ArticlesTableComponent implements OnInit {
     }
   }
 
-  sortByAlphabet(prev: adminArticle, next: adminArticle): number {
-    return prev.header < next.header ? -1 : prev.header > next.header ? 1 : 0;
+  sortByAlphabet(prev: IArticle, next: IArticle): number {
+    return prev.title < next.title ? -1 : prev.title > next.title ? 1 : 0;
   }
 
-  sortByID(prev: adminArticle, next: adminArticle): number {
-    return prev.id < next.id ? -1 : prev.id > next.id ? 1 : 0;
-  }
-
-  sortByTeamlead(prev: adminArticle, next: adminArticle): number {
-    return prev.teamlead < next.teamlead
+  sortByAuthors(prev: IArticle, next: IArticle): number {
+    return prev.authors[0] < next.authors[0]
       ? -1
-      : prev.teamlead > next.teamlead
+      : prev.authors[0] > next.authors[0]
+      ? 1
+      : 0;
+  }
+
+  sortByDepartments(prev: IArticle, next: IArticle): number {
+    return prev.departments[0] < next.departments[0]
+      ? -1
+      : prev.departments[0] > next.departments[0]
       ? 1
       : 0;
   }
@@ -140,19 +167,22 @@ export class ArticlesTableComponent implements OnInit {
 
   sortByFlag(flag: string): void {
     switch (flag) {
-      case 'id':
-        this.articles = this.articles.sort(this.sortByID);
+      case 'departments':
+        this.articles = this.articles.sort(this.sortByDepartments);
         break;
       case 'header':
         this.articles = this.articles.sort(this.sortByAlphabet);
         break;
-      case 'tags':
-        this.articles = this.articles.sort(this.sortByTags);
-        break;
-      case 'teamlead':
-        this.articles = this.articles.sort(this.sortByTeamlead);
+      case 'authors':
+        this.articles = this.articles.sort(this.sortByAuthors);
         break;
     }
     this.pageClick(this.currentPage);
+  }
+
+  resetPage(): void {
+    this.currentPage = 1;
+    this.pageClick(this.currentPage);
+    this.countPages();
   }
 }

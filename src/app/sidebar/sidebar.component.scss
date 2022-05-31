@@ -83,7 +83,7 @@
   margin: 0;
   z-index: 2;
 
-  background: linear-gradient(90deg, #dd57cf,#680f69);
+  background: linear-gradient(90deg, #c24eb6, #8d4686, #680f69);
   border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 
   @media (min-width: 1440px) {
@@ -117,11 +117,13 @@
 
 // Элементы
 .sidebar__item {
-  display: block;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
   padding: 22px 24px;
   color: rgb(255, 255, 255);
 
-  font-family: 'Roboto', sans-serif;
   font-size: 26px;
   font-weight: 500;
   line-height: 30px;
@@ -140,12 +142,22 @@
     padding: 18px 20px;
   }
 }
+
+.sidebar__item_admin {
+  display: block;
+
+  mat-icon {
+    line-height: 18px;
+    vertical-align: middle;
+  }
+}
+
 .sidebar__item:hover {
   background-color: rgba(180, 180, 180, .5);
 }
 
 .sidebar__more__info {
-  border-top: 1px solid rgb(88, 79, 79);
+  border-top: 1px solid #a45ba2;
 }
 
 .sidebar__link_person {

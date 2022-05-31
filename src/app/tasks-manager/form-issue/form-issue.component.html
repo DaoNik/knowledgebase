@@ -1,0 +1,72 @@
+<form class="form-issue" [formGroup]="issueForm" (submit)="onSubmit()">
+  <h2 class="form-issue__title">Опишите вашу проблему</h2>
+  <label class="form-issue__label">Введите ваше ФИО/ФИ*</label>
+  <input
+    class="form-issue__input"
+    formControlName="name"
+    type="text"
+    placeholder="ваши инициалы"
+  />
+  <label class="form-issue__label">Введите название (от 4 до 100 символов)*</label>
+  <input
+    class="form-issue__input"
+    formControlName="title"
+    type="text"
+    placeholder="ваше название"
+  />
+  <label class="form-issue__label">Введите ваш склад/блок/департамент*</label>
+  <input
+    class="form-issue__input"
+    formControlName="department"
+    type="text"
+    placeholder="ваше рабочее место, название службы"
+  />
+  <label class="form-issue__label">Введите описание проблемы (от 10 до 1000 символов)*</label>
+  <textarea
+    class="form-issue__textarea"
+    placeholder="Опишите вашу проблему"
+    formControlName="description"
+  ></textarea>
+  <mat-form-field appearance="fill">
+    <mat-label>Теги проблемы*</mat-label>
+    <mat-chip-list #chipList aria-label="Fruit selection">
+      <mat-chip *ngFor="let tag of tags" (removed)="remove(tag)">
+        {{ tag }}
+        <button matChipRemove>
+          <mat-icon>cancel</mat-icon>
+        </button>
+      </mat-chip>
+      <input
+        placeholder="Новый тег..."
+        #tagInput
+        [formControl]="tagCtrl"
+        [matAutocomplete]="auto"
+        [matChipInputFor]="chipList"
+      />
+    </mat-chip-list>
+    <mat-autocomplete
+      #auto="matAutocomplete"
+      (optionSelected)="selected($event)"
+    >
+      <mat-option *ngFor="let tag of filteredTags | async" [value]="tag">
+        {{ tag }}
+      </mat-option>
+    </mat-autocomplete>
+  </mat-form-field>
+  <label class="form-issue__label">Выберите категорию*</label>
+  <select class="form-issue__select" formControlName="category">
+    <option *ngFor="let tag of allTags">{{ tag }}</option>
+  </select>
+  <div class="form-issue__buttons">
+    <button mat-raised-button class="form-issue__reset" type="reset">Очистить форму</button>
+    <button
+      mat-raised-button
+      class="form-issue__submit"
+      type="submit"
+      [disabled]="issueForm.invalid"
+      (click)="[createTask(), openDialog()]"
+    >
+      Сообщить о проблеме
+    </button>
+  </div>
+</form>

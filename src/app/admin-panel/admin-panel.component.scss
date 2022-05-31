@@ -1,13 +1,10 @@
 .admin-panel {
-  padding: 80px 10px 10px;
+  padding: 10px;
 
   @media screen and (min-width: 768px) {
-    padding: 80px 20px 20px;
+    padding: 20px;
   }
 
-  @media screen and (min-width: 1440px) {
-    padding-top: 100px;
-  }
 }
 
 
@@ -27,6 +24,4 @@
 .admin-content {
   padding: 10px;
   border: 2px solid #673ab7;
-
-
 }

@@ -2,11 +2,13 @@ import { NgModule, Provider } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { ReactiveFormsModule, FormsModule } from '@angular/forms';
 import { HttpClientModule } from '@angular/common/http';
+import { TasksManagerModule } from './tasks-manager/tasks-manager.module';
 
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
 import { HeaderComponent } from './header/header.component';
 
+import { MatProgressBarModule } from '@angular/material/progress-bar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
 import { MatAutocompleteModule } from '@angular/material/autocomplete';
@@ -24,8 +26,19 @@ import { MatChipsModule } from '@angular/material/chips';
 import { FeedbackComponent } from './footer/feedback/feedback.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatSnackBarModule } from '@angular/material/snack-bar';
+import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ArticleComponent } from './article/article.component';
 import { SearchResultsComponent } from './search-results/search-results.component';
+import { BreadCrumbsComponent } from './bread-crumbs/bread-crumbs.component';
+
+// Для пайпа даты
+import { registerLocaleData } from '@angular/common';
+import localeRu from '@angular/common/locales/ru';
+import { NotFoundComponent } from './not-found/not-found.component';
+import { ClickAwayDirective } from './direct/click-away.directive';
+import { ModalTaskEntryComponent } from './tasks-manager/modal-task/modal-task-entry.component';
+registerLocaleData(localeRu);
 
 const API_URL_PROVIDER: Provider = {
   provide: 'API_URL',
@@ -44,6 +57,10 @@ const API_URL_PROVIDER: Provider = {
     FeedbackComponent,
     ArticleComponent,
     SearchResultsComponent,
+    BreadCrumbsComponent,
+    NotFoundComponent,
+    ClickAwayDirective,
+    ModalTaskEntryComponent,
   ],
   imports: [
     BrowserModule,
@@ -69,6 +86,10 @@ const API_URL_PROVIDER: Provider = {
     MatDialogModule,
     MatFormFieldModule,
     HttpClientModule,
+    TasksManagerModule,
+    MatProgressBarModule,
+    MatSnackBarModule,
+    MatProgressSpinnerModule
   ],
   providers: [API_URL_PROVIDER],
   bootstrap: [AppComponent],

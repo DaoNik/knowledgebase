@@ -4,9 +4,9 @@ export interface IArticle {
   description: string;
   dateCreate?: string;
   dateUpdate?: string;
-  content?: string;
+  content: string;
   authors: string[];
-  respondents: string[];
+  departments: string[];
   tags: string[];
   category: string;
 }

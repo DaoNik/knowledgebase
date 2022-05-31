@@ -24,7 +24,7 @@
 
 .header__text {
   display: inline-block;
-
+  padding-right: 10px;
   font-family: 'Rajdhani', sans-serif;
   font-size: 50px;
   font-weight: 600;
@@ -36,19 +36,30 @@
   @media (max-width: 890px) {
     font-size: 40px;
   }
-  @media (max-width: 560px) {
+  @media (max-width: 670px) {
+    font-size: 30px;
+  }
+  @media (max-width: 635px) {
     margin-left: 0;
     font-size: 30px;
   }
-  @media (max-width: 500px) {
+  @media (max-width: 540px) {
     display: none;
   }
 }
 
 .header__nav {
   width: 70%;
-
+  height: 40px;
   z-index: 1;
+
+  @media (max-width: 890px) {
+    width: 65%;
+  }
+
+  @media (max-width: 540px) {
+    width: 80%;
+  }
 }
 
 .header__link {

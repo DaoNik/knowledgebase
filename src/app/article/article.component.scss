@@ -1,44 +1,82 @@
-.article {
-    position: absolute;
-    top: 8vh;
+.container {
     margin: 0 auto;
-    width: 100%;
-    border: 2px solid grey;
-    box-shadow: 2px 2px 4px skyblue;
-    padding: 10px 10px 40px 10px;
-    background: rgb(230,192,227);
-    background: linear-gradient(90deg, rgba(230,192,227,1) 0%, rgba(231,201,230,1) 19%, rgba(214,179,215,1) 38%, rgba(210,202,210,1) 61%, rgba(212,191,233,1) 82%, rgba(237,241,241,1) 100%);
+    max-width: 1028px;
+}
 
-    hr {
-        margin: 20px 0 20px 0;
-    }
+.article {
+    width: 100%;
+    padding: 0 20px 40px;
 
     &__header {
+        text-align: start;
+        padding: 20px 0;
+        border-bottom: 1px solid grey;
+    }
 
-        h1, h2 {
-            text-align: center;
-        }
+    &__title {
+      margin: 0 0 20px;
+      font-size: 28px;
+      line-height: 1.1071428571;
+      font-weight: 600;
+      letter-spacing: -.015em;
 
-        &__dates {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 1rem;
-        }
+      @media (max-width: 768px) {
+        font-size: 24px;
+      }
+    }
 
-        &__team {
-            display: flex;
-            flex-wrap: wrap;
-            justify-content: center;
-            gap: 1rem;
-        }
+    &__category {
+      margin-bottom: 20px;
+      font-size: 22px;
 
+      @media (max-width: 768px) {
+        font-size: 20px;
+      }
+    }
+
+    &__date {
+      font-style: italic;
     }
 
     &__main {
-        h3 {
-            text-align: center;
+      padding: 20px 0;
+
+        &-description {
+            margin: 10px 0 0;
         }
     }
 
+    &__main-title {
+      margin: 0;
+      text-align: start;
+      font-weight: bold;
+      font-size: 20px;
+
+      @media (max-width: 768px) {
+        font-size: 18px;
+      }
+    }
+
+    &__lists {
+      display: flex;
+      flex-direction: column;
+    }
+
+    &__list {
+      padding: 0;
+      list-style: none;
+      margin: 0;
+      margin-bottom: 15px;
+    }
+
+    &__list-title {
+      margin-bottom: 5px;
+      font-weight: bold;
+      font-size: 18px;
+
+      @media (max-width: 768px) {
+        font-size: 16px;
+      }
+    }
 }
+

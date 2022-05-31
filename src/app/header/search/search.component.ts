@@ -1,7 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
-import { map, Observable, startWith } from 'rxjs';
+import { map, Observable, startWith, Subscription } from 'rxjs';
 import { IArticle } from 'src/app/interfaces/article';
 import { SearchService } from './search.service';
 
@@ -14,7 +14,8 @@ interface IFilter {
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.scss'],
 })
-export class SearchComponent implements OnInit {
+export class SearchComponent implements OnInit, OnDestroy {
+  @Input('bgColor') bgColor!: boolean;
   searchQuery = new FormControl();
   results: string[] = ['One', 'Two', 'Three'];
   filterOptions: IFilter[] = [
@@ -42,8 +43,13 @@ export class SearchComponent implements OnInit {
       title: 'Пункты выдачи',
       status: true,
     },
+    {
+      title: 'JS',
+      status: true,
+    },
   ];
   filteredResults!: Observable<IArticle[]>;
+  subscriptionArticles$!: Subscription;
   foundArticles!: IArticle[];
 
   constructor(private searchService: SearchService, private router: Router) {}
@@ -53,9 +59,13 @@ export class SearchComponent implements OnInit {
       startWith(''),
       map((value) => this._filter(value))
     );
-    this.searchService
+    this.subscriptionArticles$ = this.searchService
       .getArticles()
       .subscribe((articles: IArticle[]) => (this.foundArticles = articles));
+  }
+
+  ngOnDestroy() {
+    this.subscriptionArticles$.unsubscribe();
   }
 
   private _filter(value: string): IArticle[] {
@@ -71,7 +81,8 @@ export class SearchComponent implements OnInit {
     return this.foundArticles
       ? this.foundArticles.filter(
           (result) =>
-            result.title.toLowerCase().includes(filterValue) &&
+            (result.title.toLowerCase().includes(filterValue) ||
+              result.description.toLowerCase().includes(filterValue)) &&
             filterTags.includes(result.category)
         )
       : this.foundArticles;
@@ -85,6 +96,7 @@ export class SearchComponent implements OnInit {
       .map((item) => {
         return item.title;
       });
+    this.searchService.goToSearchResults(this.searchQuery.value, filterTags);
   }
 
   goToArticle(id: string) {

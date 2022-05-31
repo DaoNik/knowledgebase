@@ -1,0 +1,77 @@
+.form-issue {
+  display: flex;
+  flex-direction: column;
+  row-gap: 20px;
+  max-width: 800px;
+  margin: 0 auto;
+  margin-bottom: 10px;
+  border: 1px solid #fff;
+  padding: 30px;
+  border-radius: 15px;
+  z-index: -2;
+  background-color: #fff;
+}
+
+.form-issue__title {
+  margin: 0;
+}
+
+.form-issue__input {
+  padding: 10px;
+  border-radius: 5px;
+}
+
+.form-issue__textarea {
+  border-radius: 5px;
+  padding: 5px;
+  min-height: 100px;
+  max-height: 200px;
+}
+
+.form-issue__multiple {
+  overflow: auto;
+  padding: 5px;
+  border-radius: 5px;
+}
+
+.form-issue__select {
+  padding: 5px;
+  border-radius: 5px;
+}
+.form-issue__buttons {
+  display: flex;
+  justify-content: center;
+  gap: 20px;
+}
+
+.form-issue__reset {
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  color: rgb(245, 245, 245);
+  padding: 10px;
+  font-size: 100%;
+  line-height: 1.15;
+  background-color: rgb(243, 43, 42);
+}
+
+.form-issue__submit {
+  border-radius: 10px;
+  border: none;
+  cursor: pointer;
+  color: rgb(245, 245, 245);
+  padding: 10px;
+  background: linear-gradient(90deg, #c24eb6, #8d4686, #680f69);
+}
+
+.form-issue__submit:disabled {
+  cursor: auto;
+}
+
+.form-issue__submit:disabled:hover {
+  background: linear-gradient(90deg, #c24eb6, #8d4686, #680f69);
+}
+
+.form-issue__submit:hover {
+  background: linear-gradient(180deg, #dd57cf, #c24eb6);
+}

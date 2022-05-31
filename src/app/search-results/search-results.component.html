@@ -1,22 +1,37 @@
 <main class="main">
-  <ul class="main__articles" *ngIf="articles.length > 0; else noResults">
+  <ul class="articles">
     <li
-      class="main__articles_item"
-      *ngFor="let article of articles; let i = index"
+      class="articles__item"
+      *ngFor="let article of currentPageArticles; let i = index"
       (click)="openArticle(article._id!)"
     >
-      <a class="main__articles_item-link">
-        <h3 class="main__articles_item-title">{{ article.title }}</h3>
-        <p class="main__articles_item-date">
+      <a class="articles__item-link">
+        <h3 class="articles__item-title">{{ article.title }}</h3>
+        <p class="articles__item-date">
           Последнее обновление:
-          {{ article.dateUpdate | date: "dd/MM/yyyy" }}
+          {{ article.dateUpdate | date: "d MMMM y":"":"ru" }}
         </p>
-        <p class="main__articles_item-description">{{ article.description }}</p>
+        <p class="articles__item-description">{{ article.description }}</p>
+        <p class="articles__item-read">Читать статью</p>
       </a>
     </li>
+    <p class="articles__no-articles" *ngIf="articles.length < 1">
+      К сожалению нет подходящих статей
+    </p>
   </ul>
-
-  <ng-template #noResults>
-    <div class="main__empty-articles-list">Nothing was found</div>
-  </ng-template>
+  <ul class="articles__pagination-list">
+    <li class="articles__pagination-item" *ngFor="let page of pages">
+      <button
+        color="primary"
+        mat-raised-button
+        class="articles__pagination-link"
+        (click)="pageClick(page)"
+        [class]="
+          currentPage === page ? 'articles__pagination-link--active' : ''
+        "
+      >
+        {{ page }}
+      </button>
+    </li>
+  </ul>
 </main>

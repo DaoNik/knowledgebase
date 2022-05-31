@@ -1,28 +1,24 @@
-import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { Component } from '@angular/core';
+import { AdminPanelService } from '../admin-panel.service';
 
-const mockTopics: string[] = [
-  'Тема 1', 'Тема 2'
-];
+const mockTopics: string[] = ['Склад', 'Базы данных'];
 
 @Component({
   selector: 'app-article-not-listed',
   templateUrl: './article-not-listed.component.html',
-  styleUrls: ['./article-not-listed.component.scss']
+  styleUrls: ['./article-not-listed.component.scss'],
 })
-export class ArticleNotListedComponent implements OnInit {
-
+export class ArticleNotListedComponent {
   topics: string[] = mockTopics;
-  currentTopic: string = this.topics[0];
+  currentTopic: string = localStorage.getItem('categoryNotListed') || 'Склад';
 
-  constructor(private router: Router) { }
-
-  ngOnInit(): void {
-  }
+  constructor(
+    private adminPanelService: AdminPanelService
+  ) {}
 
   clickTopic(topic: string): void {
-    //здесь запрос на статьи по теме
+    this.adminPanelService.categoryNotListed.next(topic);
     this.currentTopic = topic;
+    localStorage.setItem('categoryNotListed', topic)
   }
-
 }

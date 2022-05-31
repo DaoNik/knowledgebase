@@ -15,7 +15,7 @@ import {
 } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
-import { map, Observable, startWith, Subject } from 'rxjs';
+import { forkJoin, map, Observable, of, startWith, Subject } from 'rxjs';
 import { IArticle } from '../interfaces/article';
 
 @Component({
@@ -24,33 +24,28 @@ import { IArticle } from '../interfaces/article';
   styleUrls: ['./create-article.component.scss'],
 })
 export class CreateArticleComponent implements OnInit, OnDestroy {
-  @ViewChild('respondentsInput')
-  respondentsInput!: ElementRef<HTMLInputElement>;
+  @ViewChild('departmentsInput')
+  departmentsInput!: ElementRef<HTMLInputElement>;
   @ViewChild('tagsInput')
   tagsInput!: ElementRef<HTMLInputElement>;
   @ViewChild('authorsInput')
   authorsInput!: ElementRef<HTMLInputElement>;
+  @ViewChild('categoryInput')
+  categoryInput!: ElementRef<HTMLInputElement>;
 
+  public formSubmitted = false;
+  public formLoaded = false;
   public article$!: Observable<IArticle>;
   public articleId!: string;
   public isEditArticle!: boolean;
   public form!: FormGroup;
-  public authors = ['Саша Сашин', 'Петр Петрович'];
-  public respondents = [
-    'Отдел разработки #1',
-    'Отдел разработки #2',
-    'Отдел разработки #3',
-  ];
-  public categories = [
-    'Склад',
-    'Пункты выдачи',
-    'Клиентская сторона',
-    'Серверная сторона',
-    'Логистика',
-  ];
-  public tags = ['Frontend', 'Backend', 'БД'];
-  public respondentsCtrl = new FormControl('', Validators.required);
+  public authors!: string[];
+  public departments!: string[];
+  public categories!: string[];
+  public tags!: string[];
+  public departmentsCtrl = new FormControl('', Validators.required);
   public tagsCtrl = new FormControl('', Validators.required);
+  public categoryCtrl = new FormControl('', Validators.required);
   public authorsCtrl = new FormControl('', Validators.required);
   public ctrl$ = new Subject<string>();
   public filteredChips$!: Observable<string[]>;
@@ -61,7 +56,7 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
     spellcheck: true,
     minHeight: '200px',
     maxHeight: '500px',
-    minWidth: '300px',
+    minWidth: '200px',
     translate: 'yes',
     enableToolbar: true,
     showToolbar: true,
@@ -70,7 +65,7 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
     defaultFontSize: '3',
     sanitize: true,
     toolbarPosition: 'top',
-    toolbarHiddenButtons: [['fontName', 'toggleEditorMode']],
+    toolbarHiddenButtons: [['fontName', 'toggleEditorMode', 'insertVideo']],
   };
 
   constructor(
@@ -97,73 +92,96 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
         this.articleId = this.route.snapshot.params['id'];
         this.article$ = this.createArticleService.getArticle(this.articleId);
       } else {
-        this.article$ = new Observable<IArticle>((subscriber) =>
-          subscriber.next({
-            title: '',
-            description: '',
-            content: '',
-            authors: [],
-            respondents: [],
-            category: '',
-            tags: [],
-          })
-        );
+        this.article$ = of({
+          title: '',
+          description: '',
+          content: '',
+          authors: [],
+          departments: [],
+          category: '',
+          tags: [],
+        });
       }
     });
   }
 
   createForm(): void {
-    this.article$.subscribe((article) => {
-      article.authors.forEach((editAuthor) => {
-        this.authors = this.authors.filter((author) => author !== editAuthor);
-      });
+    forkJoin([
+      this.createArticleService.getAuthors(),
+      this.createArticleService.getDepartments(),
+      this.createArticleService.getTags(),
+      this.createArticleService.getCategories(),
+      this.article$,
+    ])
+      .pipe(
+        map((data) => {
+          this.authors = data[0];
+          this.departments = data[1];
+          this.tags = data[2];
+          this.categories = data[3];
 
-      article.respondents.forEach((editRespondent) => {
-        this.respondents = this.respondents.filter(
-          (respondent) => respondent !== editRespondent
+          return data[4];
+        })
+      )
+      .subscribe((article) => {
+        article.authors.forEach((editAuthor) => {
+          this.authors = this.authors.filter((author) => author !== editAuthor);
+        });
+
+        article.departments.forEach((editRespondent) => {
+          this.departments = this.departments.filter(
+            (respondent) => respondent !== editRespondent
+          );
+        });
+
+        article.tags.forEach((editTag) => {
+          this.tags = this.tags.filter((tag) => tag !== editTag);
+        });
+
+        this.categories = this.categories.filter(
+          (editCategory) => editCategory !== article.category
         );
-      });
 
-      article.tags.forEach((editTag) => {
-        this.tags = this.tags.filter((tag) => tag !== editTag);
+        this.form = new FormGroup({
+          title: new FormControl(article.title, [
+            Validators.required,
+            Validators.minLength(4),
+            Validators.maxLength(100),
+            this.manySpacesValidator,
+          ]),
+          description: new FormControl(article.description, [
+            Validators.required,
+            Validators.minLength(10),
+            Validators.maxLength(200),
+            this.manySpacesValidator,
+          ]),
+          content: new FormControl(article.content, [
+            Validators.required,
+            Validators.minLength(10),
+            this.manySpacesValidator,
+          ]),
+          authors: new FormControl(article.authors, [
+            Validators.required,
+            Validators.minLength(1),
+          ]),
+          departments: new FormControl(article.departments, [
+            Validators.required,
+            Validators.minLength(1),
+          ]),
+          category: new FormControl(
+            article.category ? [article.category] : '',
+            [
+              Validators.required,
+              Validators.minLength(1),
+              Validators.maxLength(1),
+            ]
+          ),
+          tags: new FormControl(article.tags, [
+            Validators.required,
+            Validators.minLength(1),
+          ]),
+        });
       });
-
-      this.form = new FormGroup({
-        title: new FormControl(article.title, [
-          Validators.required,
-          Validators.minLength(4),
-          Validators.maxLength(200),
-          this.manySpacesValidator,
-        ]),
-        description: new FormControl(article.description, [
-          Validators.required,
-          Validators.minLength(10),
-          Validators.maxLength(200),
-          this.manySpacesValidator,
-        ]),
-        content: new FormControl(article.content, [
-          Validators.required,
-          Validators.minLength(4),
-          this.manySpacesValidator,
-        ]),
-        authors: new FormControl(article.authors, [
-          Validators.required,
-          Validators.minLength(1),
-        ]),
-        respondents: new FormControl(article.respondents, [
-          Validators.required,
-          Validators.minLength(1),
-        ]),
-        category: new FormControl(article.category, [
-          Validators.required,
-          Validators.minLength(1),
-        ]),
-        tags: new FormControl(article.tags, [
-          Validators.required,
-          Validators.minLength(1),
-        ]),
-      });
-    });
   }
 
   filterChips(): void {
@@ -178,11 +196,11 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
         chipsCtrl = this.authorsCtrl;
         chips = this.authors;
       } else if (ctrl === 'category') {
-        chipsCtrl = this.form.get('category') as FormControl;
+        chipsCtrl = this.categoryCtrl;
         chips = this.categories;
       } else {
-        chipsCtrl = this.respondentsCtrl;
-        chips = this.respondents;
+        chipsCtrl = this.departmentsCtrl;
+        chips = this.departments;
       }
 
       this.chipsLoaded = true;
@@ -208,13 +226,16 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
 
   createArticle(): void {
     if (this.form.valid) {
+      this.formSubmitted = true;
+      this.formLoaded = true;
+
       const article: IArticle = {
         title: this.form.get('title')?.value.trim(),
         description: this.form.get('description')?.value.trim(),
         content: this.form.get('content')?.value.trim(),
         authors: this.form.get('authors')?.value,
-        category: this.form.get('category')?.value,
-        respondents: this.form.get('respondents')?.value,
+        category: this.form.get('category')?.value[0],
+        departments: this.form.get('departments')?.value,
         tags: this.form.get('tags')?.value,
       };
 
@@ -232,14 +253,21 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
     }
   }
 
+  getChips(ctrl: string): string[] {
+    if (ctrl === 'departments') {
+      return this.departments;
+    } else if (ctrl === 'tags') {
+      return this.tags;
+    } else if (ctrl === 'category') {
+      return this.categories;
+    } else {
+      return this.authors;
+    }
+  }
+
   removeChip(chip: string, ctrl: string): void {
-    const control = this.form.get(`${ctrl}`);
-    let chips =
-      ctrl === 'respondents'
-        ? this.respondents
-        : ctrl === 'tags'
-        ? this.tags
-        : this.authors;
+    const control = this.form.get(ctrl);
+    const chips = this.getChips(ctrl);
 
     chips.push(chip);
 
@@ -254,18 +282,56 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
     chipInput: HTMLInputElement,
     chipCtrl: FormControl
   ): void {
-    const control = this.form.get(`${ctrl}`);
-    let chips =
-      ctrl === 'respondents'
-        ? this.respondents
-        : ctrl === 'tags'
-        ? this.tags
-        : this.authors;
+    const control = this.form.get(ctrl);
+    const chips = this.getChips(ctrl);
 
     chips.splice(chips.indexOf(event.option.viewValue), 1);
     control?.patchValue([...control?.value, event.option.viewValue]);
 
     chipInput.value = '';
     chipCtrl.setValue(null);
+  }
+
+  getError(ctrl: string | FormControl, err: string): boolean {
+    if (typeof ctrl === 'string') {
+      return this.form.get(ctrl)?.getError(err);
+    }
+
+    return ctrl.getError(err);
+  }
+
+  isTouched(ctrl: string | FormControl): boolean {
+    if (typeof ctrl === 'string') {
+      return this.form.get(ctrl)!.touched;
+    }
+
+    return ctrl.touched;
+  }
+
+  resetForm(): void {
+    const category = this.form.get('category')?.value;
+    const tags = this.form.get('tags')?.value;
+    const departments = this.form.get('departments')?.value;
+    const authors = this.form.get('authors')?.value;
+
+    this.categories = [...this.categories, ...category];
+    this.tags = [...this.tags, ...tags];
+    this.departments = [...this.departments, ...departments];
+    this.authors = [...this.authors, ...authors];
+
+    this.categoryCtrl.reset();
+    this.tagsCtrl.reset();
+    this.departmentsCtrl.reset();
+    this.authorsCtrl.reset();
+
+    this.form.reset({
+      title: '',
+      description: '',
+      content: '',
+      category: [],
+      tags: [],
+      departments: [],
+      authors: [],
+    });
   }
 }

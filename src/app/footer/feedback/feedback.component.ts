@@ -10,6 +10,7 @@ import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 })
 export class FeedbackComponent {
   feedback: FormGroup;
+
   constructor(
     private fb: FormBuilder,
     private http: HttpClient,
@@ -21,6 +22,4 @@ export class FeedbackComponent {
       text: ['', [Validators.minLength(10)]],
     });
   }
-
-
 }

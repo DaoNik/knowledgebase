@@ -1,0 +1,34 @@
+.header {
+  width: 100%;
+  height: 60px;
+  position: fixed;
+  top: 0;
+  z-index: 1;
+
+  @media (min-width: 1440px) {
+    height: 80px;
+  }
+}
+
+.main {
+  padding: 0 10px;
+  width: 100%;
+
+  @media (min-width: 768px) {
+    padding: 0 20px;
+  }
+
+  @media (min-width: 1440px) {
+    margin: 0 auto;
+  }
+}
+
+.task-manager__nav-list {
+  list-style: none;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: start;
+  gap: 30px;
+
+  padding: 0;
+}
