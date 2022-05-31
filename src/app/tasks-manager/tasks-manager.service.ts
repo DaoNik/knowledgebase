@@ -21,9 +21,7 @@ export class TasksManagerService {
   getBoard(): Observable<IBoard> {
     return this.http.get<IBoard>(`${this.url}/boards/1`).pipe(
       catchError((error: HttpErrorResponse) => {
-        this.errorService.errorMessage =
-          error.error.message[error.error.message.length - 1];
-        this.errorService.onVisible();
+        this.errorService.visibleForError(error.error.message[error.error.message.length - 1]);
         return throwError(() => error);
       })
     );
@@ -46,9 +44,7 @@ export class TasksManagerService {
       })
       .pipe(
         catchError((error: HttpErrorResponse) => {
-          this.errorService.errorMessage =
-            error.error.message[error.error.message.length - 1];
-          this.errorService.onVisible();
+          this.errorService.visibleForError(error.error.message[error.error.message.length - 1]);
           return throwError(() => error);
         })
       );
@@ -72,9 +68,7 @@ export class TasksManagerService {
       })
       .pipe(
         catchError((error: HttpErrorResponse) => {
-          this.errorService.errorMessage =
-            error.error.message[error.error.message.length - 1];
-          this.errorService.onVisible();
+          this.errorService.visibleForError(error.error.message[error.error.message.length - 1]);
           return throwError(() => error);
         })
       );
@@ -85,9 +79,7 @@ export class TasksManagerService {
   getColumns() {
     return this.http.get<any>(`${this.url}/columns`).pipe(
       catchError((error: HttpErrorResponse) => {
-        this.errorService.errorMessage =
-          error.error.message[error.error.message.length - 1];
-        this.errorService.onVisible();
+        this.errorService.visibleForError(error.error.message[error.error.message.length - 1]);
         return throwError(() => error);
       })
     );
@@ -96,9 +88,7 @@ export class TasksManagerService {
   getColumn(id: number): Observable<IColumn> {
     return this.http.get<IColumn>(`${this.url}/columns/${id}`).pipe(
       catchError((error: HttpErrorResponse) => {
-        this.errorService.errorMessage =
-          error.error.message[error.error.message.length - 1];
-        this.errorService.onVisible();
+        this.errorService.visibleForError(error.error.message[error.error.message.length - 1]);
         return throwError(() => error);
       })
     );
@@ -109,9 +99,7 @@ export class TasksManagerService {
       .post<IColumn>(`${this.url}/columns`, { boardId, title })
       .pipe(
         catchError((error: HttpErrorResponse) => {
-          this.errorService.errorMessage =
-            error.error.message[error.error.message.length - 1];
-          this.errorService.onVisible();
+          this.errorService.visibleForError(error.error.message[error.error.message.length - 1]);
           return throwError(() => error);
         })
       );
@@ -122,9 +110,7 @@ export class TasksManagerService {
       .patch<IColumn>(`${this.url}/columns/${id}`, { title })
       .pipe(
         catchError((error: HttpErrorResponse) => {
-          this.errorService.errorMessage =
-            error.error.message[error.error.message.length - 1];
-          this.errorService.onVisible();
+          this.errorService.visibleForError(error.error.message[error.error.message.length - 1]);
           return throwError(() => error);
         })
       );
@@ -133,9 +119,7 @@ export class TasksManagerService {
   deleteColumn(id: number) {
     return this.http.delete<number>(`${this.url}/columns/${id}`).pipe(
       catchError((error: HttpErrorResponse) => {
-        this.errorService.errorMessage =
-          error.error.message[error.error.message.length - 1];
-        this.errorService.onVisible();
+        this.errorService.visibleForError(error.error.message[error.error.message.length - 1]);
         return throwError(() => error);
       })
     );
@@ -146,9 +130,7 @@ export class TasksManagerService {
   getTasks(): Observable<ITask[]> {
     return this.http.get<ITask[]>(`${this.url}/tasks`).pipe(
       catchError((error: HttpErrorResponse) => {
-        this.errorService.errorMessage =
-          error.error.message[error.error.message.length - 1];
-        this.errorService.onVisible();
+        this.errorService.visibleForError(error.error.message[error.error.message.length - 1]);
         return throwError(() => error);
       })
     );
@@ -157,9 +139,7 @@ export class TasksManagerService {
   getTask(id: number): Observable<ITask> {
     return this.http.get<ITask>(`${this.url}/tasks/${id}`).pipe(
       catchError((error: HttpErrorResponse) => {
-        this.errorService.errorMessage =
-          error.error.message[error.error.message.length - 1];
-        this.errorService.onVisible();
+        this.errorService.visibleForError(error.error.message[error.error.message.length - 1]);
         return throwError(() => error);
       })
     );
@@ -194,9 +174,7 @@ export class TasksManagerService {
       })
       .pipe(
         catchError((error: HttpErrorResponse) => {
-          this.errorService.errorMessage =
-            error.error.message[error.error.message.length - 1];
-          this.errorService.onVisible();
+          this.errorService.visibleForError(error.error.message[error.error.message.length - 1]);
           return throwError(() => error);
         })
       );
@@ -205,9 +183,7 @@ export class TasksManagerService {
   editTask(id: number, updatedData: any): Observable<ITask> {
     return this.http.patch<ITask>(`${this.url}/tasks/${id}`, updatedData).pipe(
       catchError((error: HttpErrorResponse) => {
-        this.errorService.errorMessage =
-          error.error.message[error.error.message.length - 1];
-        this.errorService.onVisible();
+        this.errorService.visibleForError(error.error.message[error.error.message.length - 1]);
         return throwError(() => error);
       })
     );
@@ -216,9 +192,7 @@ export class TasksManagerService {
   deleteTask(id: number) {
     return this.http.delete<number>(`${this.url}/tasks/${id}`).pipe(
       catchError((error: HttpErrorResponse) => {
-        this.errorService.errorMessage =
-          error.error.message[error.error.message.length - 1];
-        this.errorService.onVisible();
+        this.errorService.visibleForError(error.error.message[error.error.message.length - 1]);
         return throwError(() => error);
       })
     );
@@ -227,9 +201,7 @@ export class TasksManagerService {
   getTaskComments(id: number): Observable<IComment[]> {
     return this.http.get<IComment[]>(`${this.url}/tasks/${id}/comments`).pipe(
       catchError((error: HttpErrorResponse) => {
-        this.errorService.errorMessage =
-          error.error.message[error.error.message.length - 1];
-        this.errorService.onVisible();
+        this.errorService.visibleForError(error.error.message[error.error.message.length - 1]);
         return throwError(() => error);
       })
     );
