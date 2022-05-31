@@ -1,4 +1,5 @@
 <h2 class="board__header" *ngIf="board">{{ board.title }}</h2>
+<span *ngIf="loading$ | async">Loading...</span>
 <div class="loading" *ngIf="!board">No board</div>
 <div class="board" *ngIf="board" cdkDropListGroup>
   <div class="board__column" *ngFor="let column of board?.columns">

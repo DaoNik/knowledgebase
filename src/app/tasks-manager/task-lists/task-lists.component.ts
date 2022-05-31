@@ -8,6 +8,7 @@ import { FormControl, Validators } from '@angular/forms';
 import { IBoard, IColumn } from '../interfaces/taskList.interface';
 import { TasksManagerService } from '../tasks-manager.service';
 import { ErrorStateMatcher } from '@angular/material/core';
+import { delay, Observable } from 'rxjs';
 
 export class LengthErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl): boolean {
@@ -38,6 +39,7 @@ export class TaskListsComponent implements OnInit {
   public newColumn!: FormControl;
   public newTask!: FormControl;
 
+  public loading$!: Observable<boolean>;
   public formChangeName: any[] = [];
 
   @ViewChild('input') input!: ElementRef<HTMLInputElement>;
@@ -59,6 +61,9 @@ export class TaskListsComponent implements OnInit {
   }
 
   ngOnInit(): void {
+    this.loading$ = this.taskServ.loading$.pipe(
+      delay(300)
+    )
     this.taskServ.getBoard().subscribe((board) => {
       board.columns.forEach((column) => {
         this.taskServ.getColumn(column.id).subscribe((res) => {
@@ -72,6 +77,7 @@ export class TaskListsComponent implements OnInit {
           control: new FormControl(column.title, Validators.minLength(4)),
         });
       });
+      this.taskServ.loading$.next(false)
     });
   }
 
@@ -98,6 +104,7 @@ export class TaskListsComponent implements OnInit {
           this.board = board;
         });
       });
+      this.taskServ.loading$.next(false)
     });
   }
 
