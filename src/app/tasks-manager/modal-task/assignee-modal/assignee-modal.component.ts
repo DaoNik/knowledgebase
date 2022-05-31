@@ -1,7 +1,7 @@
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { map, Observable, startWith, Subscription } from 'rxjs';
+import { map, Observable, startWith } from 'rxjs';
 import { TasksManagerService } from '../../tasks-manager.service';
 
 @Component({
@@ -9,7 +9,7 @@ import { TasksManagerService } from '../../tasks-manager.service';
   templateUrl: './assignee-modal.component.html',
   styleUrls: ['./assignee-modal.component.scss']
 })
-export class AssigneeModalComponent implements OnInit, OnDestroy {
+export class AssigneeModalComponent implements OnInit {
 
   constructor(
     public dialogRef: MatDialogRef<AssigneeModalComponent>,
@@ -20,7 +20,6 @@ export class AssigneeModalComponent implements OnInit, OnDestroy {
   searchAssigneeQuery = new FormControl(['']);
   assignee: string[] = []
   filteredOptions!: Observable<string[]>;
-  subscriptionEdit$!: Subscription;
   mockUsers: string[] = [
     'Никита Таранин', 'Леолид Леолидыч', 'Александр Яунберзиньш', 'Димон'
   ];
@@ -38,7 +37,7 @@ export class AssigneeModalComponent implements OnInit, OnDestroy {
   }
 
   updateData() {
-    this.subscriptionEdit$ = this.taskManagerService.editTask(Number(this.data[0].taskId), {
+    this.taskManagerService.editTask(Number(this.data[0].taskId), {
       authors: this.data[0].taskAssignee,
     }).subscribe(res => {
       this.data[0].taskAssignee = res.authors;
@@ -46,16 +45,10 @@ export class AssigneeModalComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
-    console.log(this.data[0])
-    console.log(this.mockUsers)
     this.filteredOptions = this.searchAssigneeQuery.valueChanges.pipe(
       startWith(''),
       map(value => this._filter(value)),
     );
-  }
-
-  ngOnDestroy() {
-    this.subscriptionEdit$.unsubscribe();
   }
 
   private _filter(value: string): string[] {
