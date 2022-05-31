@@ -218,7 +218,7 @@
 						<form class="modal-task__data_comments_input" [formGroup]="commentForm">
 							<div class="text-wrp">
 								<input type="text" class="comment" placeholder="Ваш комментарий" 
-								value={{commentForm.value.text}} formControlName="text"  />
+								value={{commentForm.value.text}} formControlName="text" maxlength="500" />
 								<input type="text" class="author" placeholder="Ваш ник" 
 								value={{commentForm.value.author}} formControlName="author" />
 							</div>

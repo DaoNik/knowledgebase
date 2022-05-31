@@ -219,6 +219,9 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
       taskId: this.taskData.value.id,
     });
 
+    console.log(this.commentForm.value.text)
+    console.log(this.commentForm.value.text.length)
+
     this.commentForm.controls['text'].reset();
     setTimeout(() => {
       document.getElementById('commentList')?.scrollTo({
@@ -353,6 +356,18 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
           }
         });
       });
+  }
+
+  parseStringify(desc: any, parseOrString: boolean) {
+    if (parseOrString == true) {
+      desc.forEach((element: any) => {
+        element = JSON.parse(element);
+      });
+    } else {
+      desc.forEach((element: any) => {
+        element = JSON.stringify(element);
+      });
+    }
   }
 
   private _dateTransform(date: string): string {

@@ -30,17 +30,19 @@
   <button class="search__form-btn search__form-btn_filter">
     <mat-icon [matMenuTriggerFor]="menu">filter_alt</mat-icon>
   </button>
+  
   <mat-menu #menu="matMenu">
     <button
       mat-menu-item
       *ngFor="let option of filterOptions"
       [value]="option"
       (click)="$event.stopPropagation()"
+      (click)="option.status = changeStatus(option)"
     >
       <mat-checkbox
         class="example-margin"
         [checked]="option.status"
-        (change)="option.status = !option.status"
+        (click)="$event.preventDefault()"
       >
         {{ option.title }}
       </mat-checkbox>

@@ -1,7 +1,7 @@
 import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
-import { map, Observable, startWith, Subscription } from 'rxjs';
+import { filter, map, Observable, startWith, Subscription } from 'rxjs';
 import { IArticle } from 'src/app/interfaces/article';
 import { SearchService } from './search.service';
 
@@ -86,6 +86,16 @@ export class SearchComponent implements OnInit, OnDestroy {
             filterTags.includes(result.category)
         )
       : this.foundArticles;
+  }
+
+  changeStatus(item: any): boolean {
+    const filterTags = this.filterOptions
+      .filter((item) => {
+        return item.status;
+      })
+      // console.log(filterTags)
+    if (filterTags.length > 1) return !item.status
+    else return item.status
   }
 
   search() {
