@@ -5,6 +5,10 @@
   box-sizing: border-box;
   // background-color: #eff3f6;
 
+  .main__result-count {
+    margin-top: 10px;
+  }
+
   @media (min-width: 1024px) {
     padding: 0 20px;
   }
