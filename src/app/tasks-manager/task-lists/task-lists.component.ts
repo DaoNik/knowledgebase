@@ -36,6 +36,8 @@ export class TaskListsComponent implements OnInit {
 
   taskId!: number;
 
+  @ViewChild('input') input!: ElementRef<HTMLInputElement>;
+
   public newColumn!: FormControl;
   public newTask!: FormControl;
 
@@ -43,11 +45,7 @@ export class TaskListsComponent implements OnInit {
   public board$!: Observable<IBoard>;
   public formChangeName: any[] = [];
 
-  @ViewChild('input') input!: ElementRef<HTMLInputElement>;
-
-  constructor(
-    private taskServ: TasksManagerService
-  ) {
+  constructor(private taskServ: TasksManagerService) {
     this.newTask = new FormControl('', [
       Validators.required,
       Validators.minLength(4),
@@ -62,9 +60,7 @@ export class TaskListsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loading$ = this.taskServ.loading$.pipe(
-      delay(500)
-    )
+    this.loading$ = this.taskServ.loading$.pipe(delay(500));
     this.taskServ.getBoard().subscribe((board) => {
       this.board = board;
       console.log(this.board);
@@ -81,6 +77,17 @@ export class TaskListsComponent implements OnInit {
 
   onColumnHeaderClick(id: number): void {
     this.isColumnChangeOpen.set(id, true);
+    setTimeout(() => this.input.nativeElement.focus(), 0);
+  }
+
+  findFormcontrol(id: number): FormControl {
+    let res: FormControl = new FormControl();
+    this.formChangeName.forEach((control) => {
+      if (control.id === id) {
+        res = control.control;
+      }
+    });
+    return res;
   }
 
   getColumns(): void {

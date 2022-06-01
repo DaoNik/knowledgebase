@@ -1,8 +1,3 @@
-export interface ITasksList2 {
-  name: string;
-  tasks: string[];
-}
-
 export interface ITask {
   authors: string[];
   category: string;
