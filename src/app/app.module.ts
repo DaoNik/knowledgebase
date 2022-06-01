@@ -91,7 +91,7 @@ const API_URL_PROVIDER: Provider = {
     TasksManagerModule,
     MatProgressBarModule,
     MatSnackBarModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
   ],
   providers: [API_URL_PROVIDER],
   bootstrap: [AppComponent],
