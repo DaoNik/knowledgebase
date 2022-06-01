@@ -367,6 +367,8 @@
 					.text {
 						padding: 5px 10px;
 						white-space: normal;
+						overflow: hidden;
+						word-break: break-all;
 					}
 				}
 			}

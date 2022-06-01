@@ -185,15 +185,15 @@
 								</div>
 							</div>
 						</div>
-						<form class="modal-task__data_comments_input" [formGroup]="commentForm">
-							<div class="text-wrp" (keyup.enter)="sendComment()">
+						<form class="modal-task__data_comments_input" [formGroup]="commentForm" (submit)="sendComment()">
+							<div class="text-wrp">
 								<input type="text" class="comment" placeholder="Ваш комментарий"
 									value={{commentForm.value.text}} formControlName="text" />
 								<input type="text" class="author" placeholder="Ваш ник"
 									value={{commentForm.value.author}} formControlName="author" />
 							</div>
 							<div class="btn-wrp">
-								<button mat-raised-button color="primary" (click)="sendComment()" disabled={{!commentForm.valid}}>
+								<button mat-raised-button color="primary" type="submit" disabled={{!commentForm.valid}}>
 									<mat-icon>send</mat-icon>
 								</button>
 							</div>

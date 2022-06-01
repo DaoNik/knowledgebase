@@ -94,7 +94,6 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
   }
 
   addText(e: any, index?: number) {
-    console.log(index)
     if (!index) {
       if (!this.taskData.value.text) {
         this.taskData.value.text = [
