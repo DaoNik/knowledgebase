@@ -441,10 +441,11 @@
 		.modal-task__sidebar {
 			position: relative;
 			width: 100%;
-			height: fit-content;
+			// height: fit-content;
 		}
 	
 		.modal-task__data {
+			padding-top: 30px;
 			position: relative;
 			width: 100%;
 		}

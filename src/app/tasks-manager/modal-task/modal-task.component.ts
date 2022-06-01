@@ -305,9 +305,12 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
           dateUpdated: this._dateTransform(res.updatedAt),
         });
 
-        this.taskData.patchValue({
-          text: JSON.parse(res.description),
-        });
+        if (res.description) {
+          this.taskData.patchValue({
+            text: JSON.parse(res.description),
+          });
+        }
+        
       });
 
     this.subscriptionColumn$ = this.taskManagerService
@@ -329,17 +332,17 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
       });
   }
 
-  parseStringify(desc: any, parseOrString: boolean) {
-    if (parseOrString == true) {
-      desc.forEach((element: any) => {
-        element = JSON.parse(element);
-      });
-    } else {
-      desc.forEach((element: any) => {
-        element = JSON.stringify(element);
-      });
-    }
-  }
+  // parseStringify(desc: any, parseOrString: boolean) {
+  //   if (parseOrString == true) {
+  //     desc.forEach((element: any) => {
+  //       element = JSON.parse(element);
+  //     });
+  //   } else {
+  //     desc.forEach((element: any) => {
+  //       element = JSON.stringify(element);
+  //     });
+  //   }
+  // }
 
   private _dateTransform(date: string): string {
     return `${date.slice(0, 10)} ${date.slice(11, 19)}`;

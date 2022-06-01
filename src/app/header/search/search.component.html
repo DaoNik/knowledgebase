@@ -8,6 +8,8 @@
     (keyup.enter)="search()"
     [formControl]="searchQuery"
     [matAutocomplete]="auto"
+    [ngStyle]="{'border-bottom-left-radius': auto ? '20px' : '20px', 
+                'border-bottom-right-radius': filteredResults ? '20px' : '20px'}"
   />
   <mat-autocomplete #auto="matAutocomplete" class="search__from_autocomplete">
     <mat-option
