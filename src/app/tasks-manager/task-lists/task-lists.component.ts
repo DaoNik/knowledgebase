@@ -15,7 +15,7 @@ export class LengthErrorStateMatcher implements ErrorStateMatcher {
     if (control && control?.value.trim().length < 4) {
       return control.invalid && (control.dirty || control.touched);
     }
-    
+
     return false;
   }
 }
@@ -36,6 +36,8 @@ export class TaskListsComponent implements OnInit {
 
   taskId!: number;
 
+  @ViewChild('input') input!: ElementRef<HTMLInputElement>;
+
   public newColumn!: FormControl;
   public newTask!: FormControl;
 
@@ -43,11 +45,7 @@ export class TaskListsComponent implements OnInit {
   public board$!: Observable<IBoard>;
   public formChangeName: any[] = [];
 
-  @ViewChild('input') input!: ElementRef<HTMLInputElement>;
-
-  constructor(
-    private taskServ: TasksManagerService
-  ) {
+  constructor(private taskServ: TasksManagerService) {
     this.newTask = new FormControl('', [
       Validators.required,
       Validators.minLength(4),
@@ -62,14 +60,12 @@ export class TaskListsComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loading$ = this.taskServ.loading$.pipe(
-      delay(500)
-    )
+    this.loading$ = this.taskServ.loading$.pipe(delay(500));
     this.taskServ.getBoard().subscribe((board) => {
       board.columns.forEach((column) => {
         this.taskServ.getColumn(column.id).subscribe((res) => {
           column.tasks = res.tasks;
-          this.taskServ.loading$.next(false)
+          this.taskServ.loading$.next(false);
           this.board = board;
         });
         this.isColumnChangeOpen.set(column.id, false);
@@ -84,7 +80,7 @@ export class TaskListsComponent implements OnInit {
 
   onColumnHeaderClick(id: number): void {
     this.isColumnChangeOpen.set(id, true);
-    this.input.nativeElement?.focus();
+    setTimeout(() => this.input.nativeElement.focus(), 0);
   }
 
   findFormcontrol(id: number): FormControl {

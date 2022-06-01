@@ -33,24 +33,19 @@
 				<div>Updated at {{taskData.value.dateUpdated}}</div>
 			</div>
 			<div class="modal-task__header_title">
-				<h2 *ngIf="!headerTrigger"
-				(click)="headerTrigger = !headerTrigger">
+				<h2 *ngIf="!headerTrigger" (click)="headerTrigger = !headerTrigger">
 					{{taskData.value.title}}
 				</h2>
-				<input *ngIf="headerTrigger"
-					formControlName="title"
-					(keyup.enter)="changeTitle()"
-					(change)="titleOutlineRed = false"
-					[ngStyle]="{'border-bottom': titleOutlineRed ? '1px solid red' : ''}"
+				<input *ngIf="headerTrigger" formControlName="title" (keyup.enter)="changeTitle()" 
+						(change)="titleOutlineRed = false" [ngStyle]="{'border-bottom': titleOutlineRed ? '1px solid red' : ''}"
 				>
 			</div>
-			
+
 		</div>
 		<div class="modal-task__sidebar">
 			<div class="modal-task__sidebar_info">
 				<div class="task-info">
-					<div class="task-info__edit"
-						 (click)="editSidebar()">
+					<div class="task-info__edit" (click)="editSidebar()">
 						<mat-icon *ngIf="!sidebarEditTrigger">edit</mat-icon>
 						<mat-icon *ngIf="sidebarEditTrigger">save</mat-icon>
 					</div>
@@ -62,17 +57,14 @@
 						<tr>
 							<td>Приоритет</td>
 							<td *ngIf="!sidebarEditTrigger">{{taskData.value.priority}}</td>
-							<td *ngIf="sidebarEditTrigger"
-								class="tr-menu"
-								[matMenuTriggerFor]="priorityMenu"
-							>
-							<p>
-								{{taskData.value.priority}}
-								<mat-icon>expand_more</mat-icon>
-							</p></td>
+							<td *ngIf="sidebarEditTrigger" class="tr-menu" [matMenuTriggerFor]="priorityMenu">
+								<p>
+									{{taskData.value.priority}}
+									<mat-icon>expand_more</mat-icon>
+								</p>
+							</td>
 							<mat-menu #priorityMenu="matMenu">
-								<button mat-menu-item
-									*ngFor="let priority of priorityVariants"
+								<button mat-menu-item *ngFor="let priority of priorityVariants"
 									(click)="taskData.value.priority = priority">
 									{{priority}}
 								</button>
@@ -81,16 +73,14 @@
 						<tr>
 							<td>Статус</td>
 							<td *ngIf="!sidebarEditTrigger">{{taskData.value.status}}</td>
-							<td *ngIf="sidebarEditTrigger"
-								class="tr-menu"
-								[matMenuTriggerFor]="statusMenu"
-							><p>
-								{{taskData.value.status}} 
-								<mat-icon>expand_more</mat-icon>
-							</p></td>
+							<td *ngIf="sidebarEditTrigger" class="tr-menu" [matMenuTriggerFor]="statusMenu">
+								<p>
+									{{taskData.value.status}}
+									<mat-icon>expand_more</mat-icon>
+								</p>
+							</td>
 							<mat-menu #statusMenu="matMenu">
-								<button mat-menu-item
-									*ngFor="let status of statusVariants"
+								<button mat-menu-item *ngFor="let status of statusVariants"
 									(click)="taskData.value.status = status">
 									{{status}}
 								</button>
@@ -102,16 +92,13 @@
 								<p>
 									{{taskData.value.assignee[0]}}
 									<mat-icon *ngIf="taskData.value.assignee.length > 1"
-											(click)="showAndEditAssignee(false)"
-											class="tr-more"
-									>more_vert</mat-icon>
+										(click)="showAndEditAssignee(false)" class="tr-more">more_vert</mat-icon>
 								</p>
 							</td>
 							<td *ngIf="sidebarEditTrigger">
 								<p>
 									{{taskData.value.assignee[0]}}
-								<mat-icon (click)="showAndEditAssignee(true)"
-								class="tr-more">person_add</mat-icon>
+									<mat-icon (click)="showAndEditAssignee(true)" class="tr-more">person_add</mat-icon>
 								</p>
 							</td>
 						</tr>
@@ -129,32 +116,27 @@
 					<mat-icon>attach_files</mat-icon>
 					Кидаться файлами сюда
 				</div>
-				<div *ngIf="fileUploaded"  class="modal-task__data_files_label added">
+				<div *ngIf="fileUploaded" class="modal-task__data_files_label added">
 					Загружено!
 				</div>
 				<input type="file" multiple (change)="fileInputChange(fileInput)" #fileInput>
 			</div>
 			<mat-tab-group>
 				<mat-tab label="Описание">
-					<div class="modal-task__data_description"
-					>
-						<div formGroupName="text"
-						class="text_wrp"
-						*ngFor="let item of taskData.value.text; let i = index">
+					<div class="modal-task__data_description">
+						<div formGroupName="text" class="text_wrp"
+							*ngFor="let item of taskData.value.text; let i = index">
 							<mat-icon [matMenuTriggerFor]="menu" class="more">more_vert</mat-icon>
 							<mat-menu #menu="matMenu">
-								<button mat-menu-item 
-									*ngFor="let option of typeOptions"
-									(click)="changeType(option, i)"
+								<button mat-menu-item *ngFor="let option of typeOptions" (click)="changeType(option, i)"
 									[ngStyle]="{'color': item.type == option.type ? 'orange' : 'black'}">
-										{{option.name}}
+									{{option.name}}
 								</button>
 							</mat-menu>
 							<div class="text_icon">
 								<div *ngIf="item.type.length <= 0">
 								</div>
-								<div *ngIf="item.type == 'todo'"
-									class="todo"
+								<div *ngIf="item.type == 'todo'" class="todo"
 									(click)="[item.value = item.value == 'true' ? 'false' : 'true', this.updateTaskData()]">
 									<mat-icon *ngIf="item.value == 'true'">check_box</mat-icon>
 									<mat-icon *ngIf="item.value == 'false'">check_box_outline_blank</mat-icon>
@@ -163,42 +145,30 @@
 									●
 								</div>
 							</div>
-						
-							<div *ngIf="!inputTrigger"
-								(click)="inputTrigger = !inputTrigger"
+
+							<div *ngIf="!inputTrigger" (click)="inputTrigger = !inputTrigger"
 								class='text_input_disabled'
-								[ngClass]="{'custom-done': item.type == 'todo' && item.value == 'true'}"
-								>
-									{{item.text}}
-								
+								[ngClass]="{'custom-done': item.type == 'todo' && item.value == 'true'}">
+								{{item.text}}
+
 							</div>
-							<input class='text_input' 
-									type='text'
-									value={{item.text}} 
-									*ngIf="inputTrigger"
-									name="inputTask"
-									(keyup.enter)="addText($event, i)"
-									(keyup.Delete)="deleteString(i)"
-							>
+							<input class='text_input' type='text' value={{item.text}} *ngIf="inputTrigger"
+								name="inputTask" (keyup.enter)="addText($event, i)" (keyup.Delete)="deleteString(i)">
 						</div>
 						<div class="text_wrp">
 							<mat-icon [matMenuTriggerFor]="addMenu" class="more">more_vert</mat-icon>
 							<mat-menu #addMenu="matMenu">
-								<button mat-menu-item 
-										*ngFor="let option of typeOptions"
-										(click)="changeType(option, -1)"
-										[ngStyle]="{'color': createOption.type == option.type ? 'orange' : 'black'}">
-											{{option.name}}
-										</button>
+								<button mat-menu-item *ngFor="let option of typeOptions"
+									(click)="changeType(option, -1)"
+									[ngStyle]="{'color': createOption.type == option.type ? 'orange' : 'black'}">
+									{{option.name}}
+								</button>
 							</mat-menu>
 							<div class="text_icon">
 								<mat-icon>add</mat-icon>
 							</div>
-							<input class='text_input_new' 
-								type='text'
-								name="inputTask"
-								(keyup.enter)="addText($event)"
-							>
+							<input class='text_input_new' type='text' name="inputTask"
+								(keyup.enter)="addText($event)">
 						</div>
 					</div>
 				</mat-tab>
@@ -206,7 +176,7 @@
 				<mat-tab label="Комментарии">
 					<div class="modal-task__data_comments">
 						<div class="modal-task__data_comments_list" id="commentList" #commentList>
-							<div class="modal-task__data_comments_list_item" *ngFor="let item of taskData.value.comments">
+							<div class="modal-task__data_comments_list_item" *ngFor="let item of comments">
 								<div class="author">
 									{{item.author}}
 								</div>
@@ -216,11 +186,11 @@
 							</div>
 						</div>
 						<form class="modal-task__data_comments_input" [formGroup]="commentForm">
-							<div class="text-wrp">
-								<input type="text" class="comment" placeholder="Ваш комментарий" 
-								value={{commentForm.value.text}} formControlName="text" maxlength="500" />
-								<input type="text" class="author" placeholder="Ваш ник" 
-								value={{commentForm.value.author}} formControlName="author" />
+							<div class="text-wrp" (keyup.enter)="sendComment()">
+								<input type="text" class="comment" placeholder="Ваш комментарий"
+									value={{commentForm.value.text}} formControlName="text" />
+								<input type="text" class="author" placeholder="Ваш ник"
+									value={{commentForm.value.author}} formControlName="author" />
 							</div>
 							<div class="btn-wrp">
 								<button mat-raised-button color="primary" (click)="sendComment()" disabled={{!commentForm.valid}}>
@@ -236,7 +206,7 @@
 
 				<mat-tab *ngIf="inputFile.length == 0" label="Приложения" disabled>
 				</mat-tab>
-			  </mat-tab-group>
+			</mat-tab-group>
 		</div>
 	</div>
 	<ng-template #loading>
