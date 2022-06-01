@@ -97,7 +97,7 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
           description: '',
           content: '',
           authors: [],
-          departments: [],
+          department: [],
           category: '',
           tags: [],
         });
@@ -128,7 +128,7 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
           this.authors = this.authors.filter((author) => author !== editAuthor);
         });
 
-        article.departments.forEach((editRespondent) => {
+        article.department.forEach((editRespondent) => {
           this.departments = this.departments.filter(
             (respondent) => respondent !== editRespondent
           );
@@ -164,7 +164,7 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
             Validators.required,
             Validators.minLength(1),
           ]),
-          departments: new FormControl(article.departments, [
+          departments: new FormControl(article.department, [
             Validators.required,
             Validators.minLength(1),
           ]),
@@ -235,7 +235,7 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
         content: this.form.get('content')?.value.trim(),
         authors: this.form.get('authors')?.value,
         category: this.form.get('category')?.value[0],
-        departments: this.form.get('departments')?.value,
+        department: this.form.get('departments')?.value,
         tags: this.form.get('tags')?.value,
       };
 

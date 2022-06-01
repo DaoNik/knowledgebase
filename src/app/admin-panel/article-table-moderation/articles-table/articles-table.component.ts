@@ -148,9 +148,9 @@ export class ArticlesTableComponent implements OnInit, OnDestroy {
   }
 
   sortByDepartments(prev: IArticle, next: IArticle): number {
-    return prev.departments[0] < next.departments[0]
+    return prev.department[0] < next.department[0]
       ? -1
-      : prev.departments[0] > next.departments[0]
+      : prev.department[0] > next.department[0]
       ? 1
       : 0;
   }
