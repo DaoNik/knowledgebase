@@ -243,12 +243,12 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
         ? this.createArticleService
             .editArticle(this.articleId, article)
             .subscribe((article) =>
-              this.router.navigateByUrl(`/article/${article._id}`)
+              this.router.navigateByUrl(`/article/${article.id}`)
             )
         : this.createArticleService
             .createArticle(article)
             .subscribe((article) =>
-              this.router.navigateByUrl(`/article/${article._id}`)
+              this.router.navigateByUrl(`/article/${article.id}`)
             );
     }
   }

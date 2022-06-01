@@ -111,7 +111,7 @@ export class ArticlesTableComponent implements OnInit, OnDestroy {
 
   deleteArticle(articleId: string) {
     this.articles.splice(
-      this.articles.findIndex((article) => article._id === articleId),
+      this.articles.findIndex((article) => article.id === articleId),
       1
     );
     this.pageClick(this.currentPage);
