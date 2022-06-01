@@ -92,10 +92,10 @@ export class TaskListsComponent implements OnInit {
 
   getColumns(): void {
     this.taskServ.getBoard().subscribe((board) => {
+      this.board = board;
       board.columns.forEach((column) => {
         this.taskServ.getColumn(column.id).subscribe((res) => {
           column.tasks = res.tasks;
-          this.board = board;
         });
       });
     });
@@ -140,6 +140,7 @@ export class TaskListsComponent implements OnInit {
   addColumn() {
     this.taskServ.createColumn(1, this.newColumn.value).subscribe((column) => {
       this.board.columns.push(column);
+      this.board.columns[this.board.columns.length-1].tasks = [];
     });
     this.newColumn.reset();
     this.isColumnAddOpen = false;
@@ -156,6 +157,7 @@ export class TaskListsComponent implements OnInit {
   }
 
   deleteColumn(id: number) {
+    console.log('meow');
     this.taskServ.deleteColumn(id).subscribe((id) => {
       this.board.columns.splice(this.findColumnIdx(id), 1);
     });
