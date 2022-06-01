@@ -59,7 +59,6 @@ export class TasksTableComponent implements OnInit, AfterViewInit, OnDestroy {
       .pipe(
         map((tasks) => {
           return tasks.map((task) => {
-            console.log(task);
             return {
               id: task.id,
               title: task.title,
