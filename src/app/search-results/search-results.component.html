@@ -1,6 +1,8 @@
 <main class="main">
   <div *ngIf="articles.length > 0" class="main__result-count">
-    Найдено {{articles.length}} {{articles.length % 10 == 1 ? 'статья' : (articles.length % 10 >= 2 && articles.length % 10 < 5 ? 'статьи' : 'статей')}}
+    {{articles.length == 1 ? 'Найдена' : 'Найдено'}} 
+    {{articles.length}} 
+    {{articles.length % 10 == 1 ? 'статья' : (articles.length % 10 >= 2 && articles.length % 10 < 5 ? 'статьи' : 'статей')}}
   </div>
   <ul class="articles">
     <li class="articles__item" *ngFor="let article of currentPageArticles; let i = index"
