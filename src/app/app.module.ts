@@ -43,7 +43,7 @@ registerLocaleData(localeRu);
 
 const API_URL_PROVIDER: Provider = {
   provide: 'API_URL',
-  useValue: 'https://wbschool-chat.ru/api/articles',
+  useValue: 'http://188.120.255.7:8080/articles',
 };
 
 @NgModule({
@@ -91,7 +91,7 @@ const API_URL_PROVIDER: Provider = {
     TasksManagerModule,
     MatProgressBarModule,
     MatSnackBarModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
   ],
   providers: [API_URL_PROVIDER],
   bootstrap: [AppComponent],

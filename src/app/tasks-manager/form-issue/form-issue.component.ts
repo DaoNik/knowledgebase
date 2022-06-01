@@ -5,12 +5,12 @@ import {
   FormGroup,
   FormControl,
 } from '@angular/forms';
-import { map, Observable, startWith } from 'rxjs';
+import { catchError, concatMap, map, Observable, startWith, throwError } from 'rxjs';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { TasksManagerService } from '../tasks-manager.service';
-import { ITask } from '../interfaces/taskList.interface';
 import { MatDialog } from '@angular/material/dialog';
 import { ModalFormComponent } from './modal-form/modal-form.component';
+import { IColumn } from '../interfaces/taskList.interface';
 
 @Component({
   selector: 'app-form-issue',
@@ -23,6 +23,7 @@ export class FormIssueComponent {
   tagCtrl = new FormControl();
   filteredTags: Observable<string[]>;
   tags: string[] = [];
+  errorMessage!: string;
 
   @ViewChild('tagInput') tagInput!: ElementRef<HTMLInputElement>;
 
@@ -60,12 +61,9 @@ export class FormIssueComponent {
   openDialog(): void {
     const dialogRef = this.dialog.open(ModalFormComponent, {
       panelClass: 'modal-form-global',
+      data: this.errorMessage,
       maxWidth: '500px',
       width: '90%'
-    });
-    
-    dialogRef.afterClosed().subscribe(() => {
-      // this.router.navigate(['../'], { relativeTo: this.route });
     });
   }
 
@@ -79,16 +77,17 @@ export class FormIssueComponent {
       author: this.issueForm.value.name,
       title: this.issueForm.value.title,
       description: this.issueForm.value.description,
-      columnId: 1,
       priority: 'Medium',
       status: 'To Do',
       departments: [this.issueForm.value.department],
-      tags: [],
+      tags: this.issueForm.value.tags,
       boardId: 1,
     };
-    this.taskServ
+    this.taskServ.getColumns()
+    .pipe(
+      concatMap((columns: IColumn[]) =>  this.taskServ
       .createTask(
-        formData.columnId,
+        columns[0].id,
         formData.title,
         formData.boardId,
         formData.author,
@@ -98,8 +97,15 @@ export class FormIssueComponent {
         [formData.author],
         formData.departments,
         formData.tags
-      )
-      .subscribe();
+      )),
+      catchError((error) => {
+        this.errorMessage = error.error.message;
+        return throwError(() => error);
+      })
+    ).subscribe();
+    setTimeout(() => {
+      this.openDialog();
+    }, 1000);
   }
 
   remove(fruit: string): void {
