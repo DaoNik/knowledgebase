@@ -2,6 +2,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { IArticle } from './../interfaces/article';
 import { Inject, Injectable } from '@angular/core';
 import { catchError, Observable, of, throwError } from 'rxjs';
+import { ErrorModalService } from '../error-modal/error-modal.service';
 
 @Injectable({
   providedIn: 'root',
@@ -9,12 +10,16 @@ import { catchError, Observable, of, throwError } from 'rxjs';
 export class CreateArticleService {
   constructor(
     @Inject('API_URL') private apiUrl: string,
-    private http: HttpClient
+    private http: HttpClient,
+    private errorService: ErrorModalService
   ) {}
 
   getArticle(id: string): Observable<IArticle> {
     return this.http.get<IArticle>(`${this.apiUrl}/${id}`).pipe(
       catchError((error: HttpErrorResponse) => {
+        this.errorService.visibleForError(
+          error.error.message[error.error.message.length - 1]
+        );
         return throwError(() => error);
       })
     );
@@ -23,6 +28,9 @@ export class CreateArticleService {
   createArticle(article: IArticle): Observable<IArticle> {
     return this.http.post<IArticle>(`${this.apiUrl}`, article).pipe(
       catchError((error: HttpErrorResponse) => {
+        this.errorService.visibleForError(
+          error.error.message[error.error.message.length - 1]
+        );
         return throwError(() => error);
       })
     );
@@ -31,6 +39,9 @@ export class CreateArticleService {
   editArticle(id: string, article: IArticle): Observable<IArticle> {
     return this.http.patch<IArticle>(`${this.apiUrl}/${id}`, article).pipe(
       catchError((error: HttpErrorResponse) => {
+        this.errorService.visibleForError(
+          error.error.message[error.error.message.length - 1]
+        );
         return throwError(() => error);
       })
     );
