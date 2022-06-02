@@ -3,93 +3,48 @@
     <form class="create-article__form" [formGroup]="form">
       <div class="create-article__field">
         <label class="create-article__label" for="title">Название</label>
-        <input
-          class="create-article__input"
-          maxlength="100"
-          placeholder="Введите название статьи"
-          id="title"
-          formControlName="title"
-        />
-        <small
-          class="create-article__error"
-          *ngIf="getError('title', 'required') && isTouched('title')"
-          >Поле обязательно для заполнения</small
-        >
-        <small
-          class="create-article__error"
-          *ngIf="
+        <input class="create-article__input" maxlength="100" placeholder="Введите название статьи" id="title"
+          formControlName="title" />
+        <small class="create-article__error" *ngIf="getError('title', 'required') && isTouched('title')">Поле
+          обязательно для заполнения</small>
+        <small class="create-article__error" *ngIf="
             getError('title', 'minlength') ||
             getError('title', 'maxlength') ||
             getError('title', 'manySpaces')
-          "
-          >Длина поля должна быть от 4 до 100 символов</small
-        >
+          ">Длина поля должна быть от 4 до 100 символов</small>
       </div>
 
       <div class="create-article__field">
-        <label class="create-article__label" for="description"
-          >Краткое описание</label
-        >
-        <textarea
-          class="create-article__textarea"
-          maxlength="200"
-          id="description"
-          placeholder="Введите краткое описание статьи"
-          formControlName="description"
-        ></textarea>
-        <small
-          class="create-article__error"
-          *ngIf="
+        <label class="create-article__label" for="description">Краткое описание</label>
+        <textarea class="create-article__textarea" maxlength="200" id="description"
+          placeholder="Введите краткое описание статьи" formControlName="description"></textarea>
+        <small class="create-article__error" *ngIf="
             getError('description', 'required') && isTouched('description')
-          "
-          >Поле обязательно для заполнения</small
-        >
-        <small
-          class="create-article__error"
-          *ngIf="
+          ">Поле обязательно для заполнения</small>
+        <small class="create-article__error" *ngIf="
             getError('description', 'minlength') ||
             getError('description', 'maxlength') ||
             getError('description', 'manySpaces')
-          "
-          >Длина поля должна быть от 10 до 200 символов</small
-        >
+          ">Длина поля должна быть от 10 до 200 символов</small>
       </div>
 
       <div class="create-article__field">
         <label class="create-article__label" for="content">Текст</label>
-        <angular-editor
-          class="create-article__editor"
-          id="content"
-          formControlName="content"
-          [config]="editorConfig"
-        ></angular-editor>
-        <small
-          class="create-article__error"
-          *ngIf="getError('content', 'required') && isTouched('content')"
-          >Поле обязательно для заполнения</small
-        >
-        <small
-          class="create-article__error"
-          *ngIf="
+        <angular-editor class="create-article__editor" id="content" formControlName="content" [config]="editorConfig">
+        </angular-editor>
+        <small class="create-article__error" *ngIf="getError('content', 'required') && isTouched('content')">Поле
+          обязательно для заполнения</small>
+        <small class="create-article__error" *ngIf="
             getError('content', 'minlength') ||
             getError('content', 'manySpaces')
-          "
-          >Длина поля должна быть от 10 символов</small
-        >
+          ">Длина поля должна быть от 10 символов</small>
       </div>
 
       <div class="create-article__field">
-        <label class="create-article__label" for="category" id="category"
-          >Категория</label
-        >
+        <label class="create-article__label" for="category" id="category">Категория</label>
         <div class="create-article__chips">
-          <mat-chip
-            class="create-article__chip"
-            *ngFor="let category of form.get('category')?.value"
-            (removed)="removeChip(category, 'category')"
-            color="primary"
-            selected
-          >
+          <mat-chip class="create-article__chip" *ngFor="let category of form.get('category')?.value"
+            (removed)="removeChip(category, 'category')" color="primary" selected>
             {{ category }}
             <button matChipRemove>
               <mat-icon>cancel</mat-icon>
@@ -97,58 +52,33 @@
           </mat-chip>
         </div>
         <mat-chip-list #chipCategoriesList>
-          <input
-            class="create-article__input"
-            #categoryInput
-            placeholder="Выберите категорию"
-            [matAutocomplete]="categoryAuto"
-            (click)="ctrl$.next('category')"
-            [formControl]="categoryCtrl"
-            [matChipInputFor]="chipCategoriesList"
-          />
+          <input class="create-article__input" #categoryInput placeholder="Выберите категорию"
+            [matAutocomplete]="categoryAuto" (click)="ctrl$.next('category')" [formControl]="categoryCtrl"
+            [matChipInputFor]="chipCategoriesList" />
         </mat-chip-list>
-        <mat-autocomplete
-          (closed)="chipsLoaded = false"
-          #categoryAuto="matAutocomplete"
-          (optionSelected)="
+        <mat-autocomplete (closed)="chipsLoaded = false" #categoryAuto="matAutocomplete" (optionSelected)="
             selectChip($event, 'category', categoryInput, categoryCtrl)
-          "
-        >
+          ">
           <ng-container *ngIf="chipsLoaded">
-            <mat-option
-              *ngFor="let category of filteredChips$ | async"
-              [value]="category"
-            >
+            <mat-option *ngFor="let category of filteredChips$ | async" [value]="category">
               {{ category }}
             </mat-option>
           </ng-container>
         </mat-autocomplete>
-        <small
-          class="create-article__error"
-          *ngIf="
+        <small class="create-article__error" *ngIf="
             getError(categoryCtrl, 'required') &&
             !form.get('category')?.value.length &&
             isTouched(categoryCtrl)
-          "
-          >Выберите категорию</small
-        >
-        <small
-          class="create-article__error"
-          *ngIf="getError('category', 'maxlength') && isTouched(categoryCtrl)"
-          >Можно выбрать только одну категорию</small
-        >
+          ">Выберите категорию</small>
+        <small class="create-article__error" *ngIf="getError('category', 'maxlength') && isTouched(categoryCtrl)">Можно
+          выбрать только одну категорию</small>
       </div>
 
       <div class="create-article__field">
         <label class="create-article__label" for="tags" id="tags">Теги</label>
         <div class="create-article__chips">
-          <mat-chip
-            class="create-article__chip"
-            *ngFor="let tag of form.get('tags')?.value"
-            (removed)="removeChip(tag, 'tags')"
-            color="primary"
-            selected
-          >
+          <mat-chip class="create-article__chip" *ngFor="let tag of form.get('tags')?.value"
+            (removed)="removeChip(tag, 'tags')" color="primary" selected>
             {{ tag }}
             <button matChipRemove>
               <mat-icon>cancel</mat-icon>
@@ -156,109 +86,62 @@
           </mat-chip>
         </div>
         <mat-chip-list #chipTagsList>
-          <input
-            class="create-article__input"
-            #tagsInput
-            placeholder="Выберите теги"
-            [matAutocomplete]="tagsAuto"
-            (click)="ctrl$.next('tags')"
-            [formControl]="tagsCtrl"
-            [matChipInputFor]="chipTagsList"
-          />
+          <input class="create-article__input" #tagsInput placeholder="Выберите теги" [matAutocomplete]="tagsAuto"
+            (click)="ctrl$.next('tags')" [formControl]="tagsCtrl" [matChipInputFor]="chipTagsList" />
         </mat-chip-list>
-        <mat-autocomplete
-          (closed)="chipsLoaded = false"
-          #tagsAuto="matAutocomplete"
-          (optionSelected)="selectChip($event, 'tags', tagsInput, tagsCtrl)"
-        >
+        <mat-autocomplete (closed)="chipsLoaded = false" #tagsAuto="matAutocomplete"
+          (optionSelected)="selectChip($event, 'tags', tagsInput, tagsCtrl)">
           <ng-container *ngIf="chipsLoaded">
-            <mat-option
-              *ngFor="let tag of filteredChips$ | async"
-              [value]="tag"
-            >
+            <mat-option *ngFor="let tag of filteredChips$ | async" [value]="tag">
               {{ tag }}
             </mat-option>
           </ng-container>
         </mat-autocomplete>
-        <small
-          class="create-article__error"
-          *ngIf="
+        <small class="create-article__error" *ngIf="
             getError(tagsCtrl, 'required') &&
             isTouched(tagsCtrl) &&
             !form.get('tags')?.value.length
-          "
-          >Выберите хотя бы один тег</small
-        >
+          ">Выберите хотя бы один тег</small>
       </div>
 
       <div class="create-article__field">
-        <label class="create-article__label" for="departments" id="departments"
-          >Ответственные</label
-        >
+        <label class="create-article__label" for="departments" id="departments">Ответственные</label>
         <div class="create-article__chips">
-          <mat-chip
-            class="create-article__chip"
-            *ngFor="let respondent of form.get('departments')?.value"
-            (removed)="removeChip(respondent, 'departments')"
-            color="primary"
-            selected
-          >
-            {{ respondent }}
+          <mat-chip class="create-article__chip" *ngFor="let department of form.get('departments')?.value"
+            (removed)="removeChip(department, 'departments')" color="primary" selected>
+            {{ department }}
             <button matChipRemove>
               <mat-icon>cancel</mat-icon>
             </button>
           </mat-chip>
         </div>
         <mat-chip-list #chipDepartmentsList>
-          <input
-            class="create-article__input"
-            #departmentsInput
-            placeholder="Выберите ответственных"
-            (click)="ctrl$.next('departments')"
-            [matAutocomplete]="departmentsAuto"
-            [formControl]="departmentsCtrl"
-            [matChipInputFor]="chipDepartmentsList"
-          />
+          <input class="create-article__input" #departmentsInput placeholder="Выберите ответственных"
+            (click)="ctrl$.next('departments')" [matAutocomplete]="departmentsAuto" [formControl]="departmentsCtrl"
+            [matChipInputFor]="chipDepartmentsList" />
         </mat-chip-list>
-        <mat-autocomplete
-          #departmentsAuto="matAutocomplete"
-          (optionSelected)="
+        <mat-autocomplete #departmentsAuto="matAutocomplete" (optionSelected)="
             selectChip($event, 'departments', departmentsInput, departmentsCtrl)
-          "
-          (closed)="chipsLoaded = false"
-        >
+          " (closed)="chipsLoaded = false">
           <ng-container *ngIf="chipsLoaded">
-            <mat-option
-              *ngFor="let respondent of filteredChips$ | async"
-              [value]="respondent"
-            >
-              {{ respondent }}
+            <mat-option *ngFor="let department of filteredChips$ | async" [value]="department"
+              (click)="getAuthors(department)">
+              {{ department }}
             </mat-option>
           </ng-container>
         </mat-autocomplete>
-        <small
-          class="create-article__error"
-          *ngIf="
+        <small class="create-article__error" *ngIf="
             getError(departmentsCtrl, 'required') &&
             isTouched(departmentsCtrl) &&
             !form.get('departments')?.value.length
-          "
-          >Выберите хотя бы одного ответственного</small
-        >
+          ">Выберите хотя бы одного ответственного</small>
       </div>
 
       <div class="create-article__field">
-        <label class="create-article__label" for="authors" id="authors"
-          >Авторы</label
-        >
+        <label class="create-article__label" for="authors" id="authors">Авторы</label>
         <div class="create-article__chips">
-          <mat-chip
-            class="create-article__chip"
-            *ngFor="let author of form.get('authors')?.value"
-            (removed)="removeChip(author, 'authors')"
-            color="primary"
-            selected
-          >
+          <mat-chip class="create-article__chip" *ngFor="let author of form.get('authors')?.value"
+            (removed)="removeChip(author, 'authors')" color="primary" selected>
             {{ author }}
             <button matChipRemove>
               <mat-icon>cancel</mat-icon>
@@ -266,69 +149,36 @@
           </mat-chip>
         </div>
         <mat-chip-list #chipAuthorsList>
-          <input
-            class="create-article__input"
-            #authorsInput
-            placeholder="Выберите авторов"
-            (click)="ctrl$.next('authors')"
-            [matAutocomplete]="authorsAuto"
-            [formControl]="authorsCtrl"
-            [matChipInputFor]="chipAuthorsList"
-          />
+          <input [disabled]="!authors" class="create-article__input" #authorsInput placeholder="Выберите авторов"
+            (click)="ctrl$.next('authors')" [matAutocomplete]="authorsAuto" [formControl]="authorsCtrl"
+            [matChipInputFor]="chipAuthorsList" />
         </mat-chip-list>
-        <mat-autocomplete
-          #authorsAuto="matAutocomplete"
-          (optionSelected)="
+        <mat-autocomplete #authorsAuto="matAutocomplete" (optionSelected)="
             selectChip($event, 'authors', authorsInput, authorsCtrl)
-          "
-          (closed)="chipsLoaded = false"
-        >
+          " (closed)="chipsLoaded = false">
           <ng-container *ngIf="chipsLoaded">
-            <mat-option
-              *ngFor="let author of filteredChips$ | async"
-              [value]="author"
-            >
+            <mat-option *ngFor="let author of filteredChips$ | async" [value]="author">
               {{ author }}
             </mat-option>
           </ng-container>
         </mat-autocomplete>
-        <small
-          class="create-article__error"
-          *ngIf="
+        <small class="create-article__error" *ngIf="
             getError(authorsCtrl, 'required') &&
             isTouched(authorsCtrl) &&
             !form.get('authors')?.value.length
-          "
-          >Выберите хотя бы одного автора</small
-        >
+          ">Выберите хотя бы одного автора</small>
       </div>
 
-      <button
-        class="create-article__send-btn"
-        mat-flat-button
-        color="primary"
-        [disabled]="form.invalid || formSubmitted"
-        (click)="createArticle()"
-      >
+      <button class="create-article__send-btn" mat-flat-button color="primary"
+        [disabled]="form.invalid || formSubmitted" (click)="createArticle()">
         {{ isEditArticle ? "Редактировать" : "Создать" }}
       </button>
-      <button
-        mat-flat-button
-        color="warn"
-        (click)="resetForm()"
-        [disabled]="formSubmitted"
-      >
+      <button mat-flat-button color="warn" (click)="resetForm()" [disabled]="formSubmitted">
         Очистить форму
       </button>
 
-      <mat-progress-bar
-        *ngIf="formLoaded"
-        class="create-article__loader"
-        color="primary"
-        mode="indeterminate"
-        [value]="50"
-        [bufferValue]="75"
-      >
+      <mat-progress-bar *ngIf="formLoaded" class="create-article__loader" color="primary" mode="indeterminate"
+        [value]="50" [bufferValue]="75">
       </mat-progress-bar>
     </form>
   </ng-container>
