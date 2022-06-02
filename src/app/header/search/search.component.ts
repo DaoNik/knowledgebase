@@ -16,7 +16,7 @@ interface IFilter {
 })
 export class SearchComponent implements OnInit, OnDestroy {
   @Input('bgColor') bgColor!: boolean;
-  searchQuery = new FormControl();
+  searchQuery = new FormControl('');
   results: string[] = ['One', 'Two', 'Three'];
   filterOptions: IFilter[] = [
     {
@@ -106,7 +106,7 @@ export class SearchComponent implements OnInit, OnDestroy {
       .map((item) => {
         return item.title;
       });
-    this.searchService.goToSearchResults(this.searchQuery.value, filterTags);
+    this.searchService.goToSearchResults(this.searchQuery.value.trim(), filterTags);
   }
 
   goToArticle(id: string) {

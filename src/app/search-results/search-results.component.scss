@@ -300,6 +300,19 @@
   margin: 0;
   padding: 15px;
   list-style: none;
+
+  .articles__pagination-list_menu {
+    margin: auto 0;
+    line-height: 14px;
+    cursor: pointer;
+    height: 14px;
+
+    mat-icon {
+      height: 14px;
+      font-size: 14px;
+      line-height: 14px;
+    }
+  }
 }
 
 .articles__pagination-link {
