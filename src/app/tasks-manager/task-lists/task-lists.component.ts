@@ -9,6 +9,7 @@ import { IBoard, IColumn } from '../interfaces/taskList.interface';
 import { TasksManagerService } from '../tasks-manager.service';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { delay, Observable } from 'rxjs';
+import { invalid } from '@angular/compiler/src/render3/view/util';
 
 export class LengthErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl): boolean {
@@ -138,12 +139,18 @@ export class TaskListsComponent implements OnInit {
   }
 
   addColumn() {
-    this.taskServ.createColumn(1, this.newColumn.value).subscribe((column) => {
-      this.board.columns.push(column);
-      this.board.columns[this.board.columns.length-1].tasks = [];
-    });
-    this.newColumn.reset();
-    this.isColumnAddOpen = false;
+    if (this.newColumn.value.trim().length >= 4) {
+      this.newColumn.setValue(this.newColumn.value.trim());
+      this.taskServ.createColumn(1, this.newColumn.value).subscribe((column) => {
+        this.board.columns.push(column);
+        this.board.columns[this.board.columns.length - 1].tasks = [];
+      });
+      this.newColumn.reset();
+      this.isColumnAddOpen = false;
+    }
+    else {
+      this.newColumn.getError("invalid");
+    }
   }
 
   changeName(event: any, id: number, title: string) {
@@ -157,7 +164,6 @@ export class TaskListsComponent implements OnInit {
   }
 
   deleteColumn(id: number) {
-    console.log('meow');
     this.taskServ.deleteColumn(id).subscribe((id) => {
       this.board.columns.splice(this.findColumnIdx(id), 1);
     });
