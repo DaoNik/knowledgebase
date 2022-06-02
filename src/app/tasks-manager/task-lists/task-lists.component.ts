@@ -9,6 +9,7 @@ import { IBoard, IColumn } from '../interfaces/taskList.interface';
 import { TasksManagerService } from '../tasks-manager.service';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { delay, Observable } from 'rxjs';
+import { invalid } from '@angular/compiler/src/render3/view/util';
 
 export class LengthErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl): boolean {
@@ -62,18 +63,15 @@ export class TaskListsComponent implements OnInit {
   ngOnInit(): void {
     this.loading$ = this.taskServ.loading$.pipe(delay(500));
     this.taskServ.getBoard().subscribe((board) => {
+      this.board = board;
+      console.log(this.board);
       board.columns.forEach((column) => {
         this.taskServ.getColumn(column.id).subscribe((res) => {
           column.tasks = res.tasks;
-          this.taskServ.loading$.next(false);
-          this.board = board;
+          this.taskServ.loading$.next(false)
         });
         this.isColumnChangeOpen.set(column.id, false);
         this.isTaskAddOpen.set(column.id, true);
-        this.formChangeName.push({
-          id: column.id,
-          control: new FormControl(column.title, Validators.minLength(4)),
-        });
       });
     });
   }
@@ -95,10 +93,10 @@ export class TaskListsComponent implements OnInit {
 
   getColumns(): void {
     this.taskServ.getBoard().subscribe((board) => {
+      this.board = board;
       board.columns.forEach((column) => {
         this.taskServ.getColumn(column.id).subscribe((res) => {
           column.tasks = res.tasks;
-          this.board = board;
         });
       });
     });
@@ -141,11 +139,18 @@ export class TaskListsComponent implements OnInit {
   }
 
   addColumn() {
-    this.taskServ.createColumn(1, this.newColumn.value).subscribe((column) => {
-      this.board.columns.push(column);
-    });
-    this.newColumn.reset();
-    this.isColumnAddOpen = false;
+    if (this.newColumn.value.trim().length >= 4) {
+      this.newColumn.setValue(this.newColumn.value.trim());
+      this.taskServ.createColumn(1, this.newColumn.value).subscribe((column) => {
+        this.board.columns.push(column);
+        this.board.columns[this.board.columns.length - 1].tasks = [];
+      });
+      this.newColumn.reset();
+      this.isColumnAddOpen = false;
+    }
+    else {
+      this.newColumn.getError("invalid");
+    }
   }
 
   changeName(event: any, id: number, title: string) {
