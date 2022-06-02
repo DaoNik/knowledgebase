@@ -15,9 +15,19 @@ import {
 } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
-import { forkJoin, map, Observable, of, startWith, Subject } from 'rxjs';
+import {
+  catchError,
+  forkJoin,
+  map,
+  Observable,
+  of,
+  startWith,
+  Subject,
+  throwError,
+} from 'rxjs';
 import { IArticle } from '../interfaces/article';
 import { IDepartment } from '../interfaces/department';
+import { ErrorModalService } from '../error-modal/error-modal.service';
 
 @Component({
   selector: 'app-create-article',
