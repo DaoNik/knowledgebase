@@ -1,5 +1,3 @@
-import { IDepartment } from './department';
-
 export interface IArticle {
   id?: string;
   title: string;
@@ -8,7 +6,7 @@ export interface IArticle {
   dateUpdate?: string;
   content: string;
   authors: string[];
-  department: IDepartment[];
+  department: string[];
   tags: string[];
   category: string;
 }
