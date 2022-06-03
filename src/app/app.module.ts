@@ -43,7 +43,7 @@ registerLocaleData(localeRu);
 
 const API_URL_PROVIDER: Provider = {
   provide: 'API_URL',
-  useValue: 'http://188.120.255.7:8080/articles',
+  useValue: 'https://188.120.255.7/articles',
 };
 
 @NgModule({
