@@ -15,7 +15,16 @@ import {
 } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
-import { forkJoin, map, Observable, of, startWith, Subject } from 'rxjs';
+import {
+  first,
+  forkJoin,
+  map,
+  Observable,
+  of,
+  startWith,
+  Subject,
+  takeUntil,
+} from 'rxjs';
 import { IArticle } from '../interfaces/article';
 import { IDepartment } from '../interfaces/department';
 
@@ -52,6 +61,7 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
   public ctrl$ = new Subject<string>();
   public filteredChips$!: Observable<string[]>;
   public chipsLoaded = false;
+  private destroySubscribes$ = new Subject<boolean>();
   public editorConfig: AngularEditorConfig = {
     editable: true,
     outline: false,
@@ -83,11 +93,11 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.ctrl$.unsubscribe();
+    this.destroySubscribes$.next(true);
   }
 
   getArticle(): void {
-    this.route.url.subscribe((url) => {
+    this.route.url.pipe(first()).subscribe((url) => {
       this.isEditArticle = url[0].path === 'edit';
 
       if (this.isEditArticle) {
@@ -115,6 +125,7 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
       this.article$,
     ])
       .pipe(
+        first(),
         map((data) => {
           this.departments = data[0];
           this.tags = data[1];
@@ -124,29 +135,18 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe((article) => {
-        article.authors.forEach((editAuthor) => {
-          this.authors = article.authors.filter(
-            (author) => author !== editAuthor
-          );
-        });
+        this.authors = this.filterArticleData(article.authors, this.authors);
 
-        article.department.forEach((editDepartment) => {
-          this.departments = this.departments.filter(
-            (respondent) =>
-              respondent.name_Department !== editDepartment.name_Department
-          );
-        });
+        this.tags = this.filterArticleData(article.tags, this.tags);
 
-        this.departmentNames = this.departments.map(
-          (department) => department.name_Department
+        this.categories = this.filterArticleData(
+          [article.category],
+          this.categories
         );
 
-        article.tags.forEach((editTag) => {
-          this.tags = this.tags.filter((tag) => tag !== editTag);
-        });
-
-        this.categories = this.categories.filter(
-          (editCategory) => editCategory !== article.category
+        this.departmentNames = this.filterArticleData(
+          article.department,
+          this.departments.map((department) => department.name_Department)
         );
 
         this.form = new FormGroup({
@@ -191,22 +191,50 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
       });
   }
 
+  filterArticleData(oldData: string[], newData: string[]): string[] {
+    const dataSet = new Set(oldData);
+
+    return (newData || []).filter((value) => !dataSet.has(value));
+  }
+
   getAuthors(departmentName: string): void {
     const department = this.departments.filter(
       (department) => department.name_Department === departmentName
     )[0];
 
-    this.createArticleService.getAuthors(department.id).subscribe((authros) => {
-      if (!this.authors) {
-        this.authors = [];
-      }
+    this.createArticleService
+      .getAuthors(department.id)
+      .pipe(first())
+      .subscribe((authors) => {
+        if (!this.authors?.length) {
+          this.authors = [];
+        }
 
-      this.authors = [...this.authors, ...authros];
-    });
+        this.authors = [...this.authors, ...authors];
+      });
+  }
+
+  removeAuthors(departmentName: string): void {
+    const department = this.departments.filter(
+      (department) => department.name_Department === departmentName
+    )[0];
+
+    this.createArticleService
+      .getAuthors(department.id)
+      .pipe(first())
+      .subscribe((authors) => {
+        const authorsSet = new Set(authors);
+        const control = this.form.get('authors');
+
+        this.authors = this.authors.filter((author) => !authorsSet.has(author));
+        control?.patchValue(
+          control?.value.filter((author: string) => !authorsSet.has(author))
+        );
+      });
   }
 
   filterChips(): void {
-    this.ctrl$.subscribe((ctrl) => {
+    this.ctrl$.pipe(takeUntil(this.destroySubscribes$)).subscribe((ctrl) => {
       let chipsCtrl: FormControl;
       let chips: string[];
 
@@ -227,6 +255,7 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
       this.chipsLoaded = true;
 
       this.filteredChips$ = chipsCtrl.valueChanges.pipe(
+        takeUntil(this.destroySubscribes$),
         startWith(null),
         map((inputValue: string | null) =>
           inputValue
@@ -263,11 +292,13 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
       this.isEditArticle
         ? this.createArticleService
             .editArticle(this.articleId, article)
+            .pipe(first())
             .subscribe((article) =>
               this.router.navigateByUrl(`/article/${article.id}`)
             )
         : this.createArticleService
             .createArticle(article)
+            .pipe(first())
             .subscribe((article) =>
               this.router.navigateByUrl(`/article/${article.id}`)
             );
@@ -333,12 +364,11 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
     const category = this.form.get('category')?.value;
     const tags = this.form.get('tags')?.value;
     const departments = this.form.get('departments')?.value;
-    const authors = this.form.get('authors')?.value;
 
     this.categories = [...this.categories, ...category];
     this.tags = [...this.tags, ...tags];
     this.departmentNames = [...this.departmentNames, ...departments];
-    this.authors = [...this.authors, ...authors];
+    this.authors = [];
 
     this.categoryCtrl.reset();
     this.tagsCtrl.reset();

@@ -110,7 +110,7 @@
           <mat-chip class="create-article__chip" *ngFor="let department of form.get('departments')?.value"
             (removed)="removeChip(department, 'departments')" color="primary" selected>
             {{ department }}
-            <button matChipRemove>
+            <button matChipRemove (click)="removeAuthors(department)">
               <mat-icon>cancel</mat-icon>
             </button>
           </mat-chip>
@@ -121,8 +121,7 @@
             [matChipInputFor]="chipDepartmentsList" />
         </mat-chip-list>
         <mat-autocomplete #departmentsAuto="matAutocomplete" (optionSelected)="
-            selectChip($event, 'departments', departmentsInput, departmentsCtrl)
-          " (closed)="chipsLoaded = false">
+            selectChip($event, 'departments', departmentsInput, departmentsCtrl)" (closed)="chipsLoaded = false">
           <ng-container *ngIf="chipsLoaded">
             <mat-option *ngFor="let department of filteredChips$ | async" [value]="department"
               (click)="getAuthors(department)">
@@ -149,9 +148,10 @@
           </mat-chip>
         </div>
         <mat-chip-list #chipAuthorsList>
-          <input [disabled]="!authors" class="create-article__input" #authorsInput placeholder="Выберите авторов"
+          <input class="create-article__input" #authorsInput
+            [placeholder]="!authors?.length ? 'Сначала выберите ответственных' : 'Выберите авторов'"
             (click)="ctrl$.next('authors')" [matAutocomplete]="authorsAuto" [formControl]="authorsCtrl"
-            [matChipInputFor]="chipAuthorsList" />
+            [matChipInputFor]="chipAuthorsList" [readOnly]="!authors?.length" />
         </mat-chip-list>
         <mat-autocomplete #authorsAuto="matAutocomplete" (optionSelected)="
             selectChip($event, 'authors', authorsInput, authorsCtrl)

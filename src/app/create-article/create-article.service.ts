@@ -9,7 +9,7 @@ import { ErrorModalService } from '../error-modal/error-modal.service';
   providedIn: 'root',
 })
 export class CreateArticleService {
-  private url = 'http://188.120.255.7:8080';
+  private url = 'https://wbbase.site/docker';
 
   constructor(
     @Inject('API_URL') private apiUrl: string,
@@ -73,7 +73,7 @@ export class CreateArticleService {
   }
 
   getDepartments(): Observable<IDepartment[]> {
-    return this.http.get<IDepartment[]>(`${this.url}/department`).pipe(
+    return this.http.get<IDepartment[]>(`${this.url}/departments`).pipe(
       catchError((error: HttpErrorResponse) => {
         this.errorService.visibleForError(
           error.error.message[error.error.message.length - 1]
