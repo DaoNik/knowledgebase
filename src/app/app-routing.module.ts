@@ -1,7 +1,8 @@
 import { NgModule } from '@angular/core';
-import { RouterModule, Routes } from '@angular/router';
+import { PreloadingStrategy, RouterModule, Routes } from '@angular/router';
 import { AdminPanelComponent } from './admin-panel/admin-panel.component';
 import { ArticleComponent } from './article/article.component';
+import { CustomPreloadingStrategy } from './custom-preloading-strategy';
 import { MainComponent } from './main/main.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { SearchResultsComponent } from './search-results/search-results.component';
@@ -10,21 +11,21 @@ import { TasksManagerComponent } from './tasks-manager/tasks-manager.component';
 const routes: Routes = [
   {
     path: 'admin',
-    data: { displayName: 'Админка', animation: 'admin' },
     component: AdminPanelComponent,
     loadChildren: () =>
       import('./admin-panel/admin-panel.module').then(
         (m) => m.AdminPanelModule
       ),
+    data: { displayName: 'Админка', animation: 'admin', preload: true, delay: 10000 },
   },
   {
     path: 'tasks',
-    data: { displayName: 'Менеджер задач', animation: 'tasks' },
     component: TasksManagerComponent,
     loadChildren: () =>
       import('./tasks-manager/tasks-manager.module').then(
         (m) => m.TasksManagerModule
       ),
+    data: { displayName: 'Менеджер задач', animation: 'tasks'},
   },
   {
     path: '',
@@ -60,7 +61,11 @@ const routes: Routes = [
 ];
 
 @NgModule({
-  imports: [RouterModule.forRoot(routes)],
+  imports: [
+    RouterModule.forRoot(routes, {
+      preloadingStrategy: CustomPreloadingStrategy
+    })
+  ],
   exports: [RouterModule],
 })
 export class AppRoutingModule {}

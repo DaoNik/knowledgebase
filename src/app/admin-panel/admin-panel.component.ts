@@ -1,44 +1,43 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 
 interface AdminFunc {
   name: string;
   route: string;
-};
+}
 
 const mockAdminPages: AdminFunc[] = [
   {
     name: 'Модерация статей',
-    route: 'moderate'
+    route: 'moderate',
   },
   {
     name: 'В ожидании',
-    route: 'not-listed'
+    route: 'not-listed',
   },
   {
     name: 'Назначение ролей',
-    route: 'roles'
+    route: 'roles',
   },
   {
     name: 'Еще кнопка',
-    route: 'moderate'
+    route: 'moderate',
   },
   {
     name: 'Еще кнопка',
-    route: 'moderate'
+    route: 'moderate',
   },
   {
     name: 'Еще кнопка',
-    route: 'moderate'
-  }
+    route: 'moderate',
+  },
 ];
 
 @Component({
   selector: 'app-admin-panel',
   templateUrl: './admin-panel.component.html',
-  styleUrls: ['./admin-panel.component.scss']
+  styleUrls: ['./admin-panel.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AdminPanelComponent {
-
   adminPages: AdminFunc[] = mockAdminPages;
-
 }
