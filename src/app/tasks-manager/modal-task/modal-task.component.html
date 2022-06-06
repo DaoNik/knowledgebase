@@ -3,25 +3,11 @@
 		<div class="modal-task__close" (click)="onNoClick()">
 			<mat-icon>close</mat-icon>
 		</div>
-		<div class="modal-task__header">
+		<div class="modal-task__header" #header>
 			<div class="modal-task__header_btns">
 				<div class="modal-task__header_btns_wrp">
 					<button class="link" (click)="urlCopy()">
 						<mat-icon>share</mat-icon>
-					</button>
-					<button class="link">
-						<mat-icon>label</mat-icon>
-					</button>
-					<button class="link">
-						<mat-icon>person</mat-icon>
-					</button>
-					<button class="link">
-						<mat-icon>more_horiz</mat-icon>
-					</button>
-				</div>
-				<div class="modal-task__header_btns_wrp">
-					<button class="link">
-						<mat-icon>edit</mat-icon>
 					</button>
 					<button class="link" (click)="deleteTask()">
 						<mat-icon>delete</mat-icon>
@@ -32,13 +18,14 @@
 				<div>Создана {{taskData.value.dateCreated}}</div>
 				<div>Обновлена {{taskData.value.dateUpdated}}</div>
 			</div>
-			<div class="modal-task__header_title">
-				<h2 *ngIf="!headerTrigger" (click)="headerTrigger = !headerTrigger">
+			<div class="modal-task__header_title" #titleId>
+				<!-- <h2 *ngIf="!headerTrigger" (click)="headerTrigger = !headerTrigger">
 					{{taskData.value.title}}
-				</h2>
-				<input *ngIf="headerTrigger" formControlName="title" (keyup.enter)="changeTitle()" 
-						(change)="titleOutlineRed = false" [ngStyle]="{'border-bottom': titleOutlineRed ? '1px solid red' : ''}"
-				>
+				</h2> -->
+				<textarea oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' formControlName="title" 
+						  (keyup.enter)="changeTitle(textareaId)" (change)="titleOutlineRed = false" 
+						  [ngStyle]="{'border-bottom': titleOutlineRed ? '1px solid red' : ''}" #textareaId
+				></textarea>
 			</div>
 
 		</div>
@@ -47,7 +34,7 @@
 				<div class="task-info">
 					<div class="task-info__edit" (click)="editSidebar()">
 						<mat-icon *ngIf="!sidebarEditTrigger">edit</mat-icon>
-						<mat-icon *ngIf="sidebarEditTrigger">save</mat-icon>
+						<mat-icon *ngIf="sidebarEditTrigger" class="save">save</mat-icon>
 					</div>
 					<table>
 						<tr>
@@ -65,7 +52,7 @@
 							</td>
 							<mat-menu #priorityMenu="matMenu">
 								<button mat-menu-item *ngFor="let priority of priorityVariants"
-									(click)="taskData.value.priority = priority">
+									(click)="[taskData.value.priority = priority, sidebarSaveReminder()]">
 									{{priority}}
 								</button>
 							</mat-menu>
@@ -81,7 +68,7 @@
 							</td>
 							<mat-menu #statusMenu="matMenu">
 								<button mat-menu-item *ngFor="let status of statusVariants"
-									(click)="taskData.value.status = status">
+									(click)="[taskData.value.status = status, sidebarSaveReminder()]">
 									{{status}}
 								</button>
 							</mat-menu>
@@ -165,7 +152,17 @@
 								</button>
 							</mat-menu>
 							<div class="text_icon">
-								<mat-icon>add</mat-icon>
+								<!-- <mat-icon>add</mat-icon> -->
+								<div *ngIf="createOption.type.length <= 0">
+								</div>
+								<div *ngIf="createOption.type == 'todo'" class="todo"
+									(click)="[createOption.value = createOption.value == 'true' ? 'false' : 'true', this.updateTaskData()]">
+									<mat-icon *ngIf="createOption.value == 'true'">check_box</mat-icon>
+									<mat-icon *ngIf="createOption.value == 'false'">check_box_outline_blank</mat-icon>
+								</div>
+								<div *ngIf="createOption.type == 'ul'">
+									●
+								</div>
 							</div>
 							<input class='text_input_new' type='text' name="inputTask"
 								(keyup.enter)="addText($event)">

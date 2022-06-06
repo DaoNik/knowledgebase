@@ -23,6 +23,12 @@ export class AssigneeModalComponent implements OnInit {
   mockUsers: string[] = [
     'Никита Таранин', 'Леолид Леолидыч', 'Александр Яунберзиньш', 'Димон'
   ];
+  dataChanged = false;
+
+  onNoClick(): void {
+    console.log('click out')
+    this.dialogRef.close(this.dataChanged);
+  }
 
   addAssignee(option: string): void {
     if (this.data[0].taskAssignee) this.data[0].taskAssignee.push(option);
@@ -42,6 +48,7 @@ export class AssigneeModalComponent implements OnInit {
     }).subscribe(res => {
       this.data[0].taskAssignee = res.authors;
     });
+    this.dataChanged = true;
   }
 
   ngOnInit(): void {

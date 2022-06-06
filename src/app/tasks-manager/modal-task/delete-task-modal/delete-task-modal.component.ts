@@ -19,7 +19,7 @@ export class DeleteTaskModalComponent {
   deleteTask() {
     this.taskManagerService.deleteTask(this.id)
     .subscribe();
-    this.dialogRef.close();
+    this.dialogRef.close(true);
   }
 
   closeModal() {
