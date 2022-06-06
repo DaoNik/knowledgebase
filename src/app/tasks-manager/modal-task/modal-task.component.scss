@@ -116,7 +116,6 @@
 		position: absolute;
 		top: 20px;
 		width: 40%;
-		// background: green;
 		height: calc(100% - 40px);
 
 		.modal-task__sidebar_info {
@@ -341,6 +340,7 @@
 			position: relative;
 
 			.modal-task__data_comments_list {
+				width: 100%;
 				display: flex;
 				flex-direction: column;
 				height: 190px;
@@ -348,18 +348,27 @@
 
 				.modal-task__data_comments_list_item {
 					width: 95%;
-					background: rgb(201, 201, 255);
-					margin: 5px 0;
-					border-radius: 3px;
+					background: white;
+					margin: 5px auto;
+					border-radius: 10px;
+					height: fit-content;
+					box-shadow: 0 0 5px rgba(0,0,0,0.5);
 
 					.author {
+						background: linear-gradient(90deg, #680f69, #dd57cf);
+						color: white;
+						width: fit-content;
 						font-size: 12px;
-						text-align: right;
-						padding: 3px;
+						border-radius: 10px;
+						padding: 0 10px;
+						margin: 5px 10px 0 auto;
 					}
 
 					.text {
-						padding: 3px;
+						padding: 5px 10px;
+						white-space: normal;
+						overflow: hidden;
+						word-break: break-all;
 					}
 				}
 			}
@@ -379,12 +388,26 @@
 
 					.comment {
 						width: 100%;
+						border: none;
+						border-bottom: 1px solid black;
+
+						&:focus {
+							outline: none;
+							border-bottom: 2px solid black;
+						}
 					}
 
 					.author {
 						width: 50%;
 						min-width: 50px;
 						margin: auto 0 0 auto;
+						border: none;
+						border-bottom: 1px solid black;
+
+						&:focus {
+							outline: none;
+							border-bottom: 2px solid black;
+						}
 					}
 				}
 
@@ -420,10 +443,11 @@
 		.modal-task__sidebar {
 			position: relative;
 			width: 100%;
-			height: fit-content;
+			// height: fit-content;
 		}
 	
 		.modal-task__data {
+			padding-top: 30px;
 			position: relative;
 			width: 100%;
 		}

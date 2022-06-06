@@ -64,7 +64,10 @@
 }
 
 .search__from_autocomplete {
+  width: calc(100% - 40px)!important;
   background: white!important;
+  margin: 0 auto;
+  box-shadow: 0px 4px 4px 3px rgba(34, 60, 80, 0.2)!important;
 
   .mat-option {
     background: white!important;
@@ -84,8 +87,28 @@
         margin: 0!important;
       }
 
-      @media (max-width: 768px) {
+      // @media (max-width: 768px) {
+      //   display: none;
+      // }
+    }
+
+    .search__from_autocomplete_category-div {
+      display: none;
+    }
+
+    @media (max-width: 768px) {
+      height: 96px;
+      display: flex;
+      text-align: left;
+
+      .search__from_autocomplete_category {
         display: none;
+      }
+
+      .search__from_autocomplete_category-div {
+        display: block;
+        color: grey!important;
+        text-align: top;
       }
     }
   }

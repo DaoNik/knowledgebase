@@ -1,4 +1,9 @@
-<main class="main">
+<main class="main" id="main">
+  <div *ngIf="articles.length > 0" class="main__result-count">
+    {{articles.length == 1 ? 'Найдена' : 'Найдено'}} 
+    {{articles.length}} 
+    {{articles.length % 10 == 1 ? 'статья' : (articles.length % 10 >= 2 && articles.length % 10 < 5 ? 'статьи' : 'статей')}}
+  </div>
   <ul class="articles">
     <li class="articles__item" *ngFor="let article of currentPageArticles; let i = index"
       (click)="openArticle(article.id!)">
@@ -17,6 +22,10 @@
     </p>
   </ul>
   <ul class="articles__pagination-list">
+    <div [matMenuTriggerFor]="articlesCount" class="articles__pagination-list_menu">Показать: {{articlesOnPage}} <mat-icon>expand_more</mat-icon></div>
+    <mat-menu #articlesCount="matMenu">
+      <button mat-menu-item *ngFor="let num of articlesonPageOptions" (click)="changeArticlesOnPage(num)">{{num}}</button>
+    </mat-menu>
     <li class="articles__pagination-item" *ngFor="let page of pages">
       <button color="primary" mat-raised-button class="articles__pagination-link" (click)="pageClick(page)" [class]="
           currentPage === page ? 'articles__pagination-link--active' : ''
