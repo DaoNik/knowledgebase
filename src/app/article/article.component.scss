@@ -9,8 +9,12 @@
 
     &__header {
         text-align: start;
-        padding: 20px 0;
+        padding: 20px 0 10px;
         border-bottom: 1px solid grey;
+        display: flex;
+        flex-wrap: wrap;
+        gap: 20px;
+        justify-content: space-between;
     }
 
     &__title {
@@ -19,6 +23,7 @@
       line-height: 1.1071428571;
       font-weight: 600;
       letter-spacing: -.015em;
+      order: 2;
 
       @media (max-width: 768px) {
         font-size: 24px;
