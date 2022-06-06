@@ -20,7 +20,7 @@
     </thead>
 
     <tr class="article-table__item article article-table__row"
-      *ngFor="let article of currentPageArticles; let i = index">
+      *ngFor="let article of currentPageArticles; trackBy: identify; let i = index">
       <td class="article__no"><span class="article__cell-name">№</span>{{i+1}}</td>
       <td class="article__id"><span class="article__cell-name">ID</span>{{article.id}}</td>
       <td class="article__name"><span class="article__cell-name">Заголовок</span>{{article.title}}</td>
