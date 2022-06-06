@@ -10,7 +10,7 @@ import { TasksManagerComponent } from './tasks-manager/tasks-manager.component';
 const routes: Routes = [
   {
     path: 'admin',
-    data: { displayName: 'Админка' },
+    data: { displayName: 'Админка', animation: 'admin' },
     component: AdminPanelComponent,
     loadChildren: () =>
       import('./admin-panel/admin-panel.module').then(
@@ -19,7 +19,7 @@ const routes: Routes = [
   },
   {
     path: 'tasks',
-    data: { displayName: 'Менеджер задач' },
+    data: { displayName: 'Менеджер задач', animation: 'tasks' },
     component: TasksManagerComponent,
     loadChildren: () =>
       import('./tasks-manager/tasks-manager.module').then(
@@ -31,6 +31,7 @@ const routes: Routes = [
     component: MainComponent,
     data: {
       displayName: 'Главная',
+      animation: 'main',
     },
   },
   {
