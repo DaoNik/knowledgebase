@@ -134,7 +134,6 @@ export class NotListedTableComponent implements OnInit, OnDestroy {
     this.pageClick(this.currentPage);
   }
 
-  //
   resetPage(): void {
     this.currentPage = 1;
     this.pageClick(this.currentPage);
@@ -189,4 +188,8 @@ export class NotListedTableComponent implements OnInit, OnDestroy {
     }
     this.resetPage();
   }
+
+  identify(index: number, article: IArticle){
+    return article.title; 
+ }
 }

@@ -33,6 +33,12 @@ export class AssigneeModalComponent implements OnInit {
     'Александр Яунберзиньш',
     'Димон',
   ];
+  dataChanged = false;
+
+  onNoClick(): void {
+    console.log('click out')
+    this.dialogRef.close(this.dataChanged);
+  }
 
   addAssignee(option: string): void {
     if (this.data[0].taskAssignee) this.data[0].taskAssignee.push(option);
@@ -47,14 +53,13 @@ export class AssigneeModalComponent implements OnInit {
   }
 
   updateData() {
-    this.taskManagerService
-      .editTask(Number(this.data[0].taskId), {
-        authors: this.data[0].taskAssignee,
-      })
-      .subscribe((res) => {
-        this.data[0].taskAssignee = res.authors;
-        this.changeDetectorRef.markForCheck();
-      });
+    this.taskManagerService.editTask(Number(this.data[0].taskId), {
+      authors: this.data[0].taskAssignee,
+    }).subscribe(res => {
+      this.data[0].taskAssignee = res.authors;
+      this.changeDetectorRef.markForCheck();
+    });
+    this.dataChanged = true;
   }
 
   ngOnInit(): void {
