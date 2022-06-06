@@ -1,4 +1,11 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import {
   CdkDragDrop,
   moveItemInArray,
@@ -24,6 +31,7 @@ export class LengthErrorStateMatcher implements ErrorStateMatcher {
   selector: 'app-task-lists',
   templateUrl: './task-lists.component.html',
   styleUrls: ['./task-lists.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class TaskListsComponent implements OnInit {
   isColumnChangeOpen = new Map();
@@ -45,7 +53,10 @@ export class TaskListsComponent implements OnInit {
   public board$!: Observable<IBoard>;
   public formChangeName: any[] = [];
 
-  constructor(private taskServ: TasksManagerService) {
+  constructor(
+    private taskServ: TasksManagerService,
+    private changeDetectorRef: ChangeDetectorRef
+  ) {
     this.newTask = new FormControl('', [
       Validators.required,
       Validators.minLength(4),
@@ -62,19 +73,17 @@ export class TaskListsComponent implements OnInit {
   ngOnInit(): void {
     this.loading$ = this.taskServ.loading$.pipe(delay(500));
     this.taskServ.getBoard().subscribe((board) => {
+      this.board = board;
       board.columns.forEach((column) => {
         this.taskServ.getColumn(column.id).subscribe((res) => {
           column.tasks = res.tasks;
           this.taskServ.loading$.next(false);
-          this.board = board;
+          this.changeDetectorRef.markForCheck();
         });
         this.isColumnChangeOpen.set(column.id, false);
         this.isTaskAddOpen.set(column.id, true);
-        this.formChangeName.push({
-          id: column.id,
-          control: new FormControl(column.title, Validators.minLength(4)),
-        });
       });
+      this.changeDetectorRef.markForCheck();
     });
   }
 
@@ -95,12 +104,14 @@ export class TaskListsComponent implements OnInit {
 
   getColumns(): void {
     this.taskServ.getBoard().subscribe((board) => {
+      this.board = board;
       board.columns.forEach((column) => {
         this.taskServ.getColumn(column.id).subscribe((res) => {
           column.tasks = res.tasks;
-          this.board = board;
+          this.changeDetectorRef.markForCheck();
         });
       });
+      this.changeDetectorRef.markForCheck();
     });
   }
 
@@ -122,7 +133,9 @@ export class TaskListsComponent implements OnInit {
     const updatedData = {
       columnId: columnId,
     };
-    this.taskServ.editTask(this.taskId, updatedData).subscribe();
+    this.taskServ.editTask(this.taskId, updatedData).subscribe(() => {
+      this.changeDetectorRef.markForCheck();
+    });
   }
 
   addToDo(columnId: number) {
@@ -136,16 +149,26 @@ export class TaskListsComponent implements OnInit {
             column.tasks?.push(task);
           }
         });
+        this.changeDetectorRef.markForCheck();
       });
     this.newTask.reset();
   }
 
   addColumn() {
-    this.taskServ.createColumn(1, this.newColumn.value).subscribe((column) => {
-      this.board.columns.push(column);
-    });
-    this.newColumn.reset();
-    this.isColumnAddOpen = false;
+    if (this.newColumn.value.trim().length >= 4) {
+      this.newColumn.setValue(this.newColumn.value.trim());
+      this.taskServ
+        .createColumn(1, this.newColumn.value)
+        .subscribe((column) => {
+          this.board.columns.push(column);
+          this.board.columns[this.board.columns.length - 1].tasks = [];
+          this.changeDetectorRef.markForCheck();
+        });
+      this.newColumn.reset();
+      this.isColumnAddOpen = false;
+    } else {
+      this.newColumn.getError('invalid');
+    }
   }
 
   changeName(event: any, id: number, title: string) {
@@ -154,6 +177,7 @@ export class TaskListsComponent implements OnInit {
         this.board.columns[this.findColumnIdx(id)].title = event.target.value;
         this.isColumnChangeOpen.set(id, false);
         this.isTaskAddOpen.set(id, true);
+        this.changeDetectorRef.markForCheck();
       });
     }
   }
@@ -161,6 +185,7 @@ export class TaskListsComponent implements OnInit {
   deleteColumn(id: number) {
     this.taskServ.deleteColumn(id).subscribe((id) => {
       this.board.columns.splice(this.findColumnIdx(id), 1);
+      this.changeDetectorRef.markForCheck();
     });
     this.isColumnChangeOpen.delete(id);
     this.isTaskAddOpen.delete(id);
@@ -195,6 +220,7 @@ export class TaskListsComponent implements OnInit {
       const columnIdx = this.findColumnIdx(columnId);
       const taskIdx = this.findTaskIdx(id, columnIdx);
       this.board.columns[columnIdx].tasks?.splice(taskIdx, 1);
+      this.changeDetectorRef.markForCheck();
     });
   }
 }

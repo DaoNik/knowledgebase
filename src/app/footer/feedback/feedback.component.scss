@@ -22,7 +22,7 @@
   }
 
   .close {
-    background: linear-gradient(to right, #e66465, #9198e5);
+    background: linear-gradient(90deg, #c24eb6, #8d4686, #680f69);
     border-radius: 50%;
     width: 40px;
     height: 40px;
@@ -43,9 +43,10 @@
   }
 
   .mat-button {
-    background: linear-gradient(to right, #e66465, #9198e5);
+    background: linear-gradient(90deg, #c24eb6, #8d4686, #680f69);
     margin-top: 10px;
     font-size: 22px;
     padding: 8px;
   }
+
 }

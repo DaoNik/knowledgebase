@@ -62,7 +62,8 @@
           id="content"
           formControlName="content"
           [config]="editorConfig"
-        ></angular-editor>
+        >
+        </angular-editor>
         <small
           class="create-article__error"
           *ngIf="getError('content', 'required') && isTouched('content')"
@@ -198,13 +199,13 @@
         <div class="create-article__chips">
           <mat-chip
             class="create-article__chip"
-            *ngFor="let respondent of form.get('departments')?.value"
-            (removed)="removeChip(respondent, 'departments')"
+            *ngFor="let department of form.get('departments')?.value"
+            (removed)="removeChip(department, 'departments')"
             color="primary"
             selected
           >
-            {{ respondent }}
-            <button matChipRemove>
+            {{ department }}
+            <button matChipRemove (click)="removeAuthors(department)">
               <mat-icon>cancel</mat-icon>
             </button>
           </mat-chip>
@@ -229,10 +230,11 @@
         >
           <ng-container *ngIf="chipsLoaded">
             <mat-option
-              *ngFor="let respondent of filteredChips$ | async"
-              [value]="respondent"
+              *ngFor="let department of filteredChips$ | async"
+              [value]="department"
+              (click)="getAuthors(department)"
             >
-              {{ respondent }}
+              {{ department }}
             </mat-option>
           </ng-container>
         </mat-autocomplete>
@@ -269,11 +271,16 @@
           <input
             class="create-article__input"
             #authorsInput
-            placeholder="Выберите авторов"
+            [placeholder]="
+              !authors?.length
+                ? 'Сначала выберите ответственных'
+                : 'Выберите авторов'
+            "
             (click)="ctrl$.next('authors')"
             [matAutocomplete]="authorsAuto"
             [formControl]="authorsCtrl"
             [matChipInputFor]="chipAuthorsList"
+            [readOnly]="!authors?.length"
           />
         </mat-chip-list>
         <mat-autocomplete

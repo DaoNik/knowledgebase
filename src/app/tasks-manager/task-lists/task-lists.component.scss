@@ -6,10 +6,12 @@
 
 .board__task-header {
   margin: 6px 0;
+  line-height: 26px;
 }
 
 .board {
   width: 100%;
+  padding: 0 0 20px;
   overflow-x: auto;
   margin: 0 auto;
   display: flex;
@@ -58,10 +60,28 @@
     display: inline;
   }
 
+  p{
+    margin: 0;
+  }
+
   &--new {
     border: none;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+
+    p {
+      margin: 0;
+    }
+
+    &:hover {
+      border: 1px solid rgba(0, 0, 0, 0.12);
+      padding: 19px 10px;
+    font-weight: 700;
+    }
     cursor: auto;
   }
+
 }
 
 .cdk-drag-preview {
@@ -80,10 +100,6 @@
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
 
-.example-box:last-child {
-  border: none;
-}
-
 .example-list.cdk-drop-list-dragging .example-box:not(.cdk-drag-placeholder) {
   transition: transform 250ms cubic-bezier(0, 0, 0.2, 1);
 }
@@ -92,6 +108,10 @@
 
   mat-form-field {
     width: 100%;
+    .mat-form-field-infix {
+      display: flex;
+    }
+
   }
 }
 
@@ -101,13 +121,14 @@
 }
 
 
-.example-createToDo {
+.board__new-column-form {
   margin-left: 10px;
   font-size: 20px;
 }
 
 .board__new-column {
-  width: 300px;
+  min-width: 300px;
+  padding-right: 10px;
 
   mat-form-field {
     width: 100%;

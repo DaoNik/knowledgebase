@@ -29,14 +29,16 @@
 				</div>
 			</div>
 			<div class="modal-task__header_creation">
-				<div>Created at {{taskData.value.dateCreated}}</div>
-				<div>Updated at {{taskData.value.dateUpdated}}</div>
+				<div>Создана {{taskData.value.dateCreated}}</div>
+				<div>Обновлена {{taskData.value.dateUpdated}}</div>
 			</div>
 			<div class="modal-task__header_title">
 				<h2 *ngIf="!headerTrigger" (click)="headerTrigger = !headerTrigger">
 					{{taskData.value.title}}
 				</h2>
-				<input *ngIf="headerTrigger" formControlName="title" (keyup.enter)="changeTitle()">
+				<input *ngIf="headerTrigger" formControlName="title" (keyup.enter)="changeTitle()" 
+						(change)="titleOutlineRed = false" [ngStyle]="{'border-bottom': titleOutlineRed ? '1px solid red' : ''}"
+				>
 			</div>
 
 		</div>
@@ -166,7 +168,7 @@
 								<mat-icon>add</mat-icon>
 							</div>
 							<input class='text_input_new' type='text' name="inputTask"
-								(keyup.enter)="addText($event, -1)">
+								(keyup.enter)="addText($event)">
 						</div>
 					</div>
 				</mat-tab>
@@ -176,22 +178,22 @@
 						<div class="modal-task__data_comments_list" id="commentList" #commentList>
 							<div class="modal-task__data_comments_list_item" *ngFor="let item of comments">
 								<div class="author">
-									by {{item.author}}
+									{{item.author}}
 								</div>
 								<div class="text">
 									{{item.text}}
 								</div>
 							</div>
 						</div>
-						<form class="modal-task__data_comments_input" [formGroup]="commentForm">
-							<div class="text-wrp" (keyup.enter)="sendComment()">
+						<form class="modal-task__data_comments_input" [formGroup]="commentForm" (submit)="sendComment()">
+							<div class="text-wrp">
 								<input type="text" class="comment" placeholder="Ваш комментарий"
 									value={{commentForm.value.text}} formControlName="text" />
 								<input type="text" class="author" placeholder="Ваш ник"
 									value={{commentForm.value.author}} formControlName="author" />
 							</div>
 							<div class="btn-wrp">
-								<button mat-raised-button color="primary" (click)="sendComment()">
+								<button mat-raised-button color="primary" type="submit" disabled={{!commentForm.valid}}>
 									<mat-icon>send</mat-icon>
 								</button>
 							</div>

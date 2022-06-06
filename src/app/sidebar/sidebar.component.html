@@ -1,5 +1,5 @@
 <div class="hamburger-sidebar">
-  <input id="sidebar__toggle" type="checkbox" />
+  <input id="sidebar__toggle" type="checkbox" #sidebarCheckbox />
   <label
     class="sidebar__btn"
     for="sidebar__toggle"
@@ -18,7 +18,11 @@
   <ul class="sidebar__box">
     <div class="header__line-sidebar"></div>
 
-    <li><a class="sidebar__item" routerLink="">Главная</a></li>
+    <li>
+      <a class="sidebar__item" (click)="closeSidebar()" routerLink=""
+        >Главная</a
+      >
+    </li>
     <li><a class="sidebar__item">Пункты выдачи</a></li>
     <li><a class="sidebar__item">Клиентская сторона</a></li>
     <li><a class="sidebar__item">Серверная сторона</a></li>
@@ -26,7 +30,7 @@
 
     <section class="sidebar__more__info">
       <li>
-        <a class="sidebar__item" routerLink="tasks">
+        <a class="sidebar__item" routerLink="tasks" (click)="closeSidebar()">
           <mat-icon>assignment</mat-icon> Менеджер задач</a
         >
       </li>
@@ -38,7 +42,11 @@
       </li>
 
       <li>
-        <a class="sidebar__item sidebar__item_admin" routerLink="/admin">
+        <a
+          class="sidebar__item sidebar__item_admin"
+          routerLink="/admin"
+          (click)="closeSidebar()"
+        >
           <mat-icon>https</mat-icon>
           Кабинет администратора
         </a>

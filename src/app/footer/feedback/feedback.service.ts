@@ -1,22 +1,20 @@
+import { IFeedback } from 'src/app/interfaces/feedback';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Inject, Injectable } from '@angular/core';
+import { Injectable } from '@angular/core';
 import { catchError, Observable, throwError } from 'rxjs';
-import { ErrorModalService } from '../error-modal/error-modal.service';
-import { IArticle } from '../interfaces/article';
+import { ErrorModalService } from 'src/app/error-modal/error-modal.service';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
-export class BreadCrumbsService {
-
+export class FeedbackService {
   constructor(
     private http: HttpClient,
-    @Inject('API_URL') private apiUrl: string,
     private errorService: ErrorModalService
-  ) { }
+  ) {}
 
-  getArticle(id: string): Observable<IArticle> {
-    return this.http.get<IArticle>(`${this.apiUrl}/${id}`).pipe(
+  sendFeedback(feedback: IFeedback): Observable<object> {
+    return this.http.post('https://wbbase.site/docker/feedback', feedback).pipe(
       catchError((error: HttpErrorResponse) => {
         this.errorService.visibleForError(
           error.error.message[error.error.message.length - 1]

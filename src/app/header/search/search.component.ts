@@ -1,7 +1,14 @@
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  Input,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
-import { map, Observable, startWith, Subscription } from 'rxjs';
+import { filter, map, Observable, startWith, Subscription } from 'rxjs';
 import { IArticle } from 'src/app/interfaces/article';
 import { SearchService } from './search.service';
 
@@ -13,10 +20,11 @@ interface IFilter {
   selector: 'app-search',
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class SearchComponent implements OnInit, OnDestroy {
   @Input('bgColor') bgColor!: boolean;
-  searchQuery = new FormControl();
+  searchQuery = new FormControl('');
   results: string[] = ['One', 'Two', 'Three'];
   filterOptions: IFilter[] = [
     {
@@ -52,7 +60,11 @@ export class SearchComponent implements OnInit, OnDestroy {
   subscriptionArticles$!: Subscription;
   foundArticles!: IArticle[];
 
-  constructor(private searchService: SearchService, private router: Router) {}
+  constructor(
+    private searchService: SearchService,
+    private router: Router,
+    private changeDetectorRef: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.filteredResults = this.searchQuery.valueChanges.pipe(
@@ -61,7 +73,10 @@ export class SearchComponent implements OnInit, OnDestroy {
     );
     this.subscriptionArticles$ = this.searchService
       .getArticles()
-      .subscribe((articles: IArticle[]) => (this.foundArticles = articles));
+      .subscribe((articles: IArticle[]) => {
+        this.foundArticles = articles;
+        this.changeDetectorRef.markForCheck();
+      });
   }
 
   ngOnDestroy() {
@@ -88,6 +103,16 @@ export class SearchComponent implements OnInit, OnDestroy {
       : this.foundArticles;
   }
 
+  changeStatus(option: any): boolean {
+    const filterTags = this.filterOptions.filter((item) => {
+      return item.status;
+    });
+    console.log(filterTags.length);
+
+    if (filterTags.length > 1) return !option.status;
+    else return true;
+  }
+
   search() {
     const filterTags = this.filterOptions
       .filter((item) => {
@@ -96,7 +121,10 @@ export class SearchComponent implements OnInit, OnDestroy {
       .map((item) => {
         return item.title;
       });
-    this.searchService.goToSearchResults(this.searchQuery.value, filterTags);
+    this.searchService.goToSearchResults(
+      this.searchQuery.value.trim(),
+      filterTags
+    );
   }
 
   goToArticle(id: string) {

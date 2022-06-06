@@ -39,10 +39,10 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
     dateUpdated: [],
   });
   commentForm = this.fb.group({
-    text: [''],
-    author: ['Гость'],
-  });
-  columns: any = [];
+    text: ['', [Validators.minLength(1), Validators.maxLength(500), Validators.required]],
+    author: ['Гость', [Validators.minLength(1), Validators.maxLength(50), Validators.required]]
+  })
+  columns: any = []
   statusVariants: string[] = ['Todo', 'In progress', 'Done'];
   priorityVariants: string[] = ['None', 'Low', 'Medium', 'High'];
   typeOptions: ITypeOption[] = [
@@ -65,6 +65,7 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
   inputTrigger = false;
   headerTrigger = false;
   sidebarEditTrigger = false;
+  titleOutlineRed = false;
   createOption: ITypeOption = {
     name: 'text',
     type: '',
@@ -92,8 +93,8 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
     this.dialogRef.close();
   }
 
-  addText(e: any, num: number) {
-    if (num == -1) {
+  addText(e: any, index?: number) {
+    if (!index) {
       if (!this.taskData.value.text) {
         this.taskData.value.text = [
           {
@@ -109,12 +110,12 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
           value: this.createOption.value,
         });
       }
-      e.target.value = '';
-      this.createOption.type = '';
-      this.createOption.value = '';
     } else {
-      this.taskData.value.text[num].text = e.target.value;
+      this.taskData.value.text[index].text = e.target.value;
     }
+    e.target.value = '';
+    this.createOption.type = '';
+    this.createOption.value = '';
     this.inputTrigger = false;
     this.updateTaskData();
   }
@@ -131,8 +132,12 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
   }
 
   changeTitle() {
-    this.headerTrigger = !this.headerTrigger;
-    this.updateTaskData();
+    if (this.taskData.value.title.trim().length > 4) {
+      this.headerTrigger = !this.headerTrigger;
+      this.updateTaskData();
+    } else {
+      this.titleOutlineRed = true;
+    }
   }
 
   changeType(option: any, i: number) {
@@ -199,16 +204,6 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
   }
 
   sendComment() {
-    // let tmpArr = this.taskData.value.comments;
-    // tmpArr.push({
-    //   text: this.commentForm.value.text,
-    //   author: this.commentForm.value.author,
-    // });
-    // this.taskData.patchValue({
-    //   comments: tmpArr,
-    // });
-    // this.updateTaskData();
-
     this.socketsService.createTaskComment({
       text: this.commentForm.value.text,
       author: this.commentForm.value.author,
@@ -309,7 +304,6 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
           columnId: res.columnId,
           priority: res.priority,
           contact: res.contact,
-          // comments: res.comments,
           dateCreated: this._dateTransform(res.createdAt),
           dateUpdated: this._dateTransform(res.updatedAt),
         });
@@ -319,6 +313,7 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
             text: res.description.map((element: any) => JSON.parse(element)),
           });
         }
+        
       });
 
     this.subscriptionColumn$ = this.taskManagerService
@@ -339,6 +334,18 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
         });
       });
   }
+
+  // parseStringify(desc: any, parseOrString: boolean) {
+  //   if (parseOrString == true) {
+  //     desc.forEach((element: any) => {
+  //       element = JSON.parse(element);
+  //     });
+  //   } else {
+  //     desc.forEach((element: any) => {
+  //       element = JSON.stringify(element);
+  //     });
+  //   }
+  // }
 
   private _dateTransform(date: string): string {
     return `${date.slice(0, 10)} ${date.slice(11, 19)}`;
