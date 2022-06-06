@@ -1,6 +1,8 @@
 import { CreateArticleService } from './create-article.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   OnDestroy,
@@ -32,6 +34,7 @@ import { IDepartment } from '../interfaces/department';
   selector: 'app-create-article',
   templateUrl: './create-article.component.html',
   styleUrls: ['./create-article.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CreateArticleComponent implements OnInit, OnDestroy {
   @ViewChild('departmentsInput')
@@ -83,7 +86,8 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
   constructor(
     private route: ActivatedRoute,
     private createArticleService: CreateArticleService,
-    private router: Router
+    private router: Router,
+    private changeDetectorRef: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -188,6 +192,8 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
             Validators.minLength(1),
           ]),
         });
+
+        this.changeDetectorRef.markForCheck();
       });
   }
 
@@ -211,6 +217,8 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
         }
 
         this.authors = [...this.authors, ...authors];
+
+        this.changeDetectorRef.markForCheck();
       });
   }
 
@@ -230,6 +238,8 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
         control?.patchValue(
           control?.value.filter((author: string) => !authorsSet.has(author))
         );
+
+        this.changeDetectorRef.markForCheck();
       });
   }
 
