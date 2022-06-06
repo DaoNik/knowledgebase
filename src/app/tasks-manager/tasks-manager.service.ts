@@ -148,11 +148,13 @@ export class TasksManagerService {
   // Tasks
 
   getTasks(): Observable<ITask[]> {
+    this.loading$.next(true);
     return this.http.get<ITask[]>(`${this.url}/tasks`).pipe(
       catchError((error: HttpErrorResponse) => {
         this.errorService.visibleForError(
           error.error.message[error.error.message.length - 1]
         );
+        this.loading$.next(false);
         return throwError(() => error);
       })
     );

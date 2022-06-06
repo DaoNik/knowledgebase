@@ -29,16 +29,13 @@ import { ModalTaskComponent } from './modal-task/modal-task.component';
 import { RouterModule, Routes } from '@angular/router';
 import { TasksManagerComponent } from './tasks-manager.component';
 import { TasksTableComponent } from './tasks-table/tasks-table.component';
-import { ModalTaskService } from './modal-task/modal-task.service';
 import { ModalTaskEntryComponent } from './modal-task/modal-task-entry.component';
-import { MainComponent } from '../main/main.component';
 import { AssigneeModalComponent } from './modal-task/assignee-modal/assignee-modal.component';
 import { DeleteTaskModalComponent } from './modal-task/delete-task-modal/delete-task-modal.component';
 import { ModalFormComponent } from './form-issue/modal-form/modal-form.component';
-import { NotFoundComponent } from '../not-found/not-found.component';
 import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
-const routes: Routes = [
+export const tasksManagerRoutes: Routes = [
   { path: '', redirectTo: 'lists', pathMatch: 'full' },
   
   { path: 'lists', component: TaskListsComponent, children: [
@@ -81,7 +78,7 @@ const routes: Routes = [
     ReactiveFormsModule,
     FormsModule,
     CommonModule,
-    RouterModule.forChild(routes),
+    RouterModule.forChild(tasksManagerRoutes),
 
     // Material UI
     MatButtonModule,
