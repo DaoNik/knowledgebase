@@ -76,6 +76,7 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
 
   subscriptionTask$!: Subscription;
   subscriptionColumn$!: Subscription;
+  subscriptionEdit$!: Subscription;
 
   constructor(
     public dialogRef: MatDialogRef<ModalTaskComponent>,
@@ -247,6 +248,7 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
   ngOnDestroy(): void {
     this.subscriptionTask$.unsubscribe();
     this.subscriptionColumn$.unsubscribe();
+    this.subscriptionEdit$.unsubscribe();
     this.socketsService.offTaskComments();
   }
 
@@ -268,7 +270,7 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
         JSON.stringify(element)
       ),
     };
-    this.taskManagerService
+    this.subscriptionEdit$ = this.taskManagerService
       .editTask(Number(this.data), updatedData)
       .subscribe((res) => {
         this.taskData.patchValue({
