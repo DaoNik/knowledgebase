@@ -32,48 +32,4 @@ export class ModalTaskService {
       console.log(res);
     });
   }
-
-  getTasks(): Observable<any> {
-    return this.http.get<any>(this.taskUrl).pipe(
-      catchError((error: HttpErrorResponse) => {
-        this.errorService.visibleForError(
-          error.error.message[error.error.message.length - 1]
-        );
-        return throwError(() => error);
-      })
-    );
-  }
-
-  getTask(id: number): Observable<any> {
-    return this.http.get<any>(`${this.taskUrl}/${id}`).pipe(
-      catchError((error: HttpErrorResponse) => {
-        this.errorService.visibleForError(
-          error.error.message[error.error.message.length - 1]
-        );
-        return throwError(() => error);
-      })
-    );
-  }
-
-  updateTask(id: number, updatedData: any): Observable<any> {
-    return this.http.patch<any>(`${this.taskUrl}/${id}`, updatedData).pipe(
-      catchError((error: HttpErrorResponse) => {
-        this.errorService.visibleForError(
-          error.error.message[error.error.message.length - 1]
-        );
-        return throwError(() => error);
-      })
-    );
-  }
-
-  getColumns() {
-    return this.http.get<any>(this.columnUrl).pipe(
-      catchError((error: HttpErrorResponse) => {
-        this.errorService.visibleForError(
-          error.error.message[error.error.message.length - 1]
-        );
-        return throwError(() => error);
-      })
-    );
-  }
 }

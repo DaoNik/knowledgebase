@@ -12,6 +12,7 @@ import { IArticle } from '../interfaces/article';
 export class SearchResultsComponent implements OnInit, OnDestroy {
   articles: IArticle[] = [];
   articlesOnPage: number = 8;
+  articlesonPageOptions: number[] = [8, 12, 16, 24, 48, 100]
   currentPageArticles: IArticle[] = this.articles.slice(0, this.articlesOnPage);
   currentPage: number = 1;
   pages: number[] = [];
@@ -57,9 +58,16 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
     }
   }
 
+  changeArticlesOnPage(count: number): void {
+    this.articlesOnPage = count;
+    this.currentPageArticles = this.articles.slice(0, this.articlesOnPage);
+    this.countPages();
+  }
+
   pageClick(page: number) {
     this.currentPage = page;
     const startArticle: number = (page - 1) * this.articlesOnPage;
     this.currentPageArticles = this.articles.slice(startArticle, startArticle + this.articlesOnPage);
+    scroll(0,0)
   }
 }
