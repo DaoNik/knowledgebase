@@ -16,7 +16,7 @@ const routes: Routes = [
       import('./admin-panel/admin-panel.module').then(
         (m) => m.AdminPanelModule
       ),
-    data: { displayName: 'Админка', animation: 'admin', preload: true, delay: 5000 },
+    data: { displayName: 'Админка', animation: 'admin', preload: true, delay: 10000 },
   },
   {
     path: 'tasks',
@@ -25,7 +25,7 @@ const routes: Routes = [
       import('./tasks-manager/tasks-manager.module').then(
         (m) => m.TasksManagerModule
       ),
-    data: { displayName: 'Менеджер задач', animation: 'tasks', preload: true, delay: 3000},
+    data: { displayName: 'Менеджер задач', animation: 'tasks'},
   },
   {
     path: '',
