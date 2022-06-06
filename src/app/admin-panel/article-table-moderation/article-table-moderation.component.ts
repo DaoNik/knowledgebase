@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { AdminPanelService } from '../admin-panel.service';
 
 const mockTopics: string[] = [
@@ -13,6 +13,7 @@ const mockTopics: string[] = [
   selector: 'app-article-table-moderation',
   templateUrl: './article-table-moderation.component.html',
   styleUrls: ['./article-table-moderation.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ArticleTableModerationComponent {
   topics: string[] = mockTopics;

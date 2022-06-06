@@ -1,17 +1,26 @@
 <main class="main" id="main">
   <div *ngIf="articles.length > 0" class="main__result-count">
-    {{articles.length == 1 ? 'Найдена' : 'Найдено'}} 
-    {{articles.length}} 
-    {{articles.length % 10 == 1 ? 'статья' : (articles.length % 10 >= 2 && articles.length % 10 < 5 ? 'статьи' : 'статей')}}
+    {{ articles.length == 1 ? "Найдена" : "Найдено" }}
+    {{ articles.length }}
+    {{
+      articles.length % 10 == 1
+        ? "статья"
+        : articles.length % 10 >= 2 && articles.length % 10 < 5
+        ? "статьи"
+        : "статей"
+    }}
   </div>
   <ul class="articles">
-    <li class="articles__item" *ngFor="let article of currentPageArticles; let i = index"
-      (click)="openArticle(article.id!)">
+    <li
+      class="articles__item"
+      *ngFor="let article of currentPageArticles; let i = index"
+      (click)="openArticle(article.id!)"
+    >
       <a class="articles__item-link">
         <h3 class="articles__item-title">{{ article.title }}</h3>
         <p class="articles__item-date">
           Последнее обновление:
-          {{ article.dateUpdate | date: "d MMMM y":"":"ru" }}
+          {{ article.updatedAt | date: "d MMMM y":"":"ru" }}
         </p>
         <p class="articles__item-description">{{ article.description }}</p>
         <p class="articles__item-read">Читать статью</p>
@@ -22,14 +31,31 @@
     </p>
   </ul>
   <ul class="articles__pagination-list">
-    <div [matMenuTriggerFor]="articlesCount" class="articles__pagination-list_menu">Показать: {{articlesOnPage}} <mat-icon>expand_more</mat-icon></div>
+    <div
+      [matMenuTriggerFor]="articlesCount"
+      class="articles__pagination-list_menu"
+    >
+      Показать: {{ articlesOnPage }} <mat-icon>expand_more</mat-icon>
+    </div>
     <mat-menu #articlesCount="matMenu">
-      <button mat-menu-item *ngFor="let num of articlesonPageOptions" (click)="changeArticlesOnPage(num)">{{num}}</button>
+      <button
+        mat-menu-item
+        *ngFor="let num of articlesonPageOptions"
+        (click)="changeArticlesOnPage(num)"
+      >
+        {{ num }}
+      </button>
     </mat-menu>
     <li class="articles__pagination-item" *ngFor="let page of pages">
-      <button color="primary" mat-raised-button class="articles__pagination-link" (click)="pageClick(page)" [class]="
+      <button
+        color="primary"
+        mat-raised-button
+        class="articles__pagination-link"
+        (click)="pageClick(page)"
+        [class]="
           currentPage === page ? 'articles__pagination-link--active' : ''
-        ">
+        "
+      >
         {{ page }}
       </button>
     </li>

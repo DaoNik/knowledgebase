@@ -1,4 +1,10 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { mergeMap, Subscription } from 'rxjs';
 import { IArticle } from 'src/app/interfaces/article';
@@ -61,6 +67,7 @@ const mockArticles: adminArticle[] = [
   selector: 'app-articles-table',
   templateUrl: './articles-table.component.html',
   styleUrls: ['./articles-table.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ArticlesTableComponent implements OnInit, OnDestroy {
   articles: IArticle[] = [];
@@ -77,7 +84,10 @@ export class ArticlesTableComponent implements OnInit, OnDestroy {
   search: FormControl = new FormControl('');
   tagInput: FormControl = new FormControl('');
 
-  constructor(private adminService: AdminPanelService) {}
+  constructor(
+    private adminService: AdminPanelService,
+    private changeDetectorRef: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.subscriptionCategoryListed$ = this.adminService.categoryListed
@@ -86,6 +96,8 @@ export class ArticlesTableComponent implements OnInit, OnDestroy {
         this.articles = articles;
         this.currentPageArticles = this.articles.slice(0, this.articlesOnPage);
         this.countPages();
+
+        this.changeDetectorRef.markForCheck();
       });
   }
 
@@ -116,7 +128,9 @@ export class ArticlesTableComponent implements OnInit, OnDestroy {
     );
     this.pageClick(this.currentPage);
     this.countPages();
-    this.adminService.deleteArticle(articleId).subscribe();
+    this.adminService.deleteArticle(articleId).subscribe(() => {
+      this.changeDetectorRef.markForCheck();
+    });
   }
 
   deleteCheckedArticles() {

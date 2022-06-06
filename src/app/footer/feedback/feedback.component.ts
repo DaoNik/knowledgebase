@@ -1,10 +1,11 @@
-import { Component } from '@angular/core';
+import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 
 @Component({
   selector: 'app-feedback',
   templateUrl: './feedback.component.html',
   styleUrls: ['./feedback.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FeedbackComponent {
   feedback: FormGroup;
@@ -16,5 +17,4 @@ export class FeedbackComponent {
       text: ['', [Validators.minLength(10)]],
     });
   }
-
 }

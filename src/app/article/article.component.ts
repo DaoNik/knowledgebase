@@ -1,4 +1,10 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { IArticle } from '../interfaces/article';
@@ -7,7 +13,8 @@ import { ArticleService } from './article.service';
 @Component({
   selector: 'app-article',
   templateUrl: './article.component.html',
-  styleUrls: ['./article.component.scss']
+  styleUrls: ['./article.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ArticleComponent implements OnInit, OnDestroy {
   article$!: Observable<IArticle>;
@@ -16,17 +23,18 @@ export class ArticleComponent implements OnInit, OnDestroy {
 
   constructor(
     private articlesServ: ArticleService,
-    private route: ActivatedRoute
-  ) { }
+    private route: ActivatedRoute,
+    private changeDetectorRef: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.subscriptionParams$ = this.route.params.subscribe((params: Params) => {
       this.article$ = this.articlesServ.getArticle(params['id']);
+      this.changeDetectorRef.markForCheck();
     });
   }
 
   ngOnDestroy() {
     this.subscriptionParams$.unsubscribe();
   }
-
 }
