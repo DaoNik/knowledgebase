@@ -2,12 +2,15 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { IArticle } from './../interfaces/article';
 import { Inject, Injectable } from '@angular/core';
 import { catchError, Observable, of, throwError } from 'rxjs';
+import { IDepartment } from '../interfaces/department';
 import { ErrorModalService } from '../error-modal/error-modal.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class CreateArticleService {
+  private url = 'https://wbbase.site/docker';
+
   constructor(
     @Inject('API_URL') private apiUrl: string,
     private http: HttpClient,
@@ -48,28 +51,46 @@ export class CreateArticleService {
   }
 
   getTags(): Observable<string[]> {
-    return of(['Frontend', 'Backend', 'БД']);
+    return this.http.get<string[]>(`${this.url}/tags`).pipe(
+      catchError((error: HttpErrorResponse) => {
+        this.errorService.visibleForError(
+          error.error.message[error.error.message.length - 1]
+        );
+        return throwError(() => error);
+      })
+    );
   }
 
-  getAuthors(): Observable<string[]> {
-    return of(['Саша Сашин', 'Петр Петрович']);
+  getAuthors(id: number): Observable<string[]> {
+    return this.http.get<string[]>(`${this.url}/departments/${id}`).pipe(
+      catchError((error: HttpErrorResponse) => {
+        this.errorService.visibleForError(
+          error.error.message[error.error.message.length - 1]
+        );
+        return throwError(() => error);
+      })
+    );
   }
 
-  getDepartments(): Observable<string[]> {
-    return of([
-      'Отдел разработки #1',
-      'Отдел разработки #2',
-      'Отдел разработки #3',
-    ]);
+  getDepartments(): Observable<IDepartment[]> {
+    return this.http.get<IDepartment[]>(`${this.url}/departments`).pipe(
+      catchError((error: HttpErrorResponse) => {
+        this.errorService.visibleForError(
+          error.error.message[error.error.message.length - 1]
+        );
+        return throwError(() => error);
+      })
+    );
   }
 
   getCategories(): Observable<string[]> {
-    return of([
-      'Склад',
-      'Пункты выдачи',
-      'Клиентская сторона',
-      'Серверная сторона',
-      'Логистика',
-    ]);
+    return this.http.get<string[]>(`${this.url}/categories`).pipe(
+      catchError((error: HttpErrorResponse) => {
+        this.errorService.visibleForError(
+          error.error.message[error.error.message.length - 1]
+        );
+        return throwError(() => error);
+      })
+    );
   }
 }
