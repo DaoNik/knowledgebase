@@ -1,4 +1,6 @@
-<div class="container">
+<div *ngIf="!dataSource  && (loading$ | async);" class="loading ring">Загрузка<span class="ring-animate"></span></div>
+
+<div *ngIf="dataSource" class="container">
   <mat-form-field appearance="standard">
     <mat-label>Фильтр</mat-label>
     <input

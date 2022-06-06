@@ -11,7 +11,7 @@ import {
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { map, Subject, takeUntil } from 'rxjs';
+import { delay, map, Observable, Subject, takeUntil } from 'rxjs';
 import { TasksManagerService } from '../tasks-manager.service';
 
 export interface ITableTasks {
@@ -38,6 +38,7 @@ export class TasksTableComponent implements OnInit, AfterViewChecked, OnDestroy 
   ];
 
   private destroySubscribes$ = new Subject<boolean>();
+  public loading$!: Observable<boolean>;
 
   tasks$ = this.taskServ.getTasks();
   filterTasks: ITableTasks[] = [];
@@ -55,6 +56,7 @@ export class TasksTableComponent implements OnInit, AfterViewChecked, OnDestroy 
   ) {}
 
   ngOnInit(): void {
+    this.loadingProcess();
     this.getTasks();
   }
 
@@ -69,6 +71,10 @@ export class TasksTableComponent implements OnInit, AfterViewChecked, OnDestroy 
 
   ngOnDestroy() {
     this.destroySubscribes$.next(true);
+  }
+
+  loadingProcess(): void {
+    this.loading$ = this.taskServ.loading$.pipe(delay(500));
   }
 
   getTasks(): void {
