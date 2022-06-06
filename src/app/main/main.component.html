@@ -10,13 +10,16 @@
   </div>
 
   <ul class="articles">
-    <li class="articles__item" *ngFor="let article of currentPageArticles; let i = index"
-      (click)="openArticle(article.id!)">
+    <li
+      class="articles__item"
+      *ngFor="let article of currentPageArticles; let i = index"
+      (click)="openArticle(article.id!)"
+    >
       <a class="articles__item-link">
         <h3 class="articles__item-title">{{ article.title }}</h3>
         <p class="articles__item-date">
           Последнее обновление:
-          {{ article.dateUpdate | date: "d MMMM y":"":"ru" }}
+          {{ article.updatedAt | date: "d MMMM y":"":"ru" }}
         </p>
         <p class="articles__item-description">{{ article.description }}</p>
         <p class="articles__item-read">Читать статью</p>
@@ -28,9 +31,15 @@
   </ul>
   <ul class="articles__pagination-list">
     <li class="articles__pagination-item" *ngFor="let page of pages">
-      <button color="primary" mat-raised-button class="articles__pagination-link" (click)="pageClick(page)" [class]="
+      <button
+        color="primary"
+        mat-raised-button
+        class="articles__pagination-link"
+        (click)="pageClick(page)"
+        [class]="
           currentPage === page ? 'articles__pagination-link--active' : ''
-        ">
+        "
+      >
         {{ page }}
       </button>
     </li>

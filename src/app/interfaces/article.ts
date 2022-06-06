@@ -2,8 +2,8 @@ export interface IArticle {
   id?: string;
   title: string;
   description: string;
-  dateCreate?: string;
-  dateUpdate?: string;
+  createdAt?: string;
+  updatedAt?: string;
   content: string;
   authors: string[];
   department: string[];

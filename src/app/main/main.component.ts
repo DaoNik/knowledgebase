@@ -1,4 +1,10 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { Router } from '@angular/router';
 import { Subscription } from 'rxjs';
 import { ArticleService } from '../article/article.service';
@@ -8,6 +14,7 @@ import { IArticle } from '../interfaces/article';
   selector: 'app-main',
   templateUrl: './main.component.html',
   styleUrls: ['./main.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class MainComponent implements OnInit, OnDestroy {
   articles: IArticle[] = [];
@@ -17,7 +24,11 @@ export class MainComponent implements OnInit, OnDestroy {
   pages: number[] = [];
   subscriptionArticles$!: Subscription;
 
-  constructor(private articleService: ArticleService, private router: Router) {}
+  constructor(
+    private articleService: ArticleService,
+    private router: Router,
+    private changeDetectorRef: ChangeDetectorRef
+  ) {}
 
   ngOnInit(): void {
     this.subscriptionArticles$ = this.articleService
@@ -26,6 +37,7 @@ export class MainComponent implements OnInit, OnDestroy {
         this.articles = articles;
         this.currentPageArticles = this.articles.slice(0, this.articlesOnPage);
         this.countPages();
+        this.changeDetectorRef.markForCheck();
       });
   }
 
@@ -39,7 +51,7 @@ export class MainComponent implements OnInit, OnDestroy {
 
   countPages(): void {
     this.pages = [];
-    for (let i = 0; i < (this.articles.length / this.articlesOnPage); i++) {
+    for (let i = 0; i < this.articles.length / this.articlesOnPage; i++) {
       this.pages.push(i + 1);
     }
   }
@@ -47,6 +59,9 @@ export class MainComponent implements OnInit, OnDestroy {
   pageClick(page: number) {
     this.currentPage = page;
     const startArticle: number = (page - 1) * this.articlesOnPage;
-    this.currentPageArticles = this.articles.slice(startArticle, startArticle + this.articlesOnPage);
+    this.currentPageArticles = this.articles.slice(
+      startArticle,
+      startArticle + this.articlesOnPage
+    );
   }
 }
