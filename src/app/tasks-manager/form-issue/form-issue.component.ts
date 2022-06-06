@@ -1,11 +1,23 @@
-import { Component, ElementRef, ViewChild } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  ViewChild,
+} from '@angular/core';
 import {
   FormBuilder,
   Validators,
   FormGroup,
   FormControl,
 } from '@angular/forms';
-import { catchError, concatMap, map, Observable, startWith, throwError } from 'rxjs';
+import {
+  catchError,
+  concatMap,
+  map,
+  Observable,
+  startWith,
+  throwError,
+} from 'rxjs';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
 import { TasksManagerService } from '../tasks-manager.service';
 import { MatDialog } from '@angular/material/dialog';
@@ -16,6 +28,7 @@ import { IColumn } from '../interfaces/taskList.interface';
   selector: 'app-form-issue',
   templateUrl: './form-issue.component.html',
   styleUrls: ['./form-issue.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class FormIssueComponent {
   allTags: string[] = ['Frontend', 'Backend', 'Склад', 'Базы данных'];
@@ -27,7 +40,11 @@ export class FormIssueComponent {
 
   @ViewChild('tagInput') tagInput!: ElementRef<HTMLInputElement>;
 
-  constructor(private fb: FormBuilder, private taskServ: TasksManagerService, public dialog: MatDialog) {
+  constructor(
+    private fb: FormBuilder,
+    private taskServ: TasksManagerService,
+    public dialog: MatDialog
+  ) {
     this.issueForm = this.fb.group({
       title: [
         '',
@@ -63,7 +80,7 @@ export class FormIssueComponent {
       panelClass: 'modal-form-global',
       data: this.errorMessage,
       maxWidth: '500px',
-      width: '90%'
+      width: '90%',
     });
   }
 
@@ -83,26 +100,29 @@ export class FormIssueComponent {
       tags: this.issueForm.value.tags,
       boardId: 1,
     };
-    this.taskServ.getColumns()
-    .pipe(
-      concatMap((columns: IColumn[]) =>  this.taskServ
-      .createTask(
-        columns[0].id,
-        formData.title,
-        formData.boardId,
-        formData.author,
-        formData.priority,
-        formData.status,
-        formData.description,
-        [formData.author],
-        formData.departments,
-        formData.tags
-      )),
-      catchError((error) => {
-        this.errorMessage = error.error.message;
-        return throwError(() => error);
-      })
-    ).subscribe();
+    this.taskServ
+      .getColumns()
+      .pipe(
+        concatMap((columns: IColumn[]) =>
+          this.taskServ.createTask(
+            columns[0].id,
+            formData.title,
+            formData.boardId,
+            formData.author,
+            formData.priority,
+            formData.status,
+            formData.description,
+            [formData.author],
+            formData.departments,
+            formData.tags
+          )
+        ),
+        catchError((error) => {
+          this.errorMessage = error.error.message;
+          return throwError(() => error);
+        })
+      )
+      .subscribe();
     setTimeout(() => {
       this.openDialog();
     }, 1000);

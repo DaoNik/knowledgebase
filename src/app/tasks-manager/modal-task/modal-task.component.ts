@@ -1,5 +1,12 @@
 import { SocketsService } from './../sockets.service';
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  Inject,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import {
   MatDialog,
   MatDialogRef,
@@ -19,6 +26,7 @@ import { IComment } from '../interfaces/comment';
   selector: 'app-modal-task',
   templateUrl: './modal-task.component.html',
   styleUrls: ['./modal-task.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ModalTaskComponent implements OnInit, OnDestroy {
   comments!: IComment[];
@@ -39,10 +47,16 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
     dateUpdated: [],
   });
   commentForm = this.fb.group({
-    text: ['', [Validators.minLength(1), Validators.maxLength(500), Validators.required]],
-    author: ['Гость', [Validators.minLength(1), Validators.maxLength(50), Validators.required]]
-  })
-  columns: any = []
+    text: [
+      '',
+      [Validators.minLength(1), Validators.maxLength(500), Validators.required],
+    ],
+    author: [
+      'Гость',
+      [Validators.minLength(1), Validators.maxLength(50), Validators.required],
+    ],
+  });
+  columns: any = [];
   statusVariants: string[] = ['Todo', 'In progress', 'Done'];
   priorityVariants: string[] = ['None', 'Low', 'Medium', 'High'];
   typeOptions: ITypeOption[] = [
@@ -86,7 +100,8 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
     private router: Router,
     private taskManagerService: TasksManagerService,
     private _snackBar: MatSnackBar,
-    private socketsService: SocketsService
+    private socketsService: SocketsService,
+    private changeDetectorRef: ChangeDetectorRef
   ) {}
 
   onNoClick(): void {
@@ -190,6 +205,7 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
 
     dialogRef.afterClosed().subscribe(() => {
       this.uploadTaskData();
+      this.changeDetectorRef.markForCheck();
     });
   }
 
@@ -228,7 +244,10 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
   getTaskComments() {
     this.taskManagerService
       .getTaskComments(this.taskData.value.id)
-      .subscribe((comments) => (this.comments = comments));
+      .subscribe((comments) => {
+        this.comments = comments;
+        this.changeDetectorRef.markForCheck();
+      });
   }
 
   getTaskComment() {
@@ -236,6 +255,7 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
       if (+this.taskData.value.id === +comment.taskId) {
         this.comments.push(comment);
       }
+      this.changeDetectorRef.markForCheck();
     });
   }
 
@@ -277,6 +297,7 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
           dateCreated: this._dateTransform(res.createdAt),
           dateUpdated: this._dateTransform(res.updatedAt),
         });
+        this.changeDetectorRef.markForCheck();
       });
   }
 
@@ -313,7 +334,6 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
             text: res.description.map((element: any) => JSON.parse(element)),
           });
         }
-        
       });
 
     this.subscriptionColumn$ = this.taskManagerService
