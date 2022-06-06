@@ -26,7 +26,7 @@
     padding-left: 0;
   }
 
-  @media screen and (min-width: 1024px) {
+  @media screen and (min-width: 1440px) {
     padding-left: 20px;
     padding: 0 0 5px 20px;
   }
@@ -34,7 +34,6 @@
 
 .bread-crumbs__item {
   display: flex;
-  align-items: flex-end;
   padding: 2px 0;
   color: #000;
 
@@ -47,13 +46,11 @@
 
   @media screen and (min-width: 1440px) {
     font-size: 18px;
-    align-content: center;
 
     mat-icon {
       font-size: 24px;
-      line-height: 33px;
+      line-height: 35px;
       height: 27px;
-      vertical-align: middle;
     }
   }
 }
