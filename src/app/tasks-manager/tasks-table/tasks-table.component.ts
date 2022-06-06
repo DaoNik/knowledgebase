@@ -5,13 +5,14 @@ import {
   ElementRef,
   OnInit,
   OnDestroy,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  AfterViewChecked,
 } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { Router } from '@angular/router';
 import { map, Subscription } from 'rxjs';
-import { ModalTaskService } from '../modal-task/modal-task.service';
 import { TasksManagerService } from '../tasks-manager.service';
 
 export interface ITableTasks {
@@ -25,9 +26,10 @@ export interface ITableTasks {
 @Component({
   selector: 'app-tasks-table',
   templateUrl: './tasks-table.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./tasks-table.component.scss'],
 })
-export class TasksTableComponent implements OnInit, AfterViewInit, OnDestroy {
+export class TasksTableComponent implements OnInit, AfterViewChecked, OnDestroy {
   displayedColumns: string[] = [
     'id',
     'title',
@@ -50,8 +52,7 @@ export class TasksTableComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private elRef: ElementRef,
     private taskServ: TasksManagerService,
-    private modalServ: ModalTaskService,
-    private router: Router
+    private changeDetectorRef: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -75,13 +76,17 @@ export class TasksTableComponent implements OnInit, AfterViewInit, OnDestroy {
         );
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
+        this.changeDetectorRef.markForCheck();
       });
   }
 
-  ngAfterViewInit() {
-    this.elRef.nativeElement.querySelector(
+  ngAfterViewChecked() {
+    const textElement = this.elRef.nativeElement.querySelector(
       '.mat-paginator-page-size-label'
-    ).textContent = 'Отобразить: ';
+    );
+    if (textElement) {
+      textElement.textContent = 'Отобразить: ';
+    }
   }
 
   ngOnDestroy() {
