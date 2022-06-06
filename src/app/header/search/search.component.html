@@ -29,8 +29,6 @@
     <button mat-menu-item *ngFor="let option of filterOptions" [value]="option" (click)="$event.stopPropagation()"
     (click)="option.status = changeStatus(option)">
       <mat-checkbox class="example-margin" [checked]="option.status" (click)="$event.preventDefault()">
-        <!-- $event.stopPropagation()  -->
-        <!-- option.status = changeStatus(option) -->
         {{ option.title }}
       </mat-checkbox>
     </button>

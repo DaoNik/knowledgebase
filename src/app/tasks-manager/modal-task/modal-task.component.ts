@@ -1,5 +1,5 @@
 import { SocketsService } from './../sockets.service';
-import { Component, Inject, OnDestroy, OnInit } from '@angular/core';
+import { Component, ContentChild, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import {
   MatDialog,
   MatDialogRef,
@@ -20,6 +20,7 @@ import { IComment } from '../interfaces/comment';
   templateUrl: './modal-task.component.html',
   styleUrls: ['./modal-task.component.scss'],
 })
+
 export class ModalTaskComponent implements OnInit, OnDestroy {
   comments!: IComment[];
   recievedData: any;
@@ -43,7 +44,7 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
     author: ['Гость', [Validators.minLength(1), Validators.maxLength(50), Validators.required]]
   })
   columns: any = []
-  statusVariants: string[] = ['Todo', 'In progress', 'Done'];
+  statusVariants: string[] = ['None', 'Todo', 'In progress', 'Done'];
   priorityVariants: string[] = ['None', 'Low', 'Medium', 'High'];
   typeOptions: ITypeOption[] = [
     {
@@ -77,6 +78,9 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
 
   subscriptionTask$!: Subscription;
   subscriptionColumn$!: Subscription;
+
+  
+  // @ContentChild('textareaId', {static: false}) titleArea: any;
 
   constructor(
     public dialogRef: MatDialogRef<ModalTaskComponent>,
@@ -131,9 +135,14 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
     this.updateTaskData();
   }
 
-  changeTitle() {
-    if (this.taskData.value.title.trim().length > 4) {
+  changeTitle(e: any) {
+    // e.style.height = '300px';
+    console.log(e.style)
+    if (this.taskData.value.title.trim().length > 3) {
       this.headerTrigger = !this.headerTrigger;
+      this.taskData.patchValue({
+        title: this.taskData.value.title.replaceAll('\n', '')
+      })
       this.updateTaskData();
     } else {
       this.titleOutlineRed = true;
@@ -154,6 +163,13 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
   urlCopy() {
     navigator.clipboard.writeText(window.location.href);
     this._snackBar.open('Ссылка скопирована!');
+    setTimeout(() => {
+      this._snackBar.dismiss();
+    }, 1000);
+  }
+
+  sidebarSaveReminder() {
+    this._snackBar.open('Не забудьте сохраниться!');
     setTimeout(() => {
       this._snackBar.dismiss();
     }, 1000);
@@ -189,6 +205,7 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
     });
 
     dialogRef.afterClosed().subscribe(() => {
+      if (this.sidebarEditTrigger) this.sidebarSaveReminder()
       this.uploadTaskData();
     });
   }
@@ -220,10 +237,21 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
   }
 
   ngOnInit(): void {
+    // console.log(this.titleArea)
     this.uploadTaskData();
     this.getTaskComments();
     this.getTaskComment();
   }
+
+
+  // ngAfterViewInit() {
+  //   setTimeout(() => {
+      
+  //   console.log(this.titleArea)
+  //   }, 1000);
+    // this.titleArea.nativeElement.style.height = this.titleArea.nativeElement.scrollHeight + "px";
+  // }
+
 
   getTaskComments() {
     this.taskManagerService
@@ -249,7 +277,7 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
     const updatedData = {
       title: this.taskData.value.title,
       status:
-        this.taskData.value.status == '' ? 'Todo' : this.taskData.value.status,
+        this.taskData.value.status == '' ? 'None' : this.taskData.value.status,
       column: this.taskData.value.column,
       columnId: this.taskData.value.columnId,
       authors: this.taskData.value.assignee,
