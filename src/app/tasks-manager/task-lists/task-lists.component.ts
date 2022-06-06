@@ -45,6 +45,7 @@ export class TaskListsComponent implements OnInit {
   taskId!: number;
 
   @ViewChild('input') input!: ElementRef<HTMLInputElement>;
+  @ViewChild('newTaskInput') newTaskInput!: ElementRef<HTMLInputElement>;
 
   public newColumn!: FormControl;
   public newTask!: FormControl;
@@ -90,6 +91,16 @@ export class TaskListsComponent implements OnInit {
   onColumnHeaderClick(id: number): void {
     this.isColumnChangeOpen.set(id, true);
     setTimeout(() => this.input.nativeElement.focus(), 0);
+  }
+
+  onNewTaskClick(id: number): void {
+    this.isTaskAddOpen.set(id, false);
+    setTimeout(() => this.newTaskInput.nativeElement.focus(), 0);
+  }
+
+  blurAddTask(id: number): void {
+    this.newTask.reset();
+    this.isTaskAddOpen.set(id, true);
   }
 
   findFormcontrol(id: number): FormControl {
@@ -139,19 +150,20 @@ export class TaskListsComponent implements OnInit {
   }
 
   addToDo(columnId: number) {
-    this.isTaskAddOpen.set(columnId, true);
-
-    this.taskServ
-      .createTask(columnId, this.newTask.value, this.board.id, this.author)
-      .subscribe((task) => {
-        this.board.columns.forEach((column) => {
-          if (column.id === columnId) {
-            column.tasks?.push(task);
-          }
+    if (this.newTask.valid) {
+      this.isTaskAddOpen.set(columnId, true);
+      this.taskServ
+        .createTask(columnId, this.newTask.value, this.board.id, this.author)
+        .subscribe((task) => {
+          this.board.columns.forEach((column) => {
+            if (column.id === columnId) {
+              column.tasks?.push(task);
+            }
+          });
+          this.changeDetectorRef.markForCheck();
         });
-        this.changeDetectorRef.markForCheck();
-      });
-    this.newTask.reset();
+      this.newTask.reset();
+    }
   }
 
   addColumn() {

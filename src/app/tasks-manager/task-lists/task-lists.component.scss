@@ -84,6 +84,14 @@
 
 }
 
+.form-add-task {
+  width: 100%;
+
+  mat-form-field {
+    width: 100%;
+  }
+}
+
 .cdk-drag-preview {
   box-sizing: border-box;
   border-radius: 4px;
