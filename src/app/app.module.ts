@@ -31,6 +31,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ArticleComponent } from './article/article.component';
 import { SearchResultsComponent } from './search-results/search-results.component';
 import { BreadCrumbsComponent } from './bread-crumbs/bread-crumbs.component';
+import { TextEditorComponent } from './create-edit-article/text-editor/text-editor.component';
+import { CreateEditArticleComponent } from './create-edit-article/create-edit-article/create-edit-article.component';
+import { EditArticleComponent } from './create-edit-article/edit-article/edit-article.component';
 
 // Для пайпа даты
 import { registerLocaleData } from '@angular/common';
@@ -39,8 +42,6 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { ClickAwayDirective } from './direct/click-away.directive';
 import { ModalTaskEntryComponent } from './tasks-manager/modal-task/modal-task-entry.component';
 import { ErrorModalComponent } from './error-modal/error-modal.component';
-import { TextEditorComponent } from './create-edit-article/text-editor/text-editor.component';
-import { CreateEditArticleComponent } from './create-edit-article/create-edit-article/create-edit-article.component';
 registerLocaleData(localeRu);
 
 const API_URL_PROVIDER: Provider = {
@@ -67,6 +68,7 @@ const API_URL_PROVIDER: Provider = {
     ErrorModalComponent,
     TextEditorComponent,
     CreateEditArticleComponent,
+    EditArticleComponent,
   ],
   imports: [
     BrowserModule,
