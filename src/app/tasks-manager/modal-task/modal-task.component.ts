@@ -331,6 +331,7 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
         JSON.stringify(element)
       ),
     };
+    // console.log(Date.now())
     this.taskManagerService
       .editTask(Number(this.data), updatedData)
       .subscribe((res) => {
@@ -419,6 +420,7 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
 
     dialogDel.afterClosed().subscribe((res) => {
       if (res) this.dialogRef.close(true);
+      this.changeDetector.markForCheck();
     });
   }
 }

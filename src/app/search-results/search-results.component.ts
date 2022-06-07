@@ -35,9 +35,7 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    console.log('trying')
     this.subscriptionParams$ = this.route.params.subscribe((params) => {
-      console.log(params)
       this.subscriptionArticles$ = this.articleService
         .getArticles()
         .subscribe((articles) => {
