@@ -17,19 +17,7 @@ const mockAdminPages: AdminFunc[] = [
   {
     name: 'Назначение ролей',
     route: 'roles',
-  },
-  {
-    name: 'Еще кнопка',
-    route: 'moderate',
-  },
-  {
-    name: 'Еще кнопка',
-    route: 'moderate',
-  },
-  {
-    name: 'Еще кнопка',
-    route: 'moderate',
-  },
+  }
 ];
 
 @Component({
