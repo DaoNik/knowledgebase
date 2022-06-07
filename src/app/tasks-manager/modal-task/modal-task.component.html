@@ -23,8 +23,9 @@
 					{{taskData.value.title}}
 				</h2> -->
 				<textarea oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' formControlName="title" 
-						  (keyup.enter)="changeTitle(textareaId)" (change)="titleOutlineRed = false" 
-						  [ngStyle]="{'border-bottom': titleOutlineRed ? '1px solid red' : ''}" #textareaId
+						  (keydown.enter)="changeTitle($event)" (change)="titleOutlineRed = false" 
+						  [ngStyle]="{'border-bottom': titleOutlineRed ? '1px solid red' : ''}" 
+						  (blur)="changeTitle($event)" rows="1" #textareaId
 				></textarea>
 			</div>
 
@@ -97,7 +98,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="modal-task__data">
+		<div class="modal-task__data" #dataArea>
 			<div class="modal-task__data_files">
 				<div *ngIf="!fileUploaded" class="modal-task__data_files_label">
 					<mat-icon>attach_files</mat-icon>
@@ -108,9 +109,9 @@
 				</div>
 				<input type="file" multiple (change)="fileInputChange(fileInput)" #fileInput>
 			</div>
-			<mat-tab-group>
+			<mat-tab-group #tabsGroup>
 				<mat-tab label="Описание">
-					<div class="modal-task__data_description">
+					<div class="modal-task__data_description" #descriptionArea>
 						<div formGroupName="text" class="text_wrp"
 							*ngFor="let item of taskData.value.text; let i = index">
 							<mat-icon [matMenuTriggerFor]="menu" class="more">more_vert</mat-icon>

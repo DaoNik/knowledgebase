@@ -1,5 +1,5 @@
 import { SocketsService } from './../sockets.service';
-import { Component, ContentChild, Inject, OnDestroy, OnInit, ViewChild } from '@angular/core';
+import { ChangeDetectorRef, Component, ContentChild, ElementRef, Inject, OnDestroy, OnInit, ViewChild, ViewChildren, ViewContainerRef } from '@angular/core';
 import {
   MatDialog,
   MatDialogRef,
@@ -14,6 +14,7 @@ import { AssigneeModalComponent } from './assignee-modal/assignee-modal.componen
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DeleteTaskModalComponent } from './delete-task-modal/delete-task-modal.component';
 import { IComment } from '../interfaces/comment';
+import { MatTab, MatTabGroup } from '@angular/material/tabs';
 
 @Component({
   selector: 'app-modal-task',
@@ -80,7 +81,11 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
   subscriptionColumn$!: Subscription;
 
   
-  // @ContentChild('textareaId', {static: false}) titleArea: any;
+  @ViewChild('textareaId', {static: false}) titleArea!: ElementRef;
+  @ViewChild('dataArea', {static: false}) dataArea!: ElementRef;
+  @ViewChild('tabsGroup', {static: false}) tabsGroup!: MatTabGroup;
+  @ViewChild('commentList', {static: false}) commentArea!: ElementRef; 
+  @ViewChild('descriptionArea', {static: false}) descriptionArea!: ElementRef;
 
   constructor(
     public dialogRef: MatDialogRef<ModalTaskComponent>,
@@ -90,7 +95,8 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
     private router: Router,
     private taskManagerService: TasksManagerService,
     private _snackBar: MatSnackBar,
-    private socketsService: SocketsService
+    private socketsService: SocketsService,
+    private changeDetector : ChangeDetectorRef
   ) {}
 
   onNoClick(): void {
@@ -135,18 +141,18 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
     this.updateTaskData();
   }
 
-  changeTitle(e: any) {
-    // e.style.height = '300px';
-    console.log(e.style)
+  changeTitle(e: Event) {
+    e.preventDefault();
     if (this.taskData.value.title.trim().length > 3) {
       this.headerTrigger = !this.headerTrigger;
       this.taskData.patchValue({
-        title: this.taskData.value.title.replaceAll('\n', '')
+        title: this.taskData.value.title.replace(/\n/g, "")
       })
       this.updateTaskData();
     } else {
       this.titleOutlineRed = true;
     }
+    this.configureModalHeight();
   }
 
   changeType(option: any, i: number) {
@@ -183,6 +189,21 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
   removeAssignee(index: number): void {
     this.taskData.value.assignee.splice(index, 1);
     this.updateTaskData();
+  }
+
+  configureModalHeight(newline?: boolean) {
+    this.changeDetector.detectChanges();
+    this.titleArea.nativeElement.blur();
+
+    const titleHeight = this.titleArea.nativeElement.scrollHeight;
+
+    if (window.innerWidth > 600) {
+      this.titleArea.nativeElement.style.height = (titleHeight == 55 ? 32 : titleHeight) + "px";
+      this.dataArea.nativeElement.style.height = (titleHeight == 32 ? 353 : 379 - titleHeight) + "px";
+      this.tabsGroup._elementRef.nativeElement.style.height = (titleHeight == 32 ? 291 : 317 - titleHeight) + "px";
+      this.commentArea.nativeElement.style.height = (titleHeight == 32 ? 190 : 216 - titleHeight) + "px";
+      this.descriptionArea.nativeElement.style.height = (titleHeight == 32 ? 230 : 256 - titleHeight) + "px";
+    }
   }
 
   editSidebar() {
@@ -244,13 +265,7 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
   }
 
 
-  // ngAfterViewInit() {
-  //   setTimeout(() => {
-      
-  //   console.log(this.titleArea)
-  //   }, 1000);
-    // this.titleArea.nativeElement.style.height = this.titleArea.nativeElement.scrollHeight + "px";
-  // }
+
 
 
   getTaskComments() {
@@ -323,7 +338,6 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe((res: any) => {
-        this.taskLoaded = true;
         this.taskData.patchValue({
           title: res.title,
           assignee: res.authors,
@@ -335,6 +349,9 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
           dateCreated: this._dateTransform(res.createdAt),
           dateUpdated: this._dateTransform(res.updatedAt),
         });
+        
+        this.taskLoaded = true;
+        this.configureModalHeight();
 
         if (res.description.length > 0) {
           this.taskData.patchValue({
