@@ -1,9 +1,13 @@
-<ul class="bread-crumbs">
-  <li class="bread-crumbs__item" *ngFor="let breadcrumb of breadcrumbs; let i = index">
-    <a  class="bread-crumbs__link"
-        (click)="redirect(breadcrumb.url)">
-      {{breadcrumb.displayName}}
-    </a>
-    <mat-icon *ngIf="breadcrumbs[i+1]">chevron_right</mat-icon>
-  </li>
-</ul>
+<section class="bread-crumbs">
+  <ul class="bread-crumbs__list">
+    <li
+      class="bread-crumbs__item"
+      *ngFor="let breadcrumb of breadcrumbs; let i = index"
+    >
+      <a class="bread-crumbs__link" (click)="redirect(breadcrumb.url)">
+        {{ breadcrumb.displayName }}
+      </a>
+      <mat-icon *ngIf="breadcrumbs[i + 1]">chevron_right</mat-icon>
+    </li>
+  </ul>
+</section>

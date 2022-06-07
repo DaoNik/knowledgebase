@@ -1,5 +1,14 @@
 import { SocketsService } from './../sockets.service';
-import { ChangeDetectorRef, Component, ContentChild, ElementRef, Inject, OnDestroy, OnInit, ViewChild, ViewChildren, ViewContainerRef } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  Inject,
+  OnDestroy,
+  OnInit,
+  ViewChild,
+  ElementRef
+} from '@angular/core';
 import {
   MatDialog,
   MatDialogRef,
@@ -20,6 +29,7 @@ import { MatTab, MatTabGroup } from '@angular/material/tabs';
   selector: 'app-modal-task',
   templateUrl: './modal-task.component.html',
   styleUrls: ['./modal-task.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 
 export class ModalTaskComponent implements OnInit, OnDestroy {
@@ -96,7 +106,7 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
     private taskManagerService: TasksManagerService,
     private _snackBar: MatSnackBar,
     private socketsService: SocketsService,
-    private changeDetector : ChangeDetectorRef
+    private changeDetector: ChangeDetectorRef
   ) {}
 
   onNoClick(): void {
@@ -228,6 +238,7 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe(() => {
       if (this.sidebarEditTrigger) this.sidebarSaveReminder()
       this.uploadTaskData();
+      this.changeDetector.markForCheck();
     });
   }
 
@@ -271,7 +282,10 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
   getTaskComments() {
     this.taskManagerService
       .getTaskComments(this.taskData.value.id)
-      .subscribe((comments) => (this.comments = comments));
+      .subscribe((comments) => {
+        this.comments = comments;
+        this.changeDetector.markForCheck();
+      });
   }
 
   getTaskComment() {
@@ -279,6 +293,7 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
       if (+this.taskData.value.id === +comment.taskId) {
         this.comments.push(comment);
       }
+      this.changeDetector.markForCheck();
     });
   }
 
@@ -320,6 +335,7 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
           dateCreated: this._dateTransform(res.createdAt),
           dateUpdated: this._dateTransform(res.updatedAt),
         });
+        this.changeDetector.markForCheck();
       });
   }
 
@@ -358,7 +374,6 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
             text: res.description.map((element: any) => JSON.parse(element)),
           });
         }
-        
       });
 
     this.subscriptionColumn$ = this.taskManagerService

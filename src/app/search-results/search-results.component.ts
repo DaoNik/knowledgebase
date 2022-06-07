@@ -54,6 +54,7 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
             this.articlesOnPage
           );
           this.countPages();
+          this.changeDetectorRef.markForCheck();
         });
       this.changeDetectorRef.markForCheck();
     });

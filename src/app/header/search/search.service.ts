@@ -9,8 +9,6 @@ import { IArticle } from 'src/app/interfaces/article';
   providedIn: 'root',
 })
 export class SearchService {
-  // private url: string = 'http://localhost:4500/mock-articles.json'
-
   constructor(
     private http: HttpClient,
     private router: Router,
@@ -19,7 +17,7 @@ export class SearchService {
   ) {}
 
   getArticles(): Observable<IArticle[]> {
-    return this.http.get<IArticle[]>(this.apiUrl).pipe(
+    return this.http.get<IArticle[]>(`${this.apiUrl}/docker/articles`).pipe(
       catchError((error: HttpErrorResponse) => {
         this.errorService.visibleForError(
           error.error.message[error.error.message.length - 1]
