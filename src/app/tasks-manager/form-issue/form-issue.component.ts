@@ -111,7 +111,7 @@ export class FormIssueComponent {
             formData.author,
             formData.priority,
             formData.status,
-            formData.description,
+            [formData.description],
             [formData.author],
             formData.departments,
             formData.tags

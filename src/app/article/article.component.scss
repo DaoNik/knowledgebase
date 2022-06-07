@@ -15,6 +15,10 @@
         flex-wrap: wrap;
         gap: 20px;
         justify-content: space-between;
+
+        @media (min-width: 768px) {
+          flex-wrap: nowrap;
+        }
     }
 
     &__title {
@@ -24,9 +28,11 @@
       font-weight: 600;
       letter-spacing: -.015em;
       order: 2;
+      max-width: 60%;
 
       @media (max-width: 768px) {
         font-size: 24px;
+        max-width: 100%;
       }
     }
 
@@ -67,21 +73,16 @@
       flex-direction: column;
     }
 
-    &__list {
-      padding: 0;
-      list-style: none;
-      margin: 0;
-      margin-bottom: 15px;
-    }
+    &__lists-item {
+      font-size: 14px;
 
-    &__list-title {
-      margin-bottom: 5px;
-      font-weight: bold;
-      font-size: 18px;
-
-      @media (max-width: 768px) {
+      @media (min-width: 768px) {
         font-size: 16px;
       }
+    }
+
+    &__lists-item_bold {
+      font-weight: bold;
     }
 }
 
