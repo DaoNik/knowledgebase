@@ -17,7 +17,7 @@ export class SearchService {
   ) {}
 
   getArticles(): Observable<IArticle[]> {
-    return this.http.get<IArticle[]>(this.apiUrl).pipe(
+    return this.http.get<IArticle[]>(`${this.apiUrl}/docker/articles`).pipe(
       catchError((error: HttpErrorResponse) => {
         this.errorService.visibleForError(
           error.error.message[error.error.message.length - 1]
