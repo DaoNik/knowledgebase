@@ -19,7 +19,7 @@ import { MainComponent } from './main/main.component';
 import { FooterComponent } from './footer/footer.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { SearchComponent } from './header/search/search.component';
-import { CreateArticleComponent } from './create-article/create-article.component';
+import { CreateArticleComponent } from './create-edit-article/create-article/create-article.component';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { MatInputModule } from '@angular/material/input';
 import { MatChipsModule } from '@angular/material/chips';
@@ -39,11 +39,13 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { ClickAwayDirective } from './direct/click-away.directive';
 import { ModalTaskEntryComponent } from './tasks-manager/modal-task/modal-task-entry.component';
 import { ErrorModalComponent } from './error-modal/error-modal.component';
+import { TextEditorComponent } from './create-edit-article/text-editor/text-editor.component';
+import { CreateEditArticleComponent } from './create-edit-article/create-edit-article/create-edit-article.component';
 registerLocaleData(localeRu);
 
 const API_URL_PROVIDER: Provider = {
   provide: 'API_URL',
-  useValue: 'https://wbbase.site/docker/articles',
+  useValue: 'https://wbbase.site',
 };
 
 @NgModule({
@@ -63,6 +65,8 @@ const API_URL_PROVIDER: Provider = {
     ClickAwayDirective,
     ModalTaskEntryComponent,
     ErrorModalComponent,
+    TextEditorComponent,
+    CreateEditArticleComponent,
   ],
   imports: [
     BrowserModule,
