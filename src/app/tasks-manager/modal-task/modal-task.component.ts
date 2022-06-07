@@ -331,7 +331,7 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
         JSON.stringify(element)
       ),
     };
-    // console.log(Date.now())
+    // console.log(Date.now().getTime())
     this.taskManagerService
       .editTask(Number(this.data), updatedData)
       .subscribe((res) => {
