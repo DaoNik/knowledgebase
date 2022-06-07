@@ -1,7 +1,7 @@
 <div class="people">
 	<h2>Список ответственных</h2>
 	<div class="person" *ngFor="let person of data[0].taskAssignee; let i = index">
-		<mat-icon *ngIf="data[0].edit" (click)="deleteAssignee(i)">delete</mat-icon>
+		<mat-icon *ngIf="data[0].edit" (click)="deleteAssignee(i)">close</mat-icon>
 		{{person}}
 	</div>
 	<div *ngIf="!data[0].taskAssignee">
