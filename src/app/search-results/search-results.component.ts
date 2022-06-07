@@ -90,4 +90,5 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
     );
     scroll(0, 0);
   }
+  
 }
