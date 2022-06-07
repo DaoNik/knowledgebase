@@ -9,8 +9,6 @@ import { IArticle } from 'src/app/interfaces/article';
   providedIn: 'root',
 })
 export class SearchService {
-  // private url: string = 'http://localhost:4500/mock-articles.json'
-
   constructor(
     private http: HttpClient,
     private router: Router,
