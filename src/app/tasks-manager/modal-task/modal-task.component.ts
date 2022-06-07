@@ -57,6 +57,8 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
   columns: any = []
   statusVariants: string[] = ['None', 'Todo', 'In progress', 'Done'];
   priorityVariants: string[] = ['None', 'Low', 'Medium', 'High'];
+  tabsOptions: string[] = []
+  tabsIcon = false;
   typeOptions: ITypeOption[] = [
     {
       name: 'text',
@@ -273,11 +275,18 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
     this.uploadTaskData();
     this.getTaskComments();
     this.getTaskComment();
+    this.configureTabs();
   }
 
-
-
-
+  configureTabs() {
+    if ((window.innerWidth > 600 && window.innerWidth < 720) || window.innerWidth < 400) {
+      this.tabsOptions = ['description', 'forum', 'attachment'];
+      this.tabsIcon = true;
+    } else {
+      this.tabsOptions = ['Описание', 'Комментарии', 'Приложения'];
+      this.tabsIcon = false;
+    }
+  }
 
   getTaskComments() {
     this.taskManagerService

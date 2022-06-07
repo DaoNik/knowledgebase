@@ -110,7 +110,18 @@
 				<input type="file" multiple (change)="fileInputChange(fileInput)" #fileInput>
 			</div>
 			<mat-tab-group #tabsGroup>
-				<mat-tab label="Описание">
+				<label for="desc">
+					desc 
+				</label>
+				<mat-tab>
+
+					<ng-template mat-tab-label *ngIf="tabsIcon">
+						<span><mat-icon>{{tabsOptions[0]}}</mat-icon></span>
+					</ng-template>
+					<ng-template mat-tab-label *ngIf="!tabsIcon">
+						<span>{{tabsOptions[0]}}</span>
+					</ng-template>
+
 					<div class="modal-task__data_description" #descriptionArea>
 						<div formGroupName="text" class="text_wrp"
 							*ngFor="let item of taskData.value.text; let i = index">
@@ -171,7 +182,15 @@
 					</div>
 				</mat-tab>
 
-				<mat-tab label="Комментарии">
+				<mat-tab>
+
+					<ng-template mat-tab-label *ngIf="tabsIcon">
+						<span><mat-icon>{{tabsOptions[1]}}</mat-icon></span>
+					</ng-template>
+					<ng-template mat-tab-label *ngIf="!tabsIcon">
+						<span>{{tabsOptions[1]}}</span>
+					</ng-template>
+
 					<div class="modal-task__data_comments">
 						<div class="modal-task__data_comments_list" id="commentList" #commentList>
 							<div class="modal-task__data_comments_list_item" *ngFor="let item of comments">
@@ -199,10 +218,22 @@
 					</div>
 				</mat-tab>
 
-				<mat-tab *ngIf="inputFile.length > 0" label="Приложения">
+				<mat-tab *ngIf="inputFile.length > 0">
+					<ng-template mat-tab-label *ngIf="tabsIcon">
+						<span><mat-icon>{{tabsOptions[2]}}</mat-icon></span>
+					</ng-template>
+					<ng-template mat-tab-label *ngIf="!tabsIcon">
+						<span>{{tabsOptions[2]}}</span>
+					</ng-template>
 				</mat-tab>
 
-				<mat-tab *ngIf="inputFile.length == 0" label="Приложения" disabled>
+				<mat-tab *ngIf="inputFile.length == 0" disabled>
+					<ng-template mat-tab-label *ngIf="tabsIcon">
+						<span><mat-icon>{{tabsOptions[2]}}</mat-icon></span>
+					</ng-template>
+					<ng-template mat-tab-label *ngIf="!tabsIcon">
+						<span>{{tabsOptions[2]}}</span>
+					</ng-template>
 				</mat-tab>
 			</mat-tab-group>
 		</div>
