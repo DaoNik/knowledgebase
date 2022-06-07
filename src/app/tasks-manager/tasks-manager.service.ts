@@ -177,7 +177,7 @@ export class TasksManagerService {
     contact: string,
     priority?: string,
     status?: string,
-    description?: string,
+    description?: string[],
     authors?: string[],
     departments?: string[],
     tags?: string[],
