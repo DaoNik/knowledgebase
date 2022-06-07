@@ -2,13 +2,19 @@
   <nav class="admin-panel__nav admin-nav">
     <ul class="admin-nav__list">
       <li class="admin-nav__item" *ngFor="let page of adminPages">
-        <button mat-raised-button  class="admin-nav__link" routerLinkActive="admin-nav__link--active"
-        [color]="page.name.includes('Еще')? 'basic' : 'primary'" [routerLink]="page.route">{{page.name}}</button>
+        <button
+          mat-raised-button
+          class="admin-nav__link"
+          routerLinkActive="admin-nav__link--active"
+          [color]="page.name.includes('Еще') ? 'basic' : 'primary'"
+          [routerLink]="page.route"
+        >
+          {{ page.name }}
+        </button>
       </li>
     </ul>
   </nav>
   <div class="admin-content">
     <router-outlet></router-outlet>
   </div>
-
 </section>

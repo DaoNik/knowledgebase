@@ -21,19 +21,18 @@ export class ArticleTableModerationComponent {
   currentTopic: string = localStorage.getItem('categoryListed') || '';
 
   constructor(private adminService: AdminPanelService) {
-    this.adminService.getCategories().pipe(
-      first()
-    ).subscribe(categories => {
-      this.topics = categories;
-      this.currentTopic = this.topics[0];
-    });
+    this.adminService
+      .getCategories()
+      .pipe(first())
+      .subscribe((categories) => {
+        this.topics = categories;
+        this.currentTopic = this.topics[0];
+      });
   }
 
   clickTopic(topic: string): void {
     localStorage.setItem('categoryListed', topic);
     this.adminService.categoryListed.next(topic);
     this.currentTopic = topic;
-
-    
   }
 }
