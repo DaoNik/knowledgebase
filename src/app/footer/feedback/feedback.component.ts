@@ -17,8 +17,7 @@ export class FeedbackComponent {
     private fb: FormBuilder,
     private snackBar: MatSnackBar,
     private feedbackService :FeedbackService,
-    public dialog: MatDialog,
-    @Inject('API_URL') private apiUrl: string
+    public dialog: MatDialog
   ) {
     this.feedback = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(5)]],

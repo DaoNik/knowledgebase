@@ -26,38 +26,10 @@ export class SearchComponent implements OnInit, OnDestroy {
   @Input('bgColor') bgColor!: boolean;
   searchQuery = new FormControl('');
   results: string[] = ['One', 'Two', 'Three'];
-  filterOptions: IFilter[] = [
-    {
-      title: 'Логистика',
-      status: true,
-    },
-    {
-      title: 'Серверная сторона',
-      status: true,
-    },
-    {
-      title: 'Базы данных',
-      status: true,
-    },
-    {
-      title: 'Клиентская сторона',
-      status: true,
-    },
-    {
-      title: 'Склад',
-      status: true,
-    },
-    {
-      title: 'Пункты выдачи',
-      status: true,
-    },
-    {
-      title: 'JS',
-      status: true,
-    },
-  ];
+  filterOptions: IFilter[] = [];
   filteredResults!: Observable<IArticle[]>;
   subscriptionArticles$!: Subscription;
+  subscriptionCategories$!: Subscription;
   foundArticles!: IArticle[];
 
   constructor(
@@ -67,6 +39,17 @@ export class SearchComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
+    this.subscriptionCategories$ = this.searchService
+      .getCategories()
+      .subscribe((res: string[]) => {
+        res.map((tag: string) => {
+          this.filterOptions.push({
+            title: tag,
+            status: true
+          })
+        })
+        this.changeDetectorRef.markForCheck();
+      })
     this.filteredResults = this.searchQuery.valueChanges.pipe(
       startWith(''),
       map((value) => this._filter(value))
@@ -81,6 +64,7 @@ export class SearchComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscriptionArticles$.unsubscribe();
+    this.subscriptionCategories$.unsubscribe();
   }
 
   private _filter(value: string): IArticle[] {
@@ -107,7 +91,6 @@ export class SearchComponent implements OnInit, OnDestroy {
     const filterTags = this.filterOptions.filter((item) => {
       return item.status;
     });
-    console.log(filterTags.length);
 
     if (filterTags.length > 1) return !option.status;
     else return true;
@@ -121,6 +104,8 @@ export class SearchComponent implements OnInit, OnDestroy {
       .map((item) => {
         return item.title;
       });
+    console.log(`goiong to sr`)
+    console.log(filterTags)
     this.searchService.goToSearchResults(
       this.searchQuery.value.trim(),
       filterTags
