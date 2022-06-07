@@ -6,8 +6,8 @@ import {
   Inject,
   OnDestroy,
   OnInit,
-  ContentChild,
-  ViewChild
+  ViewChild,
+  ElementRef
 } from '@angular/core';
 import {
   MatDialog,
@@ -23,6 +23,7 @@ import { AssigneeModalComponent } from './assignee-modal/assignee-modal.componen
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DeleteTaskModalComponent } from './delete-task-modal/delete-task-modal.component';
 import { IComment } from '../interfaces/comment';
+import { MatTab, MatTabGroup } from '@angular/material/tabs';
 
 @Component({
   selector: 'app-modal-task',
@@ -56,6 +57,8 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
   columns: any = []
   statusVariants: string[] = ['None', 'Todo', 'In progress', 'Done'];
   priorityVariants: string[] = ['None', 'Low', 'Medium', 'High'];
+  tabsOptions: string[] = []
+  tabsIcon = false;
   typeOptions: ITypeOption[] = [
     {
       name: 'text',
@@ -90,7 +93,11 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
   subscriptionColumn$!: Subscription;
 
   
-  // @ContentChild('textareaId', {static: false}) titleArea: any;
+  @ViewChild('textareaId', {static: false}) titleArea!: ElementRef;
+  @ViewChild('dataArea', {static: false}) dataArea!: ElementRef;
+  @ViewChild('tabsGroup', {static: false}) tabsGroup!: MatTabGroup;
+  @ViewChild('commentList', {static: false}) commentArea!: ElementRef; 
+  @ViewChild('descriptionArea', {static: false}) descriptionArea!: ElementRef;
 
   constructor(
     public dialogRef: MatDialogRef<ModalTaskComponent>,
@@ -101,7 +108,7 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
     private taskManagerService: TasksManagerService,
     private _snackBar: MatSnackBar,
     private socketsService: SocketsService,
-    private changeDetectorRef: ChangeDetectorRef
+    private changeDetector: ChangeDetectorRef
   ) {}
 
   onNoClick(): void {
@@ -146,15 +153,15 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
     this.updateTaskData();
   }
 
-  changeTitle(e: any) {
-    // e.style.height = '300px';
-    console.log(e.style)
+  changeTitle(e: Event) {
+    e.preventDefault();
     if (this.taskData.value.title.trim().length > 3) {
       this.headerTrigger = !this.headerTrigger;
       this.taskData.patchValue({
-        title: this.taskData.value.title.replaceAll('\n', '')
+        title: this.taskData.value.title.replace(/\n/g, "")
       })
       this.updateTaskData();
+      this.configureModalHeight();
     } else {
       this.titleOutlineRed = true;
     }
@@ -196,6 +203,22 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
     this.updateTaskData();
   }
 
+  configureModalHeight(newline?: boolean) {
+    this.changeDetector.detectChanges();
+    this.titleArea.nativeElement.blur();
+
+    const titleHeight = this.titleArea.nativeElement.scrollHeight;
+
+    
+    this.titleArea.nativeElement.style.height = (titleHeight == 55 ? 32 : titleHeight) + "px";
+    if (window.innerWidth > 600) {
+      this.dataArea.nativeElement.style.height = (titleHeight == 32 ? 353 : 379 - titleHeight) + "px";
+      this.tabsGroup._elementRef.nativeElement.style.height = (titleHeight == 32 ? 291 : 317 - titleHeight) + "px";
+      this.commentArea.nativeElement.style.height = (titleHeight == 32 ? 190 : 216 - titleHeight) + "px";
+      this.descriptionArea.nativeElement.style.height = (titleHeight == 32 ? 230 : 256 - titleHeight) + "px";
+    }
+  }
+
   editSidebar() {
     if (this.sidebarEditTrigger == true) this.updateTaskData();
     this.sidebarEditTrigger = !this.sidebarEditTrigger;
@@ -218,7 +241,7 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
     dialogRef.afterClosed().subscribe(() => {
       if (this.sidebarEditTrigger) this.sidebarSaveReminder()
       this.uploadTaskData();
-      this.changeDetectorRef.markForCheck();
+      this.changeDetector.markForCheck();
     });
   }
 
@@ -253,24 +276,25 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
     this.uploadTaskData();
     this.getTaskComments();
     this.getTaskComment();
+    this.configureTabs();
   }
 
-
-  // ngAfterViewInit() {
-  //   setTimeout(() => {
-      
-  //   console.log(this.titleArea)
-  //   }, 1000);
-    // this.titleArea.nativeElement.style.height = this.titleArea.nativeElement.scrollHeight + "px";
-  // }
-
+  configureTabs() {
+    if ((window.innerWidth > 600 && window.innerWidth < 720) || window.innerWidth < 400) {
+      this.tabsOptions = ['description', 'forum', 'attachment'];
+      this.tabsIcon = true;
+    } else {
+      this.tabsOptions = ['Описание', 'Комментарии', 'Приложения'];
+      this.tabsIcon = false;
+    }
+  }
 
   getTaskComments() {
     this.taskManagerService
       .getTaskComments(this.taskData.value.id)
       .subscribe((comments) => {
         this.comments = comments;
-        this.changeDetectorRef.markForCheck();
+        this.changeDetector.markForCheck();
       });
   }
 
@@ -279,7 +303,7 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
       if (+this.taskData.value.id === +comment.taskId) {
         this.comments.push(comment);
       }
-      this.changeDetectorRef.markForCheck();
+      this.changeDetector.markForCheck();
     });
   }
 
@@ -307,6 +331,7 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
         JSON.stringify(element)
       ),
     };
+    // console.log(Date.now())
     this.taskManagerService
       .editTask(Number(this.data), updatedData)
       .subscribe((res) => {
@@ -321,7 +346,7 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
           dateCreated: this._dateTransform(res.createdAt),
           dateUpdated: this._dateTransform(res.updatedAt),
         });
-        this.changeDetectorRef.markForCheck();
+        this.changeDetector.markForCheck();
       });
   }
 
@@ -340,7 +365,6 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe((res: any) => {
-        this.taskLoaded = true;
         this.taskData.patchValue({
           title: res.title,
           assignee: res.authors,
@@ -352,12 +376,16 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
           dateCreated: this._dateTransform(res.createdAt),
           dateUpdated: this._dateTransform(res.updatedAt),
         });
+        
+        this.taskLoaded = true;
+        this.configureModalHeight();
 
         if (res.description.length > 0) {
           this.taskData.patchValue({
             text: res.description.map((element: any) => JSON.parse(element)),
           });
         }
+        this.changeDetector.markForCheck();
       });
 
     this.subscriptionColumn$ = this.taskManagerService
@@ -376,20 +404,9 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
             });
           }
         });
+        this.changeDetector.markForCheck();
       });
   }
-
-  // parseStringify(desc: any, parseOrString: boolean) {
-  //   if (parseOrString == true) {
-  //     desc.forEach((element: any) => {
-  //       element = JSON.parse(element);
-  //     });
-  //   } else {
-  //     desc.forEach((element: any) => {
-  //       element = JSON.stringify(element);
-  //     });
-  //   }
-  // }
 
   private _dateTransform(date: string): string {
     return `${date.slice(0, 10)} ${date.slice(11, 19)}`;
@@ -403,6 +420,7 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
 
     dialogDel.afterClosed().subscribe((res) => {
       if (res) this.dialogRef.close(true);
+      this.changeDetector.markForCheck();
     });
   }
 }

@@ -100,11 +100,11 @@
 
 			textarea {
 				width: 100%;
-				height: fit-content;
+				// height: fit-content;
 				// height: fit-content;
 				// max-height: 64px;
 				overflow: hidden;
-				resize:none;
+				resize: none;
 				font-size: 24px;
 				font-weight: bold;
 				border: none;
@@ -292,7 +292,7 @@
 			text-align: center;
 			padding-right: 25px;
 			margin-top: 10px;
-			height: 200px;
+			// height: 200px;
 			overflow: auto;
 	
 			.text_wrp {
@@ -372,7 +372,7 @@
 				width: 100%;
 				display: flex;
 				flex-direction: column;
-				height: 190px;
+				// height: 190px;
 				overflow: auto;
 
 				.modal-task__data_comments_list_item {

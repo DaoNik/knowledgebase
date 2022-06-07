@@ -39,16 +39,24 @@ export class SearchResultsComponent implements OnInit, OnDestroy {
       this.subscriptionArticles$ = this.articleService
         .getArticles()
         .subscribe((articles) => {
-          this.articles = articles.filter(
-            (item) =>
-              (item.title
-                .toLowerCase()
-                .includes(params['title'].toLowerCase()) ||
-                item.description
+          if (params['title']) {
+            this.articles = articles.filter(
+              (item) =>
+                (item.title
                   .toLowerCase()
-                  .includes(params['title'].toLowerCase())) &&
-              params['categories'].includes(item.category)
-          );
+                  .includes(params['title'].toLowerCase()) ||
+                  item.description
+                    .toLowerCase()
+                    .includes(params['title'].toLowerCase())) &&
+                params['categories'].includes(item.category)
+            );
+          } else {
+            this.articles = articles.filter(
+              (item) =>
+                params['categories'].includes(item.category)
+            );
+          }
+          
           this.currentPageArticles = this.articles.slice(
             0,
             this.articlesOnPage
