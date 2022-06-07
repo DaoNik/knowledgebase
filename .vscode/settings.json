@@ -8,6 +8,6 @@
   "editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
   },
-  
-  "explorer.confirmDelete": false
+
+  "explorer.confirmDelete": false,
 }
