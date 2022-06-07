@@ -2,33 +2,35 @@
   <div class="article" *ngIf="article$ | async as article; else loading">
     <header class="article__header">
       <h2 class="article__title">{{ article.title }}</h2>
-      <p class="article__category">Категория: {{ article.category }}</p>
-      <!-- <p>
+      <div>
+        <p class="article__category">Категория: {{ article.category }}</p>
+        <!-- <p>
             Cоздано:
             {{ article.dateCreate | date: "dd/MM/yyyy HH:mm" }}
           </p> -->
-      <p class="article__date">
-        Последнее обновление
-        {{ article.dateUpdate | date: "d MMMM y":"":"ru" }}
-      </p>
+        <p class="article__date">
+          Последнее обновление
+          {{ article.updatedAt | date: "d MMMM y":"":"ru" }}
+        </p>
+      </div>
     </header>
 
     <main class="article__main">
-      <h3 class="article__main-title">Описание</h3>
+      <h3 class="article__main-title">Контент</h3>
       <p class="article__main-description" [innerHtml]="article.content"></p>
     </main>
 
     <div class="article__lists">
       <ul class="article__list">
-        <h3 class="article__list-title">Создатели</h3>
-        <li *ngFor="let author of article.authors">
-          {{ author }}
-        </li>
-      </ul>
-      <ul class="article__list">
         <h3 class="article__list-title">Отдел</h3>
         <li *ngFor="let respondent of article.department">
           {{ respondent }}
+        </li>
+      </ul>
+      <ul class="article__list">
+        <h3 class="article__list-title">Создатели</h3>
+        <li *ngFor="let author of article.authors">
+          {{ author }}
         </li>
       </ul>
     </div>

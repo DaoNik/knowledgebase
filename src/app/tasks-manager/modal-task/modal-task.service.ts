@@ -9,14 +9,9 @@ import { ModalTaskComponent } from './modal-task.component';
   providedIn: 'root',
 })
 export class ModalTaskService {
-  private url: string = 'https://wbbase.site/api';
-  private taskUrl = `${this.url}/tasks`;
-  private columnUrl = `${this.url}/columns`;
-
   constructor(
     public dialog: MatDialog,
     private http: HttpClient,
-    @Inject('API_URL') private apiUrl: string,
     private errorService: ErrorModalService
   ) {}
 

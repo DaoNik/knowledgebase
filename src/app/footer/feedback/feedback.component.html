@@ -6,26 +6,26 @@
   <div class="form__container">
     <div class="userName">
       <label for="name" class="form__label"> Имя: </label>
-      <input type="text" formControlName="userName" class="form__input"/>
+      <input type="text" formControlName="name" class="form__input"/>
       <mat-error
         class="error"
-        *ngIf="feedback.get('userName')?.getError('required')"
+        *ngIf="feedback.get('name')?.getError('required') || feedback.get('name')?.getError('touched')"
       >
         Введите ваше имя</mat-error
       >
     </div>
     <div class="userId">
       <label for="userId" class="form__label"> Код работника: </label>
-      <input type="text" formControlName="userId" class="form__input"/>
+      <input type="text" formControlName="userCode" class="form__input"/>
       <mat-error
         class="error"
-        *ngIf="feedback.get('userId')?.getError('required')"
+        *ngIf="feedback.get('userCode')?.getError('required') || feedback.get('userCode')?.getError('touched')"
       >
         Введите свой код работника</mat-error
       >
     </div>
     <label for="message" class="form__label">Сообщение(минимум 10 символов):</label>
-    <textarea class="form__message" cols="30" rows="10" required></textarea>
+    <textarea class="form__message" cols="30" rows="10" formControlName="description"></textarea>
   </div>
-  <button mat-button>Отправить</button>
+  <button mat-button [disabled]="feedback.invalid" (click)="sendFeedback()">Отправить</button>
 </form>

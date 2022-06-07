@@ -1,4 +1,4 @@
-import { Component, OnDestroy, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { mergeMap, Observable, Subscription } from 'rxjs';
@@ -8,6 +8,7 @@ import { AdminPanelService } from '../../admin-panel.service';
 @Component({
   selector: 'app-not-listed-table',
   templateUrl: './not-listed-table.component.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
   styleUrls: ['./not-listed-table.component.scss'],
 })
 export class NotListedTableComponent implements OnInit, OnDestroy {
@@ -32,8 +33,8 @@ export class NotListedTableComponent implements OnInit, OnDestroy {
   tagInput: FormControl = new FormControl('');
 
   constructor(
-    private router: Router,
-    private adminPanelService: AdminPanelService
+    private adminPanelService: AdminPanelService,
+    private changeDetectorRef: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -43,6 +44,7 @@ export class NotListedTableComponent implements OnInit, OnDestroy {
         this.articles = articles;
         this.currentPageArticles = this.articles.slice(0, this.articlesOnPage);
         this.countPages();
+        this.changeDetectorRef.markForCheck()
       });
   }
 
@@ -132,7 +134,6 @@ export class NotListedTableComponent implements OnInit, OnDestroy {
     this.pageClick(this.currentPage);
   }
 
-  //
   resetPage(): void {
     this.currentPage = 1;
     this.pageClick(this.currentPage);
@@ -187,4 +188,8 @@ export class NotListedTableComponent implements OnInit, OnDestroy {
     }
     this.resetPage();
   }
+
+  identify(index: number, article: IArticle){
+    return article.title; 
+ }
 }

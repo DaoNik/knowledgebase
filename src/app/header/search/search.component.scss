@@ -7,7 +7,7 @@
 
 	.search__form-input {
 		width: 100%;
-		padding: 0 0 0 40px;
+		padding: 0 40px;
 		box-sizing: border-box;
 		border-radius: 20px;
 		border: none;
@@ -18,7 +18,7 @@
 
 		&::selection {
 			color: white;
-			background: #8d4686; 
+			background: #8d4686;
 		}
 	}
 

@@ -1,9 +1,6 @@
 .bread-crumbs {
-  display: flex;
-  flex-wrap: wrap;
   padding: 60px 10px 0;
   margin: 0;
-  list-style: none;
   background: #eff3f6;
 
   @media screen and (min-width: 768px) {
@@ -12,6 +9,26 @@
 
   @media screen and (min-width: 1440px) {
     padding: 80px 20px 0;
+  }
+}
+
+.bread-crumbs__list {
+  margin: 0 auto;
+  padding: 0;
+  padding-left: 10px;
+  width: 100%;
+  max-width: 1860px;
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+
+  @media screen and (min-width: 768px) {
+    padding-left: 0;
+  }
+
+  @media screen and (min-width: 1440px) {
+    padding-left: 20px;
+    padding: 0 0 5px 20px;
   }
 }
 
@@ -24,7 +41,18 @@
   mat-icon {
     display: block;
     font-size: 21px;
+    line-height: 24px;
     height: 21px;
+  }
+
+  @media screen and (min-width: 1440px) {
+    font-size: 18px;
+
+    mat-icon {
+      font-size: 24px;
+      line-height: 35px;
+      height: 27px;
+    }
   }
 }
 

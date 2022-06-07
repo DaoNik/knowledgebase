@@ -1,17 +1,17 @@
 import {
   Component,
   ViewChild,
-  AfterViewInit,
   ElementRef,
   OnInit,
   OnDestroy,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  AfterViewChecked,
 } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
 import { MatTableDataSource } from '@angular/material/table';
-import { Router } from '@angular/router';
-import { map, Subscription } from 'rxjs';
-import { ModalTaskService } from '../modal-task/modal-task.service';
+import { delay, map, Observable, Subject, takeUntil } from 'rxjs';
 import { TasksManagerService } from '../tasks-manager.service';
 
 export interface ITableTasks {
@@ -26,8 +26,9 @@ export interface ITableTasks {
   selector: 'app-tasks-table',
   templateUrl: './tasks-table.component.html',
   styleUrls: ['./tasks-table.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TasksTableComponent implements OnInit, AfterViewInit, OnDestroy {
+export class TasksTableComponent implements OnInit, AfterViewChecked, OnDestroy {
   displayedColumns: string[] = [
     'id',
     'title',
@@ -36,7 +37,8 @@ export class TasksTableComponent implements OnInit, AfterViewInit, OnDestroy {
     'priority',
   ];
 
-  subscriptionTasks$!: Subscription;
+  private destroySubscribes$ = new Subject<boolean>();
+  public loading$!: Observable<boolean>;
 
   tasks$ = this.taskServ.getTasks();
   filterTasks: ITableTasks[] = [];
@@ -50,42 +52,55 @@ export class TasksTableComponent implements OnInit, AfterViewInit, OnDestroy {
   constructor(
     private elRef: ElementRef,
     private taskServ: TasksManagerService,
-    private modalServ: ModalTaskService,
-    private router: Router
+    private changeDetectorRef: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-    this.subscriptionTasks$ = this.tasks$
-      .pipe(
-        map((tasks) => {
-          return tasks.map((task) => {
-            return {
-              id: task.id,
-              title: task.title,
-              status: task.status,
-              departments: task.authors,
-              priority: task.priority,
-            };
-          });
-        })
-      )
-      .subscribe((tasks) => {
-        this.dataSource = new MatTableDataSource(
-          tasks.sort((a, b) => a.id - b.id)
-        );
-        this.dataSource.paginator = this.paginator;
-        this.dataSource.sort = this.sort;
-      });
+    this.loadingProcess();
+    this.getTasks();
   }
 
-  ngAfterViewInit() {
-    this.elRef.nativeElement.querySelector(
+  ngAfterViewChecked(): void {
+    const textElement = this.elRef.nativeElement.querySelector(
       '.mat-paginator-page-size-label'
-    ).textContent = 'Отобразить: ';
+    );
+    if (textElement) {
+      textElement.textContent = 'Отобразить: ';
+    }
   }
 
   ngOnDestroy() {
-    this.subscriptionTasks$.unsubscribe();
+    this.destroySubscribes$.next(true);
+  }
+
+  loadingProcess(): void {
+    this.loading$ = this.taskServ.loading$.pipe(delay(500));
+  }
+
+  getTasks(): void {
+    this.tasks$
+    .pipe(
+      map((tasks) => {
+        return tasks.map((task) => {
+          return {
+            id: task.id,
+            title: task.title,
+            status: task.status,
+            departments: task.authors,
+            priority: task.priority,
+          };
+        });
+      }),
+      takeUntil(this.destroySubscribes$)
+    )
+    .subscribe((tasks) => {
+      this.dataSource = new MatTableDataSource(
+        tasks.sort((a, b) => a.id - b.id)
+      );
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+      this.changeDetectorRef.markForCheck();
+    });
   }
 
   applyFilter(event: Event) {

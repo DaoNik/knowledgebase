@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ErrorModalService } from './error-modal/error-modal.service';
 import { trigger, style, animate, transition } from '@angular/animations';
 import { RouterOutlet } from '@angular/router';
@@ -21,6 +21,7 @@ import { routeChangeAnimation } from './change-route-animation';
   ],
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent implements OnInit {
   title = 'База знаний WB';
