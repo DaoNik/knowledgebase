@@ -21,9 +21,7 @@ export class TextEditorComponent implements OnInit {
     enableToolbar: true,
     showToolbar: true,
     placeholder: 'Введите текст статьи',
-    defaultFontName: 'Arial',
-    defaultFontSize: '3',
-    sanitize: true,
+    sanitize: false,
     toolbarPosition: 'top',
     toolbarHiddenButtons: [['fontName', 'toggleEditorMode', 'insertVideo']],
   };
