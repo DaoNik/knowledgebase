@@ -17,7 +17,7 @@
 
     <main class="article__main">
       <h3 class="article__main-title">Контент</h3>
-      <p class="article__main-description" [innerHtml]="article.content"></p>
+      <p class="article__main-description" [innerHtml]="sanitizeHtml(article.content)"></p>
     </main>
 
     <div class="article__lists">
