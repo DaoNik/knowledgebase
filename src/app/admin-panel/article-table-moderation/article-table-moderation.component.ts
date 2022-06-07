@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { first } from 'rxjs';
 import { AdminPanelService } from '../admin-panel.service';
 
 const mockTopics: string[] = [
@@ -16,14 +17,23 @@ const mockTopics: string[] = [
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ArticleTableModerationComponent {
-  topics: string[] = mockTopics;
-  currentTopic: string = localStorage.getItem('categoryListed') || 'Склад';
+  topics: string[] = [];
+  currentTopic: string = localStorage.getItem('categoryListed') || '';
 
-  constructor(private adminService: AdminPanelService) {}
+  constructor(private adminService: AdminPanelService) {
+    this.adminService.getCategories().pipe(
+      first()
+    ).subscribe(categories => {
+      this.topics = categories;
+      this.currentTopic = this.topics[0];
+    });
+  }
 
   clickTopic(topic: string): void {
     localStorage.setItem('categoryListed', topic);
     this.adminService.categoryListed.next(topic);
     this.currentTopic = topic;
+
+    
   }
 }

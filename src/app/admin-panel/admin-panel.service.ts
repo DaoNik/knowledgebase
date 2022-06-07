@@ -57,4 +57,17 @@ export class AdminPanelService {
       })
     );
   }
+
+  getCategories(): Observable<string[]> {
+    return this.http.get<string[]>(`${this.apiUrl}/docker/categories`).pipe(
+      catchError((error: HttpErrorResponse) => {
+        if (error.error.message) {
+          this.errorService.visibleForError(
+            error.error.message[error.error.message.length - 1]
+          );
+        };
+        return throwError(() => error);
+      })
+    );
+  }
 }
