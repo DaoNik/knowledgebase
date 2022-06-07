@@ -1,4 +1,4 @@
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { AngularEditorConfig } from '@kolkov/angular-editor';
 
@@ -7,7 +7,7 @@ import { AngularEditorConfig } from '@kolkov/angular-editor';
   templateUrl: './text-editor.component.html',
   styleUrls: ['./text-editor.component.scss'],
 })
-export class TextEditorComponent implements OnInit {
+export class TextEditorComponent {
   @Input('control') control!: FormControl;
 
   public editorConfig: AngularEditorConfig = {
@@ -25,8 +25,4 @@ export class TextEditorComponent implements OnInit {
     toolbarPosition: 'top',
     toolbarHiddenButtons: [['fontName', 'toggleEditorMode', 'insertVideo']],
   };
-
-  constructor() {}
-
-  ngOnInit(): void {}
 }
