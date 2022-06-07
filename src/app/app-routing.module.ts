@@ -51,11 +51,28 @@ const routes: Routes = [
     ],
   },
   {
-    path: 'search-result/:title/:categories',
-    component: SearchResultsComponent,
+    path: 'search-result',
+    // component: SearchResultsComponent,
+    // component: NotFoundComponent,
     data: {
       displayName: 'Результаты поиска',
     },
+    children: [
+      {
+        path: ':categories',
+        component: SearchResultsComponent,
+        data: {
+          displayName: '',
+        }
+      },
+      {
+        path: ':categories/:title',
+        component: SearchResultsComponent,
+        data: {
+          displayName: '',
+        },
+      },
+    ],
   },
   { path: '**', component: NotFoundComponent },
 ];

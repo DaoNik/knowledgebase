@@ -6,7 +6,7 @@ import {
   OnInit,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { mergeMap, Subscription } from 'rxjs';
+import { first, mergeMap, Subscription } from 'rxjs';
 import { IArticle } from 'src/app/interfaces/article';
 import { AdminPanelService } from '../../admin-panel.service';
 
@@ -74,6 +74,7 @@ export class ArticlesTableComponent implements OnInit, OnDestroy {
   subscriptionCategoryListed$!: Subscription;
   articlesOnPage: number = 3;
   pages: number[] = [];
+  currentTopic: string = '';
 
   currentPageArticles: IArticle[] = this.articles.slice(0, this.articlesOnPage);
   currentPage: number = 1;

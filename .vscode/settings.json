@@ -1,0 +1,20 @@
+{
+  "cSpell.words": [
+    "ваше",
+    "Введите",
+    "минимум",
+    "обратной",
+    "Отправить",
+    "работника",
+    "свой",
+    "связи",
+    "символов",
+    "Сообщение",
+    "Форма"
+  ],
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
+  "editor.formatOnSave": true,
+  "[typescript]": {
+    "editor.defaultFormatter": "esbenp.prettier-vscode"
+  }
+}

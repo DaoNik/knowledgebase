@@ -17,9 +17,11 @@ export class ArticleService {
   getArticles(): Observable<IArticle[]> {
     return this.http.get<IArticle[]>(`${this.apiUrl}/docker/articles`).pipe(
       catchError((error: HttpErrorResponse) => {
-        this.errorService.visibleForError(
-          error.error.message[error.error.message.length - 1]
-        );
+        if (error.error.message) {
+          this.errorService.visibleForError(
+            error.error.message[error.error.message.length - 1]
+          );
+        };
         return throwError(() => error);
       })
     );

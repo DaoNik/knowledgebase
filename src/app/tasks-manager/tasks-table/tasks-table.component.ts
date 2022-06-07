@@ -28,7 +28,9 @@ export interface ITableTasks {
   styleUrls: ['./tasks-table.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class TasksTableComponent implements OnInit, AfterViewChecked, OnDestroy {
+export class TasksTableComponent
+  implements OnInit, AfterViewChecked, OnDestroy
+{
   displayedColumns: string[] = [
     'id',
     'title',
@@ -79,28 +81,28 @@ export class TasksTableComponent implements OnInit, AfterViewChecked, OnDestroy 
 
   getTasks(): void {
     this.tasks$
-    .pipe(
-      map((tasks) => {
-        return tasks.map((task) => {
-          return {
-            id: task.id,
-            title: task.title,
-            status: task.status,
-            departments: task.authors,
-            priority: task.priority,
-          };
-        });
-      }),
-      takeUntil(this.destroySubscribes$)
-    )
-    .subscribe((tasks) => {
-      this.dataSource = new MatTableDataSource(
-        tasks.sort((a, b) => a.id - b.id)
-      );
-      this.dataSource.paginator = this.paginator;
-      this.dataSource.sort = this.sort;
-      this.changeDetectorRef.markForCheck();
-    });
+      .pipe(
+        map((tasks) => {
+          return tasks.map((task) => {
+            return {
+              id: task.id,
+              title: task.title,
+              status: task.status,
+              departments: task.authors,
+              priority: task.priority,
+            };
+          });
+        }),
+        takeUntil(this.destroySubscribes$)
+      )
+      .subscribe((tasks) => {
+        this.dataSource = new MatTableDataSource(
+          tasks.sort((a, b) => a.id - b.id)
+        );
+        this.dataSource.paginator = this.paginator;
+        this.dataSource.sort = this.sort;
+        this.changeDetectorRef.markForCheck();
+      });
   }
 
   applyFilter(event: Event) {

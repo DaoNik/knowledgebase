@@ -23,8 +23,9 @@
 					{{taskData.value.title}}
 				</h2> -->
 				<textarea oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' formControlName="title" 
-						  (keyup.enter)="changeTitle(textareaId)" (change)="titleOutlineRed = false" 
-						  [ngStyle]="{'border-bottom': titleOutlineRed ? '1px solid red' : ''}" #textareaId
+						  (keydown.enter)="changeTitle($event)" (change)="titleOutlineRed = false" 
+						  [ngStyle]="{'border-bottom': titleOutlineRed ? '1px solid red' : ''}" 
+						  (blur)="changeTitle($event)" rows="1" maxlength="100" #textareaId
 				></textarea>
 			</div>
 
@@ -97,7 +98,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="modal-task__data">
+		<div class="modal-task__data" #dataArea>
 			<div class="modal-task__data_files">
 				<div *ngIf="!fileUploaded" class="modal-task__data_files_label">
 					<mat-icon>attach_files</mat-icon>
@@ -108,9 +109,20 @@
 				</div>
 				<input type="file" multiple (change)="fileInputChange(fileInput)" #fileInput>
 			</div>
-			<mat-tab-group>
-				<mat-tab label="Описание">
-					<div class="modal-task__data_description">
+			<mat-tab-group #tabsGroup>
+				<label for="desc">
+					desc 
+				</label>
+				<mat-tab>
+
+					<ng-template mat-tab-label *ngIf="tabsIcon">
+						<span><mat-icon>{{tabsOptions[0]}}</mat-icon></span>
+					</ng-template>
+					<ng-template mat-tab-label *ngIf="!tabsIcon">
+						<span>{{tabsOptions[0]}}</span>
+					</ng-template>
+
+					<div class="modal-task__data_description" #descriptionArea>
 						<div formGroupName="text" class="text_wrp"
 							*ngFor="let item of taskData.value.text; let i = index">
 							<mat-icon [matMenuTriggerFor]="menu" class="more">more_vert</mat-icon>
@@ -170,7 +182,15 @@
 					</div>
 				</mat-tab>
 
-				<mat-tab label="Комментарии">
+				<mat-tab>
+
+					<ng-template mat-tab-label *ngIf="tabsIcon">
+						<span><mat-icon>{{tabsOptions[1]}}</mat-icon></span>
+					</ng-template>
+					<ng-template mat-tab-label *ngIf="!tabsIcon">
+						<span>{{tabsOptions[1]}}</span>
+					</ng-template>
+
 					<div class="modal-task__data_comments">
 						<div class="modal-task__data_comments_list" id="commentList" #commentList>
 							<div class="modal-task__data_comments_list_item" *ngFor="let item of comments">
@@ -198,10 +218,22 @@
 					</div>
 				</mat-tab>
 
-				<mat-tab *ngIf="inputFile.length > 0" label="Приложения">
+				<mat-tab *ngIf="inputFile.length > 0">
+					<ng-template mat-tab-label *ngIf="tabsIcon">
+						<span><mat-icon>{{tabsOptions[2]}}</mat-icon></span>
+					</ng-template>
+					<ng-template mat-tab-label *ngIf="!tabsIcon">
+						<span>{{tabsOptions[2]}}</span>
+					</ng-template>
 				</mat-tab>
 
-				<mat-tab *ngIf="inputFile.length == 0" label="Приложения" disabled>
+				<mat-tab *ngIf="inputFile.length == 0" disabled>
+					<ng-template mat-tab-label *ngIf="tabsIcon">
+						<span><mat-icon>{{tabsOptions[2]}}</mat-icon></span>
+					</ng-template>
+					<ng-template mat-tab-label *ngIf="!tabsIcon">
+						<span>{{tabsOptions[2]}}</span>
+					</ng-template>
 				</mat-tab>
 			</mat-tab-group>
 		</div>

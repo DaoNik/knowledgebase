@@ -7,12 +7,14 @@
     type="text"
     placeholder="ваши инициалы"
   />
-  <label class="form-issue__label">Введите название (от 4 до 100 символов)*</label>
+  <label class="form-issue__label"
+    >Введите название (от 4 до 100 символов)*</label
+  >
   <input
     class="form-issue__input"
     formControlName="title"
     type="text"
-    placeholder="ваше название"
+    placeholder="название проблемы"
   />
   <label class="form-issue__label">Введите ваш склад/блок/департамент*</label>
   <input
@@ -21,7 +23,9 @@
     type="text"
     placeholder="ваше рабочее место, название службы"
   />
-  <label class="form-issue__label">Введите описание проблемы (от 10 до 1000 символов)*</label>
+  <label class="form-issue__label"
+    >Введите описание проблемы (от 10 до 1000 символов)*</label
+  >
   <textarea
     class="form-issue__textarea"
     placeholder="Опишите вашу проблему"
@@ -58,7 +62,6 @@
     <option *ngFor="let tag of allTags">{{ tag }}</option>
   </select>
   <div class="form-issue__buttons">
-    <button mat-raised-button class="form-issue__reset" type="reset">Очистить форму</button>
     <button
       mat-raised-button
       class="form-issue__submit"
@@ -67,6 +70,9 @@
       (click)="createTask()"
     >
       Сообщить о проблеме
+    </button>
+    <button mat-raised-button class="form-issue__reset" type="reset">
+      Очистить форму
     </button>
   </div>
 </form>
