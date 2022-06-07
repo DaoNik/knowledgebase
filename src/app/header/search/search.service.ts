@@ -29,6 +29,10 @@ export class SearchService {
     );
   }
 
+  getCategories(): Observable<string[]> {
+    return this.http.get<string[]>('https://wbbase.site/docker/categories')
+  }
+
   goToSearchResults(title: string, categories: string[]) {
     if (title == null)
       this.router.navigate(['search-result', ``, `${categories}`]);
