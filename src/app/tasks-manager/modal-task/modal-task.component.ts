@@ -209,8 +209,9 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
 
     const titleHeight = this.titleArea.nativeElement.scrollHeight;
 
+    
+    this.titleArea.nativeElement.style.height = (titleHeight == 55 ? 32 : titleHeight) + "px";
     if (window.innerWidth > 600) {
-      this.titleArea.nativeElement.style.height = (titleHeight == 55 ? 32 : titleHeight) + "px";
       this.dataArea.nativeElement.style.height = (titleHeight == 32 ? 353 : 379 - titleHeight) + "px";
       this.tabsGroup._elementRef.nativeElement.style.height = (titleHeight == 32 ? 291 : 317 - titleHeight) + "px";
       this.commentArea.nativeElement.style.height = (titleHeight == 32 ? 190 : 216 - titleHeight) + "px";
