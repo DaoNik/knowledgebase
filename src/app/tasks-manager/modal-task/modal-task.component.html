@@ -123,19 +123,19 @@
 							<div class="text_icon">
 								<div *ngIf="item.type.length <= 0">
 								</div>
-								<div *ngIf="item.type == 'todo'" class="todo"
+								<div *ngIf="item.type === 'todo'" class="todo"
 									(click)="[item.value = item.value == 'true' ? 'false' : 'true', this.updateTaskData()]">
-									<mat-icon *ngIf="item.value == 'true'">check_box</mat-icon>
-									<mat-icon *ngIf="item.value == 'false'">check_box_outline_blank</mat-icon>
+									<mat-icon *ngIf="item.value === 'true'">check_box</mat-icon>
+									<mat-icon *ngIf="item.value === 'false'">check_box_outline_blank</mat-icon>
 								</div>
-								<div *ngIf="item.type == 'ul'">
+								<div *ngIf="item.type === 'ul'">
 									●
 								</div>
 							</div>
 
 							<div *ngIf="!inputTrigger" (click)="inputTrigger = !inputTrigger"
 								class='text_input_disabled'
-								[ngClass]="{'custom-done': item.type == 'todo' && item.value == 'true'}">
+								[ngClass]="{'custom-done': item.type === 'todo' && item.value === 'true'}">
 								{{item.text}}
 
 							</div>
@@ -155,12 +155,12 @@
 								<!-- <mat-icon>add</mat-icon> -->
 								<div *ngIf="createOption.type.length <= 0">
 								</div>
-								<div *ngIf="createOption.type == 'todo'" class="todo"
+								<div *ngIf="createOption.type === 'todo'" class="todo"
 									(click)="[createOption.value = createOption.value == 'true' ? 'false' : 'true', this.updateTaskData()]">
-									<mat-icon *ngIf="createOption.value == 'true'">check_box</mat-icon>
-									<mat-icon *ngIf="createOption.value == 'false'">check_box_outline_blank</mat-icon>
+									<mat-icon *ngIf="createOption.value === 'true'">check_box</mat-icon>
+									<mat-icon *ngIf="createOption.value === 'false'">check_box_outline_blank</mat-icon>
 								</div>
-								<div *ngIf="createOption.type == 'ul'">
+								<div *ngIf="createOption.type === 'ul'">
 									●
 								</div>
 							</div>

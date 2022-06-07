@@ -19,8 +19,10 @@ import { routeChangeAnimation } from './change-route-animation';
     ]),
     routeChangeAnimation,
   ],
+
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
+
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent implements OnInit {
