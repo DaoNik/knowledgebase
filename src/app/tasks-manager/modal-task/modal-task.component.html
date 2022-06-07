@@ -25,7 +25,7 @@
 				<textarea oninput='this.style.height = "";this.style.height = this.scrollHeight + "px"' formControlName="title" 
 						  (keydown.enter)="changeTitle($event)" (change)="titleOutlineRed = false" 
 						  [ngStyle]="{'border-bottom': titleOutlineRed ? '1px solid red' : ''}" 
-						  (blur)="changeTitle($event)" rows="1" #textareaId
+						  (blur)="changeTitle($event)" rows="1" maxlength="100" #textareaId
 				></textarea>
 			</div>
 

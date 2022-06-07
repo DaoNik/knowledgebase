@@ -92,7 +92,6 @@ export class SearchComponent implements OnInit, OnDestroy {
     const filterTags = this.filterOptions.filter((item) => {
       return item.status;
     });
-    console.log(filterTags.length);
 
     if (filterTags.length > 1) return !option.status;
     else return true;

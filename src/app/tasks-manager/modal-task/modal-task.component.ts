@@ -149,10 +149,10 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
         title: this.taskData.value.title.replace(/\n/g, "")
       })
       this.updateTaskData();
+      this.configureModalHeight();
     } else {
       this.titleOutlineRed = true;
     }
-    this.configureModalHeight();
   }
 
   changeType(option: any, i: number) {
