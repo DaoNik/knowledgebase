@@ -1,4 +1,12 @@
-import { ChangeDetectorRef, Component, Input, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  Input,
+  OnInit,
+  Output,
+} from '@angular/core';
 import {
   FormControl,
   FormGroup,
@@ -23,14 +31,15 @@ import { CreateEditArticleService } from './create-edit-article.service';
   selector: 'app-create-edit-article',
   templateUrl: './create-edit-article.component.html',
   styleUrls: ['./create-edit-article.component.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class CreateEditArticleComponent implements OnInit {
   @Input('article') article$!: Observable<IArticle>;
+  @Input('textBtn') textBtn!: string;
+  @Output('articleEvent') articleEmitter = new EventEmitter<IArticle>();
 
   public formSubmitted = false;
   public formLoaded = false;
-  public articleId!: string;
-  public isEditArticle!: boolean;
   public form!: FormGroup;
   public authors!: string[];
   public departments!: IDepartment[];
@@ -51,7 +60,10 @@ export class CreateEditArticleComponent implements OnInit {
     private changeDetectorRef: ChangeDetectorRef
   ) {}
 
-  ngOnInit(): void {}
+  ngOnInit(): void {
+    this.createForm();
+    this.filterChips();
+  }
 
   createForm(): void {
     forkJoin([
@@ -71,8 +83,6 @@ export class CreateEditArticleComponent implements OnInit {
         })
       )
       .subscribe((article) => {
-        this.authors = this.filterArticleData(article.authors, this.authors);
-
         this.tags = this.filterArticleData(article.tags, this.tags);
 
         this.categories = this.filterArticleData(
@@ -84,6 +94,12 @@ export class CreateEditArticleComponent implements OnInit {
           article.department,
           this.departments.map((department) => department.name_Department)
         );
+
+        this.authors = this.filterArticleData(article.authors, this.authors);
+
+        article.department.forEach((departmentName) => {
+          this.getAuthors(departmentName);
+        });
 
         this.form = new FormGroup({
           title: new FormControl(article.title, [
@@ -138,7 +154,7 @@ export class CreateEditArticleComponent implements OnInit {
   filterArticleData(oldData: string[], newData: string[]): string[] {
     const dataSet = new Set(oldData);
 
-    return (newData || []).filter((value) => !dataSet.has(value));
+    return (newData || []).filter((value) => !dataSet.has(value)).sort();
   }
 
   filterChips(): void {
@@ -209,6 +225,7 @@ export class CreateEditArticleComponent implements OnInit {
     const chips = this.getChips(ctrl);
 
     chips.push(chip);
+    chips.sort();
 
     control?.patchValue(
       control?.value.filter((value: string) => value !== chip)
@@ -240,11 +257,15 @@ export class CreateEditArticleComponent implements OnInit {
       .getAuthors(department.id)
       .pipe(first())
       .subscribe((authors) => {
+        const authorsSet = new Set(this.form.get('authors')?.value);
+
         if (!this.authors?.length) {
           this.authors = [];
         }
 
-        this.authors = [...this.authors, ...authors];
+        this.authors = [...this.authors, ...authors].filter(
+          (author) => !authorsSet.has(author)
+        );
 
         this.changeDetectorRef.markForCheck();
       });
@@ -271,14 +292,26 @@ export class CreateEditArticleComponent implements OnInit {
       });
   }
 
+  setCategory(newCategory: string): void {
+    const control = this.form.get('category');
+    const oldCategory = control?.value;
+
+    control?.patchValue([newCategory]);
+    this.categories.push(oldCategory[0]);
+
+    this.categories = this.categories
+      .filter((category) => category !== newCategory)
+      .sort();
+  }
+
   resetForm(): void {
     const category = this.form.get('category')?.value;
     const tags = this.form.get('tags')?.value;
     const departments = this.form.get('departments')?.value;
 
-    this.categories = [...this.categories, ...category];
-    this.tags = [...this.tags, ...tags];
-    this.departmentNames = [...this.departmentNames, ...departments];
+    this.categories = [...this.categories, ...category].sort();
+    this.tags = [...this.tags, ...tags].sort();
+    this.departmentNames = [...this.departmentNames, ...departments].sort();
     this.authors = [];
 
     this.categoryCtrl.reset();
@@ -312,7 +345,7 @@ export class CreateEditArticleComponent implements OnInit {
         tags: this.form.get('tags')?.value,
       };
 
-      console.log(article);
+      this.articleEmitter.emit(article);
     }
   }
 }

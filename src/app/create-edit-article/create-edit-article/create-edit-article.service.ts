@@ -20,6 +20,7 @@ export class CreateEditArticleService {
         this.errorService.visibleForError(
           error.error.message[error.error.message.length - 1]
         );
+
         return throwError(() => error);
       })
     );
@@ -33,6 +34,7 @@ export class CreateEditArticleService {
           this.errorService.visibleForError(
             error.error.message[error.error.message.length - 1]
           );
+
           return throwError(() => error);
         })
       );
@@ -46,6 +48,7 @@ export class CreateEditArticleService {
           this.errorService.visibleForError(
             error.error.message[error.error.message.length - 1]
           );
+
           return throwError(() => error);
         })
       );
@@ -57,6 +60,7 @@ export class CreateEditArticleService {
         this.errorService.visibleForError(
           error.error.message[error.error.message.length - 1]
         );
+
         return throwError(() => error);
       })
     );

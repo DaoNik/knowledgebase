@@ -1,1 +1,2 @@
-<app-create-edit-article [article]="article$"></app-create-edit-article>
+<app-create-edit-article (articleEvent)="createArticle($event)" [article]="article$" [textBtn]="'Создать'">
+</app-create-edit-article>
