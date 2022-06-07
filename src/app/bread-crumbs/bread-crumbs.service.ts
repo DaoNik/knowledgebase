@@ -17,9 +17,12 @@ export class BreadCrumbsService {
   getArticle(id: string): Observable<IArticle> {
     return this.http.get<IArticle>(`${this.apiUrl}/docker/articles/${id}`).pipe(
       catchError((error: HttpErrorResponse) => {
-        this.errorService.visibleForError(
-          error.error.message[error.error.message.length - 1]
-        );
+        if (error.error.message) {
+          this.errorService.visibleForError(
+            error.error.message[error.error.message.length - 1]
+          );
+        }
+        
         return throwError(() => error);
       })
     );

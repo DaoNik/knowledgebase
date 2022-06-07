@@ -43,8 +43,12 @@ export class SearchService {
   }
 
   goToSearchResults(title: string, categories: string[]) {
-    if (title == null)
-      this.router.navigate(['search-result', ``, `${categories}`]);
-    else this.router.navigate(['search-result', `${title}`, `${categories}`]);
+    console.log(title)
+    if (!title)
+      this.router.navigate(['search-result', `${categories}`]);
+    else {
+      console.log(title);
+      this.router.navigate(['search-result', `${categories}`, `${title}`]);
+    }
   }
 }

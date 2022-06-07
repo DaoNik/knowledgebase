@@ -39,7 +39,6 @@ export class SearchComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    // this.getCategories();
     this.subscriptionCategories$ = this.searchService
       .getCategories()
       .subscribe((res: string[]) => {
@@ -105,6 +104,8 @@ export class SearchComponent implements OnInit, OnDestroy {
       .map((item) => {
         return item.title;
       });
+    console.log(`goiong to sr`)
+    console.log(filterTags)
     this.searchService.goToSearchResults(
       this.searchQuery.value.trim(),
       filterTags

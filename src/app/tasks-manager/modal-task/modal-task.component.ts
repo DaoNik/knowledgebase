@@ -384,6 +384,7 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
             text: res.description.map((element: any) => JSON.parse(element)),
           });
         }
+        this.changeDetector.markForCheck();
       });
 
     this.subscriptionColumn$ = this.taskManagerService
@@ -402,20 +403,9 @@ export class ModalTaskComponent implements OnInit, OnDestroy {
             });
           }
         });
+        this.changeDetector.markForCheck();
       });
   }
-
-  // parseStringify(desc: any, parseOrString: boolean) {
-  //   if (parseOrString == true) {
-  //     desc.forEach((element: any) => {
-  //       element = JSON.parse(element);
-  //     });
-  //   } else {
-  //     desc.forEach((element: any) => {
-  //       element = JSON.stringify(element);
-  //     });
-  //   }
-  // }
 
   private _dateTransform(date: string): string {
     return `${date.slice(0, 10)} ${date.slice(11, 19)}`;
