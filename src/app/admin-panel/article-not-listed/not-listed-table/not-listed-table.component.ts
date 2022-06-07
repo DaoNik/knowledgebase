@@ -1,6 +1,11 @@
-import { ChangeDetectionStrategy, ChangeDetectorRef, Component, OnDestroy, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnDestroy,
+  OnInit,
+} from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { Router } from '@angular/router';
 import { mergeMap, Observable, Subscription } from 'rxjs';
 import { IArticle } from 'src/app/interfaces/article';
 import { AdminPanelService } from '../../admin-panel.service';
@@ -13,21 +18,21 @@ import { AdminPanelService } from '../../admin-panel.service';
 })
 export class NotListedTableComponent implements OnInit, OnDestroy {
   articles: IArticle[] = [];
-  article$!: Observable<IArticle[]>;
   subscriptionNotListed$!: Subscription;
+
+  checkedArticles: string[] = [];
   articlesOnPage: number = 3;
+  currentPage: number = 1;
   pages: number[] = [];
-  category: string = '';
+  filterTags: string[] = [];
+
+  // category: string = '';
 
   currentArticles: IArticle[] = this.articles;
   currentPageArticles: IArticle[] = this.currentArticles.slice(
     0,
     this.articlesOnPage
   );
-  currentPage: number = 1;
-
-  checkedArticles: string[] = [];
-  filterTags: string[] = [];
 
   search: FormControl = new FormControl('');
   tagInput: FormControl = new FormControl('');
@@ -38,18 +43,29 @@ export class NotListedTableComponent implements OnInit, OnDestroy {
   ) {}
 
   ngOnInit(): void {
-    this.subscriptionNotListed$ = this.adminPanelService.categoryNotListed
-      .pipe(mergeMap((topic) => this.adminPanelService.getArticles(topic)))
-      .subscribe((articles) => {
-        this.articles = articles;
-        this.currentPageArticles = this.articles.slice(0, this.articlesOnPage);
-        this.countPages();
-        this.changeDetectorRef.markForCheck()
-      });
+    this.getArticles();
   }
 
   ngOnDestroy() {
     this.subscriptionNotListed$.unsubscribe();
+  }
+
+  getArticles(): void {
+    let topic = '';
+    this.adminPanelService.categoryNotListed.subscribe((val) => {
+      topic = val;
+    });
+    this.subscriptionNotListed$ = this.adminPanelService.categoryNotListed
+      .pipe(mergeMap((topic) => this.adminPanelService.getArticles(topic)))
+      .subscribe((articles) => {
+        articles = articles.filter((articles) => {
+          return articles.category == topic;
+        });
+        this.articles = articles;
+        this.currentPageArticles = this.articles.slice(0, this.articlesOnPage);
+        this.countPages();
+        this.changeDetectorRef.markForCheck();
+      });
   }
 
   countPages(): void {
@@ -189,7 +205,7 @@ export class NotListedTableComponent implements OnInit, OnDestroy {
     this.resetPage();
   }
 
-  identify(index: number, article: IArticle){
-    return article.title; 
- }
+  identify(index: number, article: IArticle) {
+    return article.title;
+  }
 }
