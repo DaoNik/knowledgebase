@@ -2,14 +2,6 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { first } from 'rxjs';
 import { AdminPanelService } from '../admin-panel.service';
 
-const mockTopics: string[] = [
-  'Склад',
-  'Серверная сторона',
-  'Еще раздел',
-  'Еще раздел',
-  'Еще раздел',
-];
-
 @Component({
   selector: 'app-article-table-moderation',
   templateUrl: './article-table-moderation.component.html',
@@ -26,7 +18,6 @@ export class ArticleTableModerationComponent {
       .pipe(first())
       .subscribe((categories) => {
         this.topics = categories;
-        this.currentTopic = this.topics[0];
       });
   }
 

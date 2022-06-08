@@ -9,10 +9,10 @@ import { ErrorModalService } from '../error-modal/error-modal.service';
 })
 export class AdminPanelService {
   categoryNotListed = new BehaviorSubject<string>(
-    localStorage.getItem('categoryNotListed') || 'Склад'
+    localStorage.getItem('categoryNotListed') || 'Логистика'
   );
   categoryListed = new BehaviorSubject<string>(
-    localStorage.getItem('categoryListed') || 'Склад'
+    localStorage.getItem('categoryListed') || 'Логистика'
   );
 
   constructor(
@@ -65,7 +65,7 @@ export class AdminPanelService {
           this.errorService.visibleForError(
             error.error.message[error.error.message.length - 1]
           );
-        };
+        }
         return throwError(() => error);
       })
     );
