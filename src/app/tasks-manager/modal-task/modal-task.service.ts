@@ -1,8 +1,5 @@
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { Inject, Injectable } from '@angular/core';
+import { ChangeDetectorRef, Inject, Injectable } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-import { catchError, Observable, throwError } from 'rxjs';
-import { ErrorModalService } from 'src/app/error-modal/error-modal.service';
 import { ModalTaskComponent } from './modal-task.component';
 
 @Injectable({
@@ -11,8 +8,7 @@ import { ModalTaskComponent } from './modal-task.component';
 export class ModalTaskService {
   constructor(
     public dialog: MatDialog,
-    private http: HttpClient,
-    private errorService: ErrorModalService
+    private changeDetectorRef: ChangeDetectorRef
   ) {}
 
   openDialog(data?: any): void {
@@ -25,6 +21,7 @@ export class ModalTaskService {
 
     dialogRef.afterClosed().subscribe((res) => {
       console.log(res);
+      this.changeDetectorRef.markForCheck();
     });
   }
 }

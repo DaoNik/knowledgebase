@@ -29,7 +29,7 @@
       К сожалению нет подходящих статей
     </p>
   </ul>
-  <ul class="articles__pagination-list">
+  <ul class="articles__pagination-list" *ngIf="articles.length > 0">
     <button
       mat-raised-button
       [matMenuTriggerFor]="articlesCount"

@@ -16,14 +16,14 @@ import {
 } from '@angular/material/dialog';
 import { ITypeOption } from './modal-task-interface';
 import { FormBuilder, Validators } from '@angular/forms';
-import { Subscription, catchError, timeout } from 'rxjs';
+import { Subscription, catchError } from 'rxjs';
 import { Router } from '@angular/router';
 import { TasksManagerService } from '../tasks-manager.service';
 import { AssigneeModalComponent } from './assignee-modal/assignee-modal.component';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { DeleteTaskModalComponent } from './delete-task-modal/delete-task-modal.component';
 import { IComment } from '../interfaces/comment';
-import { MatTab, MatTabGroup } from '@angular/material/tabs';
+import { MatTabGroup } from '@angular/material/tabs';
 
 @Component({
   selector: 'app-modal-task',

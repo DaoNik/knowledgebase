@@ -104,8 +104,7 @@ export class SearchComponent implements OnInit, OnDestroy {
       .map((item) => {
         return item.title;
       });
-    console.log(`goiong to sr`)
-    console.log(filterTags)
+      
     this.searchService.goToSearchResults(
       this.searchQuery.value.trim(),
       filterTags
