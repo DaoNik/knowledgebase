@@ -14,6 +14,7 @@ export class FooterComponent {
   openFeedbackForm() {
     this.dialog.open(FeedbackComponent, {
       maxWidth: '100%',
+      width: '550px'
     });
   }
 }

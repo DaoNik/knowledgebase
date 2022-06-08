@@ -20,6 +20,12 @@
   @media (min-width: 1920px) {
     padding: 30px 30px;
   }
+
+  @media (max-width: 1024px) {
+    .main__result-count {
+      padding-left: 20px;
+    }
+  }
 }
 
 .main__title {
@@ -303,9 +309,9 @@
 
   .articles__pagination-list_menu {
     margin: auto 0;
-    line-height: 14px;
+    // line-height: 14px;
     cursor: pointer;
-    height: 14px;
+    height: 100%;
 
     mat-icon {
       height: 14px;

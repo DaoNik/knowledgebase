@@ -1,8 +1,8 @@
 <form class="search__form">
   <input type="text" placeholder="Pick one" placeholder="Введите вашу проблему" class="search__form-input"
     [ngClass]="{ 'search__form-input_bg': bgColor }" (keyup.enter)="search()" [formControl]="searchQuery"
-    [matAutocomplete]="auto" />
-  <mat-autocomplete #auto="matAutocomplete" class="search__from_autocomplete">
+    [matAutocomplete]="auto" #searchQueryArea />
+  <mat-autocomplete #auto="matAutocomplete" class="search__from_autocomplete" #searchAutocomplete>
     <mat-option *ngFor="let option of filteredResults | async | slice: 0:4" [value]="option.title"
       (click)="goToArticle(option.id!)">
       <span class="search__from_autocomplete_title">

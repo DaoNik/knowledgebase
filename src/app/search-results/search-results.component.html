@@ -2,8 +2,7 @@
   <div *ngIf="articles.length > 0" class="main__result-count">
     {{ articles.length == 1 ? "Найдена" : "Найдено" }}
     {{ articles.length }}
-    {{
-      articles.length % 10 == 1
+    {{ articles.length % 10 == 1 && articles.length % 100 < 10 && articles.length % 100 > 20
         ? "статья"
         : articles.length % 10 >= 2 && articles.length % 10 < 5
         ? "статьи"
@@ -30,13 +29,14 @@
       К сожалению нет подходящих статей
     </p>
   </ul>
-  <ul class="articles__pagination-list">
-    <div
+  <ul class="articles__pagination-list" *ngIf="articles.length > 0">
+    <button
+      mat-raised-button
       [matMenuTriggerFor]="articlesCount"
       class="articles__pagination-list_menu"
     >
       Показать: {{ articlesOnPage }} <mat-icon>expand_more</mat-icon>
-    </div>
+    </button>
     <mat-menu #articlesCount="matMenu">
       <button
         mat-menu-item

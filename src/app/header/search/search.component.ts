@@ -5,17 +5,17 @@ import {
   Input,
   OnDestroy,
   OnInit,
+  ViewChild,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
+import { MatMenu, MatMenuTrigger } from '@angular/material/menu';
 import { Router } from '@angular/router';
 import { filter, map, Observable, startWith, Subscription } from 'rxjs';
 import { IArticle } from 'src/app/interfaces/article';
+import { IFilter } from 'src/app/interfaces/search';
 import { SearchService } from './search.service';
 
-interface IFilter {
-  title: string;
-  status: boolean;
-}
 @Component({
   selector: 'app-search',
   templateUrl: './search.component.html',
@@ -31,6 +31,8 @@ export class SearchComponent implements OnInit, OnDestroy {
   subscriptionArticles$!: Subscription;
   subscriptionCategories$!: Subscription;
   foundArticles!: IArticle[];
+
+  @ViewChild('searchQueryArea', { read: MatAutocompleteTrigger }) autocomplete!: MatAutocompleteTrigger;
 
   constructor(
     private searchService: SearchService,
@@ -96,6 +98,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     else return true;
   }
 
+
   search() {
     const filterTags = this.filterOptions
       .filter((item) => {
@@ -104,12 +107,12 @@ export class SearchComponent implements OnInit, OnDestroy {
       .map((item) => {
         return item.title;
       });
-    console.log(`goiong to sr`)
-    console.log(filterTags)
+      
     this.searchService.goToSearchResults(
       this.searchQuery.value.trim(),
       filterTags
-    );
+    );    
+    this.autocomplete.closePanel(); 
   }
 
   goToArticle(id: string) {
