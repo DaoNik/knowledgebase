@@ -1,31 +1,50 @@
 <form class="form" [formGroup]="feedback">
   <div class="form__header">
-    <h2>Форма обратной связи</h2>
-    <button class="close" mat-dialog-close><mat-icon>close</mat-icon></button>
+    <h2 class="form__title">Форма обратной связи</h2>
+    <button class="form__close" mat-dialog-close>
+      <mat-icon>close</mat-icon>
+    </button>
   </div>
   <div class="form__container">
-    <div class="userName">
-      <label for="name" class="form__label"> Имя: </label>
-      <input type="text" formControlName="name" class="form__input"/>
+    <div class="form__userName">
+      <label class="form__label"> Имя: </label>
+      <input type="text" formControlName="name" class="form__input" />
       <mat-error
         class="error"
-        *ngIf="feedback.get('name')?.getError('required') || feedback.get('name')?.getError('touched')"
+        *ngIf="
+          feedback.get('name')?.getError('required') ||
+          feedback.get('name')?.getError('touched')
+        "
       >
         Введите ваше имя</mat-error
       >
     </div>
-    <div class="userId">
-      <label for="userId" class="form__label"> Код работника: </label>
-      <input type="text" formControlName="userCode" class="form__input"/>
+    <div class="form__userCode">
+      <label class="form__label"> Код работника: </label>
+      <input type="text" formControlName="userCode" class="form__input" />
       <mat-error
         class="error"
-        *ngIf="feedback.get('userCode')?.getError('required') || feedback.get('userCode')?.getError('touched')"
+        *ngIf="
+          feedback.get('userCode')?.getError('required') ||
+          feedback.get('userCode')?.getError('dirty')
+        "
       >
         Введите свой код работника</mat-error
       >
     </div>
-    <label for="message" class="form__label">Сообщение(минимум 10 символов):</label>
-    <textarea class="form__message" cols="30" rows="10" formControlName="description"></textarea>
+    <div class="form__description">
+      <label for="message" class="form__label form__label-description"
+        >Сообщение(минимум 10 символов):</label
+      >
+      <textarea
+        class="form__message"
+        cols="40"
+        rows="10"
+        formControlName="description"
+      ></textarea>
+    </div>
   </div>
-  <button mat-button [disabled]="feedback.invalid" (click)="sendFeedback()">Отправить</button>
+  <button mat-button [disabled]="feedback.invalid" (click)="sendFeedback()">
+    Отправить
+  </button>
 </form>

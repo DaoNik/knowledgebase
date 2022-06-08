@@ -1,5 +1,4 @@
 import { FeedbackService } from './feedback.service';
-import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
@@ -16,7 +15,6 @@ export class FeedbackComponent {
 
   constructor(
     private fb: FormBuilder,
-    private http: HttpClient,
     private snackBar: MatSnackBar,
     private feedbackService :FeedbackService,
     public dialog: MatDialog

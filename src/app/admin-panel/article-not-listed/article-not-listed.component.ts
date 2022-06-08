@@ -1,4 +1,5 @@
 import { ChangeDetectionStrategy, Component } from '@angular/core';
+import { first } from 'rxjs';
 import { AdminPanelService } from '../admin-panel.service';
 
 const mockTopics: string[] = ['Склад', 'Базы данных'];
@@ -13,7 +14,14 @@ export class ArticleNotListedComponent {
   topics: string[] = mockTopics;
   currentTopic: string = localStorage.getItem('categoryNotListed') || 'Склад';
 
-  constructor(private adminPanelService: AdminPanelService) {}
+  constructor(private adminPanelService: AdminPanelService) {
+    this.adminPanelService.getCategories().pipe(
+      first()
+    ).subscribe(categories => {
+      this.topics = categories;
+      this.currentTopic = this.topics[0];
+    });
+  }
 
   clickTopic(topic: string): void {
     this.adminPanelService.categoryNotListed.next(topic);

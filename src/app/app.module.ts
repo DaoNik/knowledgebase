@@ -19,7 +19,7 @@ import { MainComponent } from './main/main.component';
 import { FooterComponent } from './footer/footer.component';
 import { SidebarComponent } from './sidebar/sidebar.component';
 import { SearchComponent } from './header/search/search.component';
-import { CreateArticleComponent } from './create-article/create-article.component';
+import { CreateArticleComponent } from './create-edit-article/create-article/create-article.component';
 import { AngularEditorModule } from '@kolkov/angular-editor';
 import { MatInputModule } from '@angular/material/input';
 import { MatChipsModule } from '@angular/material/chips';
@@ -31,6 +31,9 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { ArticleComponent } from './article/article.component';
 import { SearchResultsComponent } from './search-results/search-results.component';
 import { BreadCrumbsComponent } from './bread-crumbs/bread-crumbs.component';
+import { TextEditorComponent } from './create-edit-article/text-editor/text-editor.component';
+import { CreateEditArticleComponent } from './create-edit-article/create-edit-article/create-edit-article.component';
+import { EditArticleComponent } from './create-edit-article/edit-article/edit-article.component';
 
 // Для пайпа даты
 import { registerLocaleData } from '@angular/common';
@@ -63,6 +66,9 @@ const API_URL_PROVIDER: Provider = {
     ClickAwayDirective,
     ModalTaskEntryComponent,
     ErrorModalComponent,
+    TextEditorComponent,
+    CreateEditArticleComponent,
+    EditArticleComponent,
   ],
   imports: [
     BrowserModule,

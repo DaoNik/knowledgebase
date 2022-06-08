@@ -7,6 +7,8 @@
 .board__task-header {
   margin: 6px 0;
   line-height: 26px;
+  line-break: anywhere;
+    width: calc(100% - 24px);
 }
 
 .board {
@@ -48,9 +50,6 @@
   background: white;
   font-size: 20px;
 
-  &-header {
-    width: -webkit-fill-available;
-  }
   &-delete {
     display: none;
     color: #673ab7;
