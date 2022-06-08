@@ -83,7 +83,7 @@ export class SearchComponent implements OnInit, OnDestroy {
       ? this.foundArticles.filter(
           (result) =>
             (result.title.toLowerCase().includes(filterValue) ||
-              result.description.toLowerCase().includes(filterValue)) &&
+              result.description[0].toLowerCase().includes(filterValue)) &&
             filterTags.includes(result.category)
         )
       : this.foundArticles;
