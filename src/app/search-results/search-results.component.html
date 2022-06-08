@@ -30,12 +30,13 @@
     </p>
   </ul>
   <ul class="articles__pagination-list">
-    <div
+    <button
+      mat-raised-button
       [matMenuTriggerFor]="articlesCount"
       class="articles__pagination-list_menu"
     >
       Показать: {{ articlesOnPage }} <mat-icon>expand_more</mat-icon>
-    </div>
+    </button>
     <mat-menu #articlesCount="matMenu">
       <button
         mat-menu-item
