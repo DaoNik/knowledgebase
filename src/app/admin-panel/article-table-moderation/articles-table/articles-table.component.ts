@@ -50,14 +50,13 @@ export class ArticlesTableComponent implements OnInit, OnDestroy {
     this.subscriptionCategoryListed$ = this.adminService.categoryListed
       .pipe(map((topic) => this.topic = topic), concatMap((topic) => this.adminService.getArticles(topic)))
       .subscribe((articles) => {
-        console.log(this.topic);
         this.articles = [];
+        //TO DO: надо на бэке фильтрацию организовать, а не на фронте
         articles.forEach(article => {
           if(article.category === this.topic) {
             this.articles.push(article);
           }
         });
-        //this.articles = articles;
         this.currentPageArticles = this.articles.slice(0, this.articlesOnPage);
         this.countPages();
 
