@@ -17,22 +17,22 @@
 
     <main class="article__main">
       <h3 class="article__main-title">Контент</h3>
-      <p class="article__main-description" [innerHtml]="article.content"></p>
+      <p class="article__main-description" [innerHtml]="sanitizeHtml(article.content)"></p>
     </main>
 
     <div class="article__lists">
-      <ul class="article__list">
-        <h3 class="article__list-title">Отдел</h3>
-        <li *ngFor="let respondent of article.department">
-          {{ respondent }}
-        </li>
-      </ul>
-      <ul class="article__list">
-        <h3 class="article__list-title">Создатели</h3>
-        <li *ngFor="let author of article.authors">
-          {{ author }}
-        </li>
-      </ul>
+      <p class="article__lists-item">
+        <span class="article__lists-item_bold">Отделы:</span>
+        {{ article.department.join(", ") }}
+      </p>
+      <p class="article__lists-item">
+        <span class="article__lists-item_bold">Создатели:</span>
+        {{ article.authors.join(", ") }}
+      </p>
+      <p class="article__lists-item">
+        <span class="article__lists-item_bold">Теги:</span>
+        {{ article.tags.join(", ") }}
+      </p>
     </div>
   </div>
   <ng-template #loading> Loading </ng-template>

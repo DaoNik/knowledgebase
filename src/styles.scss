@@ -53,9 +53,10 @@
 .mat-dialog-container {
   background-color: #fff;
   border-radius: 15px !important;
+  width: 550px !important;
 }
 
-.create-article__editor {
+.create-edit-article__editor {
   .angular-editor-textarea {
     &:focus{
       border: 1px solid #7b1fa2 !important;

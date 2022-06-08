@@ -5,6 +5,7 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
+import { DomSanitizer } from '@angular/platform-browser';
 import { ActivatedRoute, Params } from '@angular/router';
 import { Observable, Subscription } from 'rxjs';
 import { IArticle } from '../interfaces/article';
@@ -24,7 +25,8 @@ export class ArticleComponent implements OnInit, OnDestroy {
   constructor(
     private articlesServ: ArticleService,
     private route: ActivatedRoute,
-    private changeDetectorRef: ChangeDetectorRef
+    private changeDetectorRef: ChangeDetectorRef,
+    private sanitizer: DomSanitizer
   ) {}
 
   ngOnInit(): void {
@@ -36,5 +38,9 @@ export class ArticleComponent implements OnInit, OnDestroy {
 
   ngOnDestroy() {
     this.subscriptionParams$.unsubscribe();
+  }
+
+  sanitizeHtml(content: string) {
+    return this.sanitizer.bypassSecurityTrustHtml(content);
   }
 }

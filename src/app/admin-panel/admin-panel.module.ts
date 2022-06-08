@@ -9,9 +9,10 @@ import { MatIconModule } from '@angular/material/icon';
 import { RoleModerationComponent } from './role-moderation/role-moderation.component';
 import { ArticleTableModerationComponent } from './article-table-moderation/article-table-moderation.component';
 import { ArticlesTableComponent } from './article-table-moderation/articles-table/articles-table.component';
-import { CreateArticleComponent } from '../create-article/create-article.component';
 import { ArticleNotListedComponent } from './article-not-listed/article-not-listed.component';
 import { NotListedTableComponent } from './article-not-listed/not-listed-table/not-listed-table.component';
+import { CreateArticleComponent } from '../create-edit-article/create-article/create-article.component';
+import { EditArticleComponent } from '../create-edit-article/edit-article/edit-article.component';
 
 export const adminRoutes: Routes = [
   { path: '', redirectTo: 'moderate', pathMatch: 'full' },
@@ -32,7 +33,7 @@ export const adminRoutes: Routes = [
   },
   {
     path: 'edit/:id',
-    component: CreateArticleComponent,
+    component: EditArticleComponent,
     data: { displayName: 'Редактировать статью' },
   },
   {

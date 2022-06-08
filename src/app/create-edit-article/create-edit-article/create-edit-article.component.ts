@@ -1,13 +1,11 @@
-import { CreateArticleService } from './create-article.service';
-import { ActivatedRoute, Router } from '@angular/router';
 import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
-  ElementRef,
-  OnDestroy,
+  EventEmitter,
+  Input,
   OnInit,
-  ViewChild,
+  Output,
 } from '@angular/core';
 import {
   FormControl,
@@ -16,41 +14,32 @@ import {
   Validators,
 } from '@angular/forms';
 import { MatAutocompleteSelectedEvent } from '@angular/material/autocomplete';
-import { AngularEditorConfig } from '@kolkov/angular-editor';
 import {
   first,
   forkJoin,
   map,
   Observable,
-  of,
   startWith,
   Subject,
   takeUntil,
 } from 'rxjs';
-import { IArticle } from '../interfaces/article';
-import { IDepartment } from '../interfaces/department';
+import { IArticle } from 'src/app/interfaces/article';
+import { IDepartment } from 'src/app/interfaces/department';
+import { CreateEditArticleService } from './create-edit-article.service';
 
 @Component({
-  selector: 'app-create-article',
-  templateUrl: './create-article.component.html',
-  styleUrls: ['./create-article.component.scss'],
+  selector: 'app-create-edit-article',
+  templateUrl: './create-edit-article.component.html',
+  styleUrls: ['./create-edit-article.component.scss'],
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
-export class CreateArticleComponent implements OnInit, OnDestroy {
-  @ViewChild('departmentsInput')
-  departmentsInput!: ElementRef<HTMLInputElement>;
-  @ViewChild('tagsInput')
-  tagsInput!: ElementRef<HTMLInputElement>;
-  @ViewChild('authorsInput')
-  authorsInput!: ElementRef<HTMLInputElement>;
-  @ViewChild('categoryInput')
-  categoryInput!: ElementRef<HTMLInputElement>;
+export class CreateEditArticleComponent implements OnInit {
+  @Input('article') article$!: Observable<IArticle>;
+  @Input('textBtn') textBtn!: string;
+  @Output('articleEvent') articleEmitter = new EventEmitter<IArticle>();
 
   public formSubmitted = false;
   public formLoaded = false;
-  public article$!: Observable<IArticle>;
-  public articleId!: string;
-  public isEditArticle!: boolean;
   public form!: FormGroup;
   public authors!: string[];
   public departments!: IDepartment[];
@@ -65,67 +54,22 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
   public filteredChips$!: Observable<string[]>;
   public chipsLoaded = false;
   private destroySubscribes$ = new Subject<boolean>();
-  public editorConfig: AngularEditorConfig = {
-    editable: true,
-    outline: false,
-    spellcheck: true,
-    minHeight: '200px',
-    maxHeight: '500px',
-    minWidth: '200px',
-    translate: 'yes',
-    enableToolbar: true,
-    showToolbar: true,
-    placeholder: 'Введите текст статьи',
-    defaultFontName: 'Arial',
-    defaultFontSize: '3',
-    sanitize: true,
-    toolbarPosition: 'top',
-    toolbarHiddenButtons: [['fontName', 'toggleEditorMode', 'insertVideo']],
-  };
 
   constructor(
-    private route: ActivatedRoute,
-    private createArticleService: CreateArticleService,
-    private router: Router,
+    private createEditArticleService: CreateEditArticleService,
     private changeDetectorRef: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
-    this.getArticle();
     this.createForm();
     this.filterChips();
   }
 
-  ngOnDestroy(): void {
-    this.destroySubscribes$.next(true);
-  }
-
-  getArticle(): void {
-    this.route.url.pipe(first()).subscribe((url) => {
-      this.isEditArticle = url[0].path === 'edit';
-
-      if (this.isEditArticle) {
-        this.articleId = this.route.snapshot.params['id'];
-        this.article$ = this.createArticleService.getArticle(this.articleId);
-      } else {
-        this.article$ = of({
-          title: '',
-          description: '',
-          content: '',
-          authors: [],
-          department: [],
-          category: '',
-          tags: [],
-        });
-      }
-    });
-  }
-
   createForm(): void {
     forkJoin([
-      this.createArticleService.getDepartments(),
-      this.createArticleService.getTags(),
-      this.createArticleService.getCategories(),
+      this.createEditArticleService.getDepartments(),
+      this.createEditArticleService.getTags(),
+      this.createEditArticleService.getCategories(),
       this.article$,
     ])
       .pipe(
@@ -139,8 +83,6 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
         })
       )
       .subscribe((article) => {
-        this.authors = this.filterArticleData(article.authors, this.authors);
-
         this.tags = this.filterArticleData(article.tags, this.tags);
 
         this.categories = this.filterArticleData(
@@ -152,6 +94,12 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
           article.department,
           this.departments.map((department) => department.name_Department)
         );
+
+        this.authors = this.filterArticleData(article.authors, this.authors);
+
+        article.department.forEach((departmentName) => {
+          this.getAuthors(departmentName);
+        });
 
         this.form = new FormGroup({
           title: new FormControl(article.title, [
@@ -197,50 +145,16 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
       });
   }
 
+  manySpacesValidator(control: FormControl): ValidationErrors | null {
+    return control.value && control.value.trim().length < 4
+      ? { manySpaces: true }
+      : null;
+  }
+
   filterArticleData(oldData: string[], newData: string[]): string[] {
     const dataSet = new Set(oldData);
 
-    return (newData || []).filter((value) => !dataSet.has(value));
-  }
-
-  getAuthors(departmentName: string): void {
-    const department = this.departments.filter(
-      (department) => department.name_Department === departmentName
-    )[0];
-
-    this.createArticleService
-      .getAuthors(department.id)
-      .pipe(first())
-      .subscribe((authors) => {
-        if (!this.authors?.length) {
-          this.authors = [];
-        }
-
-        this.authors = [...this.authors, ...authors];
-
-        this.changeDetectorRef.markForCheck();
-      });
-  }
-
-  removeAuthors(departmentName: string): void {
-    const department = this.departments.filter(
-      (department) => department.name_Department === departmentName
-    )[0];
-
-    this.createArticleService
-      .getAuthors(department.id)
-      .pipe(first())
-      .subscribe((authors) => {
-        const authorsSet = new Set(authors);
-        const control = this.form.get('authors');
-
-        this.authors = this.authors.filter((author) => !authorsSet.has(author));
-        control?.patchValue(
-          control?.value.filter((author: string) => !authorsSet.has(author))
-        );
-
-        this.changeDetectorRef.markForCheck();
-      });
+    return (newData || []).filter((value) => !dataSet.has(value)).sort();
   }
 
   filterChips(): void {
@@ -278,41 +192,20 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
     });
   }
 
-  manySpacesValidator(control: FormControl): ValidationErrors | null {
-    return control.value && control.value.trim().length < 4
-      ? { manySpaces: true }
-      : null;
+  getError(ctrl: string | FormControl, err: string): boolean {
+    if (typeof ctrl === 'string') {
+      return this.form.get(ctrl)?.getError(err);
+    }
+
+    return ctrl.getError(err);
   }
 
-  createArticle(): void {
-    if (this.form.valid) {
-      this.formSubmitted = true;
-      this.formLoaded = true;
-
-      const article: IArticle = {
-        title: this.form.get('title')?.value.trim(),
-        description: this.form.get('description')?.value.trim(),
-        content: this.form.get('content')?.value.trim(),
-        authors: this.form.get('authors')?.value,
-        category: this.form.get('category')?.value[0],
-        department: this.form.get('departments')?.value,
-        tags: this.form.get('tags')?.value,
-      };
-
-      this.isEditArticle
-        ? this.createArticleService
-            .editArticle(this.articleId, article)
-            .pipe(first())
-            .subscribe((article) =>
-              this.router.navigateByUrl(`/article/${article.id}`)
-            )
-        : this.createArticleService
-            .createArticle(article)
-            .pipe(first())
-            .subscribe((article) =>
-              this.router.navigateByUrl(`/article/${article.id}`)
-            );
+  isTouched(ctrl: string | FormControl): boolean {
+    if (typeof ctrl === 'string') {
+      return this.form.get(ctrl)!.touched;
     }
+
+    return ctrl.touched;
   }
 
   getChips(ctrl: string): string[] {
@@ -332,6 +225,7 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
     const chips = this.getChips(ctrl);
 
     chips.push(chip);
+    chips.sort();
 
     control?.patchValue(
       control?.value.filter((value: string) => value !== chip)
@@ -354,20 +248,60 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
     chipCtrl.setValue(null);
   }
 
-  getError(ctrl: string | FormControl, err: string): boolean {
-    if (typeof ctrl === 'string') {
-      return this.form.get(ctrl)?.getError(err);
-    }
+  getAuthors(departmentName: string): void {
+    const department = this.departments.filter(
+      (department) => department.name_Department === departmentName
+    )[0];
 
-    return ctrl.getError(err);
+    this.createEditArticleService
+      .getAuthors(department.id)
+      .pipe(first())
+      .subscribe((authors) => {
+        const authorsSet = new Set(this.form.get('authors')?.value);
+
+        if (!this.authors?.length) {
+          this.authors = [];
+        }
+
+        this.authors = [...this.authors, ...authors].filter(
+          (author) => !authorsSet.has(author)
+        );
+
+        this.changeDetectorRef.markForCheck();
+      });
   }
 
-  isTouched(ctrl: string | FormControl): boolean {
-    if (typeof ctrl === 'string') {
-      return this.form.get(ctrl)!.touched;
-    }
+  removeAuthors(departmentName: string): void {
+    const department = this.departments.filter(
+      (department) => department.name_Department === departmentName
+    )[0];
 
-    return ctrl.touched;
+    this.createEditArticleService
+      .getAuthors(department.id)
+      .pipe(first())
+      .subscribe((authors) => {
+        const authorsSet = new Set(authors);
+        const control = this.form.get('authors');
+
+        this.authors = this.authors.filter((author) => !authorsSet.has(author));
+        control?.patchValue(
+          control?.value.filter((author: string) => !authorsSet.has(author))
+        );
+
+        this.changeDetectorRef.markForCheck();
+      });
+  }
+
+  setCategory(newCategory: string): void {
+    const control = this.form.get('category');
+    const oldCategory = control?.value;
+
+    control?.patchValue([newCategory]);
+    this.categories.push(oldCategory[0]);
+
+    this.categories = this.categories
+      .filter((category) => category !== newCategory)
+      .sort();
   }
 
   resetForm(): void {
@@ -375,9 +309,9 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
     const tags = this.form.get('tags')?.value;
     const departments = this.form.get('departments')?.value;
 
-    this.categories = [...this.categories, ...category];
-    this.tags = [...this.tags, ...tags];
-    this.departmentNames = [...this.departmentNames, ...departments];
+    this.categories = [...this.categories, ...category].sort();
+    this.tags = [...this.tags, ...tags].sort();
+    this.departmentNames = [...this.departmentNames, ...departments].sort();
     this.authors = [];
 
     this.categoryCtrl.reset();
@@ -394,5 +328,24 @@ export class CreateArticleComponent implements OnInit, OnDestroy {
       departments: [],
       authors: [],
     });
+  }
+
+  createArticle(): void {
+    if (this.form.valid) {
+      this.formSubmitted = true;
+      this.formLoaded = true;
+
+      const article: IArticle = {
+        title: this.form.get('title')?.value.trim(),
+        description: this.form.get('description')?.value.trim(),
+        content: this.form.get('content')?.value.trim(),
+        authors: this.form.get('authors')?.value,
+        category: this.form.get('category')?.value[0],
+        department: this.form.get('departments')?.value,
+        tags: this.form.get('tags')?.value,
+      };
+
+      this.articleEmitter.emit(article);
+    }
   }
 }
