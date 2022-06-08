@@ -189,6 +189,7 @@ export class CreateEditArticleComponent implements OnInit {
             : chips
         )
       );
+      this.changeDetectorRef.markForCheck();
     });
   }
 

@@ -1,4 +1,8 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+} from '@angular/core';
 import { first } from 'rxjs';
 import { AdminPanelService } from '../admin-panel.service';
 
@@ -12,12 +16,16 @@ export class ArticleTableModerationComponent {
   topics: string[] = [];
   currentTopic: string = localStorage.getItem('categoryListed') || '';
 
-  constructor(private adminService: AdminPanelService) {
+  constructor(
+    private adminService: AdminPanelService,
+    private changeDetectorRef: ChangeDetectorRef
+  ) {
     this.adminService
       .getCategories()
       .pipe(first())
       .subscribe((categories) => {
         this.topics = categories;
+        this.changeDetectorRef.markForCheck();
       });
   }
 

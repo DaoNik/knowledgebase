@@ -1,5 +1,10 @@
 import { CreateArticleService } from 'src/app/create-edit-article/create-article/create-article.service';
-import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  OnInit,
+} from '@angular/core';
 import { first, Observable } from 'rxjs';
 import { IArticle } from './../../../app/interfaces/article';
 import { Router } from '@angular/router';
@@ -15,7 +20,8 @@ export class CreateArticleComponent implements OnInit {
 
   constructor(
     private createArticleService: CreateArticleService,
-    private router: Router
+    private router: Router,
+    private changeDetectorRef: ChangeDetectorRef
   ) {}
 
   ngOnInit(): void {
@@ -30,8 +36,9 @@ export class CreateArticleComponent implements OnInit {
     this.createArticleService
       .createArticle(article)
       .pipe(first())
-      .subscribe((article) =>
-        this.router.navigateByUrl(`/article/${article.id}`)
-      );
+      .subscribe((article) => {
+        this.router.navigateByUrl(`/article/${article.id}`);
+        this.changeDetectorRef.markForCheck();
+      });
   }
 }

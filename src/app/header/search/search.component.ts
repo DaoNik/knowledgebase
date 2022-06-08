@@ -9,9 +9,8 @@ import {
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
-import { MatMenu, MatMenuTrigger } from '@angular/material/menu';
 import { Router } from '@angular/router';
-import { filter, map, Observable, startWith, Subscription } from 'rxjs';
+import { map, Observable, startWith, Subscription } from 'rxjs';
 import { IArticle } from 'src/app/interfaces/article';
 import { IFilter } from 'src/app/interfaces/search';
 import { SearchService } from './search.service';
@@ -32,7 +31,8 @@ export class SearchComponent implements OnInit, OnDestroy {
   subscriptionCategories$!: Subscription;
   foundArticles!: IArticle[];
 
-  @ViewChild('searchQueryArea', { read: MatAutocompleteTrigger }) autocomplete!: MatAutocompleteTrigger;
+  @ViewChild('searchQueryArea', { read: MatAutocompleteTrigger })
+  autocomplete!: MatAutocompleteTrigger;
 
   constructor(
     private searchService: SearchService,
@@ -47,11 +47,11 @@ export class SearchComponent implements OnInit, OnDestroy {
         res.map((tag: string) => {
           this.filterOptions.push({
             title: tag,
-            status: true
-          })
-        })
+            status: true,
+          });
+        });
         this.changeDetectorRef.markForCheck();
-      })
+      });
     this.filteredResults = this.searchQuery.valueChanges.pipe(
       startWith(''),
       map((value) => this._filter(value))
@@ -98,7 +98,6 @@ export class SearchComponent implements OnInit, OnDestroy {
     else return true;
   }
 
-
   search() {
     const filterTags = this.filterOptions
       .filter((item) => {
@@ -107,12 +106,12 @@ export class SearchComponent implements OnInit, OnDestroy {
       .map((item) => {
         return item.title;
       });
-      
+
     this.searchService.goToSearchResults(
       this.searchQuery.value.trim(),
       filterTags
-    );    
-    this.autocomplete.closePanel(); 
+    );
+    this.autocomplete.closePanel();
   }
 
   goToArticle(id: string) {

@@ -1,13 +1,6 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ErrorModalService } from './error-modal/error-modal.service';
-import {
-  ActivatedRoute,
-  NavigationEnd,
-  Router,
-  RouterEvent,
-  RouterOutlet,
-  RoutesRecognized,
-} from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { routeChangeAnimation } from './change-route-animation';
 import { errorAnimation } from './error-animation';
 
