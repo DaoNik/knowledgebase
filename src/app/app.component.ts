@@ -1,6 +1,13 @@
 import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
 import { ErrorModalService } from './error-modal/error-modal.service';
-import { RouterOutlet } from '@angular/router';
+import {
+  ActivatedRoute,
+  NavigationEnd,
+  Router,
+  RouterEvent,
+  RouterOutlet,
+  RoutesRecognized,
+} from '@angular/router';
 import { routeChangeAnimation } from './change-route-animation';
 import { errorAnimation } from './error-animation';
 
@@ -15,7 +22,7 @@ export class AppComponent implements OnInit {
   title = 'База знаний WB';
   visibleError!: boolean;
 
-  constructor(private errorService: ErrorModalService) {}
+  constructor(private errorService: ErrorModalService, public router: Router) {}
 
   ngOnInit(): void {
     this.visibleError = this.errorService.visibleError;
@@ -27,5 +34,9 @@ export class AppComponent implements OnInit {
 
   getRouteAnimationState(outlet: RouterOutlet) {
     return outlet?.activatedRouteData?.['animation'];
+  }
+
+  getIsFormIssue() {
+    return this.router.url !== '/form-issue';
   }
 }

@@ -37,29 +37,42 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 
 export const tasksManagerRoutes: Routes = [
   { path: '', redirectTo: 'lists', pathMatch: 'full' },
-  
-  { path: 'lists', component: TaskListsComponent, children: [
-    {
-      path: ':item',
-      component: ModalTaskEntryComponent,
-      data: {
-        displayName: 'Задача',
-      },
-    },
-  ],  data: {displayName: 'Списки задач'} },
-  
-  { path: 'form', component: FormIssueComponent, data: {displayName: 'Форма заявки'}  },
 
-  { path: 'table', component: TasksTableComponent, children:[
-    {
-      path: ':item',
-      component: ModalTaskEntryComponent,
-      data: {
-        displayName: 'Задача',
+  {
+    path: 'lists',
+    component: TaskListsComponent,
+    children: [
+      {
+        path: ':item',
+        component: ModalTaskEntryComponent,
+        data: {
+          displayName: 'Задача',
+        },
       },
-    },
-  ], data: {displayName: 'Таблица задач'}  },
+    ],
+    data: { displayName: 'Списки задач' },
+  },
 
+  {
+    path: 'form',
+    component: FormIssueComponent,
+    data: { displayName: 'Форма заявки' },
+  },
+
+  {
+    path: 'table',
+    component: TasksTableComponent,
+    children: [
+      {
+        path: ':item',
+        component: ModalTaskEntryComponent,
+        data: {
+          displayName: 'Задача',
+        },
+      },
+    ],
+    data: { displayName: 'Таблица задач' },
+  },
 ];
 
 @NgModule({
@@ -100,8 +113,8 @@ export const tasksManagerRoutes: Routes = [
     MatTableModule,
     MatPaginatorModule,
     MatSortModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
   ],
-  exports: [TasksManagerComponent],
+  exports: [TasksManagerComponent, FormIssueComponent],
 })
 export class TasksManagerModule {}
