@@ -6,15 +6,7 @@ import {
   OnInit,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import {
-  concatMap,
-  first,
-  map,
-  merge,
-  mergeMap,
-  Subscription,
-  switchMap,
-} from 'rxjs';
+import { concatMap, map, Subscription } from 'rxjs';
 import { IArticle } from 'src/app/interfaces/article';
 import { AdminPanelService } from '../../admin-panel.service';
 
@@ -67,10 +59,8 @@ export class ArticlesTableComponent implements OnInit, OnDestroy {
             this.articles.push(article);
           }
         });
-        //this.articles = articles;
         this.currentPageArticles = this.articles.slice(0, this.articlesOnPage);
         this.countPages();
-
         this.changeDetectorRef.markForCheck();
       });
   }

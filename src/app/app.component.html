@@ -1,10 +1,10 @@
 <div class="app">
   <h1 class="visually-hidden">База знаний</h1>
-  <app-header class="header"></app-header>
-  <app-bread-crumbs></app-bread-crumbs>
+  <app-header class="header" *ngIf="getIsFormIssue()"></app-header>
+  <app-bread-crumbs *ngIf="getIsFormIssue()"></app-bread-crumbs>
   <div [@routeChangeAnimation]="getRouteAnimationState(outlet)">
     <router-outlet #outlet="outlet"></router-outlet>
   </div>
-  <app-footer class="footer"></app-footer>
+  <app-footer *ngIf="getIsFormIssue()" class="footer"></app-footer>
   <app-error-modal *ngIf="visibleError" [@errorAnimation]></app-error-modal>
 </div>

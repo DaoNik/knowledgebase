@@ -1,5 +1,10 @@
 import { FeedbackService } from './feedback.service';
-import { ChangeDetectionStrategy, Component, Inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  Inject,
+} from '@angular/core';
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { MatSnackBar } from '@angular/material/snack-bar';
 import { MatDialog } from '@angular/material/dialog';
@@ -16,8 +21,9 @@ export class FeedbackComponent {
   constructor(
     private fb: FormBuilder,
     private snackBar: MatSnackBar,
-    private feedbackService :FeedbackService,
-    public dialog: MatDialog
+    private feedbackService: FeedbackService,
+    public dialog: MatDialog,
+    private changeDetectorRef: ChangeDetectorRef
   ) {
     this.feedback = this.fb.group({
       name: ['', [Validators.required, Validators.minLength(5)]],
@@ -26,15 +32,14 @@ export class FeedbackComponent {
     });
   }
 
-  sendFeedback(){
-    this.feedbackService.sendFeedback(this.feedback.value).subscribe(()=> {
+  sendFeedback() {
+    this.feedbackService.sendFeedback(this.feedback.value).subscribe(() => {
       this.dialog.closeAll();
       this.snackBar.open('Спасибо за обратную связь!');
       setTimeout(() => {
         this.snackBar.dismiss();
       }, 3000);
-    })
+      this.changeDetectorRef.markForCheck();
+    });
   }
 }
-
-

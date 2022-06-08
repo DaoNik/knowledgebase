@@ -6,6 +6,7 @@ import { CustomPreloadingStrategy } from './custom-preloading-strategy';
 import { MainComponent } from './main/main.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { SearchResultsComponent } from './search-results/search-results.component';
+import { FormIssueComponent } from './tasks-manager/form-issue/form-issue.component';
 import { TasksManagerComponent } from './tasks-manager/tasks-manager.component';
 
 const routes: Routes = [
@@ -16,7 +17,12 @@ const routes: Routes = [
       import('./admin-panel/admin-panel.module').then(
         (m) => m.AdminPanelModule
       ),
-    data: { displayName: 'Админка', animation: 'admin', preload: true, delay: 10000 },
+    data: {
+      displayName: 'Админка',
+      animation: 'admin',
+      preload: true,
+      delay: 10000,
+    },
   },
   {
     path: 'tasks',
@@ -25,7 +31,7 @@ const routes: Routes = [
       import('./tasks-manager/tasks-manager.module').then(
         (m) => m.TasksManagerModule
       ),
-    data: { displayName: 'Менеджер задач', animation: 'tasks'},
+    data: { displayName: 'Менеджер задач', animation: 'tasks' },
   },
   {
     path: '',
@@ -63,7 +69,7 @@ const routes: Routes = [
         component: SearchResultsComponent,
         data: {
           displayName: '',
-        }
+        },
       },
       {
         path: ':categories/:title',
@@ -74,14 +80,15 @@ const routes: Routes = [
       },
     ],
   },
+  { path: 'form-issue', component: FormIssueComponent },
   { path: '**', component: NotFoundComponent },
 ];
 
 @NgModule({
   imports: [
     RouterModule.forRoot(routes, {
-      preloadingStrategy: CustomPreloadingStrategy
-    })
+      preloadingStrategy: CustomPreloadingStrategy,
+    }),
   ],
   exports: [RouterModule],
 })

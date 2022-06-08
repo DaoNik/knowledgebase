@@ -1,4 +1,8 @@
-import { ChangeDetectionStrategy, Component } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+} from '@angular/core';
 import { first } from 'rxjs';
 import { AdminPanelService } from '../admin-panel.service';
 
@@ -13,12 +17,16 @@ export class ArticleNotListedComponent {
   currentTopic: string =
     localStorage.getItem('categoryNotListed') || 'Логистика';
 
-  constructor(private adminPanelService: AdminPanelService) {
+  constructor(
+    private adminPanelService: AdminPanelService,
+    private changeDetectorRef: ChangeDetectorRef
+  ) {
     this.adminPanelService
       .getCategories()
       .pipe(first())
       .subscribe((categories) => {
         this.topics = categories;
+        this.changeDetectorRef.markForCheck();
       });
   }
 

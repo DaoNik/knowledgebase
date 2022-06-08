@@ -1,5 +1,6 @@
 import {
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   ViewChild,
@@ -43,7 +44,8 @@ export class FormIssueComponent {
   constructor(
     private fb: FormBuilder,
     private taskServ: TasksManagerService,
-    public dialog: MatDialog
+    public dialog: MatDialog,
+    private changeDetectorRef: ChangeDetectorRef
   ) {
     this.issueForm = this.fb.group({
       title: [
@@ -122,7 +124,9 @@ export class FormIssueComponent {
           return throwError(() => error);
         })
       )
-      .subscribe();
+      .subscribe(() => {
+        this.changeDetectorRef.markForCheck();
+      });
     setTimeout(() => {
       this.openDialog();
     }, 1000);

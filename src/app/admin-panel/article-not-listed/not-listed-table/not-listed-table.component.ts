@@ -6,7 +6,7 @@ import {
   OnInit,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { mergeMap, Observable, Subscription } from 'rxjs';
+import { mergeMap, Subscription } from 'rxjs';
 import { IArticle } from 'src/app/interfaces/article';
 import { AdminPanelService } from '../../admin-panel.service';
 
@@ -54,6 +54,7 @@ export class NotListedTableComponent implements OnInit, OnDestroy {
     let topic = '';
     this.adminPanelService.categoryNotListed.subscribe((val) => {
       topic = val;
+      this.changeDetectorRef.markForCheck();
     });
     this.subscriptionNotListed$ = this.adminPanelService.categoryNotListed
       .pipe(mergeMap((topic) => this.adminPanelService.getArticles(topic)))
@@ -91,7 +92,9 @@ export class NotListedTableComponent implements OnInit, OnDestroy {
     );
     this.pageClick(this.currentPage);
     this.countPages();
-    this.adminPanelService.deleteArticle(articleId).subscribe();
+    this.adminPanelService.deleteArticle(articleId).subscribe(() => {
+      this.changeDetectorRef.markForCheck();
+    });
   }
 
   deleteSelected(articlesId: string[]): void {
