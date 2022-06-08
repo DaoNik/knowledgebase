@@ -10,12 +10,9 @@ import { FormControl } from '@angular/forms';
 import { Router } from '@angular/router';
 import { filter, map, Observable, startWith, Subscription } from 'rxjs';
 import { IArticle } from 'src/app/interfaces/article';
+import { IFilter } from 'src/app/interfaces/search';
 import { SearchService } from './search.service';
 
-interface IFilter {
-  title: string;
-  status: boolean;
-}
 @Component({
   selector: 'app-search',
   templateUrl: './search.component.html',
