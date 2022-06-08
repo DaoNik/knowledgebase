@@ -6,7 +6,7 @@ import {
   OnInit,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { first, mergeMap, Subscription } from 'rxjs';
+import { concatMap, first, map, merge, mergeMap, Subscription, switchMap } from 'rxjs';
 import { IArticle } from 'src/app/interfaces/article';
 import { AdminPanelService } from '../../admin-panel.service';
 
@@ -16,52 +16,6 @@ interface adminArticle {
   tags: string[];
   teamlead: string[];
 }
-
-const mockArticles: adminArticle[] = [
-  {
-    id: 'id10',
-    header:
-      'A 100 способов сделать это...100 способов сделать это...100 способов сделать это...',
-    tags: ['тег1', 'тег2'],
-    teamlead: ['username', 'username2', 'username3'],
-  },
-  {
-    id: 'id20',
-    header: 'B 100 способов сделать это...',
-    tags: ['тег1', 'тег3'],
-    teamlead: ['username'],
-  },
-  {
-    id: 'id30',
-    header: 'A 100 способов сделать это...',
-    tags: ['тег1', 'тег2', 'тег3'],
-    teamlead: ['username'],
-  },
-  {
-    id: 'id40',
-    header: '100 способов сделать это...',
-    tags: ['тег1', 'тег2', 'тег3'],
-    teamlead: ['username'],
-  },
-  {
-    id: 'id50',
-    header: '100 способов сделать это...',
-    tags: ['тег1', 'тег2'],
-    teamlead: ['username'],
-  },
-  {
-    id: 'id60',
-    header: '100 способов сделать это...',
-    tags: ['тег2', 'тег3'],
-    teamlead: ['username', 'username2'],
-  },
-  {
-    id: 'id70',
-    header: '100 способов сделать это...',
-    tags: ['тег1', 'тег2', 'тег4'],
-    teamlead: ['username'],
-  },
-];
 
 @Component({
   selector: 'app-articles-table',
@@ -90,11 +44,20 @@ export class ArticlesTableComponent implements OnInit, OnDestroy {
     private changeDetectorRef: ChangeDetectorRef
   ) {}
 
+    topic: string = '';
+
   ngOnInit(): void {
     this.subscriptionCategoryListed$ = this.adminService.categoryListed
-      .pipe(mergeMap((topic) => this.adminService.getArticles(topic)))
+      .pipe(map((topic) => this.topic = topic), concatMap((topic) => this.adminService.getArticles(topic)))
       .subscribe((articles) => {
-        this.articles = articles;
+        console.log(this.topic);
+        this.articles = [];
+        articles.forEach(article => {
+          if(article.category === this.topic) {
+            this.articles.push(article);
+          }
+        });
+        //this.articles = articles;
         this.currentPageArticles = this.articles.slice(0, this.articlesOnPage);
         this.countPages();
 
