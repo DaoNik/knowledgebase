@@ -37,6 +37,6 @@ export class AppComponent implements OnInit {
   }
 
   getIsFormIssue() {
-    return this.router.url !== '/form-issue';
+    return !this.router.url.includes('form-issue');
   }
 }
