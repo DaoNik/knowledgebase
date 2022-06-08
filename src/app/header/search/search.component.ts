@@ -5,8 +5,11 @@ import {
   Input,
   OnDestroy,
   OnInit,
+  ViewChild,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
+import { MatAutocompleteTrigger } from '@angular/material/autocomplete';
+import { MatMenu, MatMenuTrigger } from '@angular/material/menu';
 import { Router } from '@angular/router';
 import { filter, map, Observable, startWith, Subscription } from 'rxjs';
 import { IArticle } from 'src/app/interfaces/article';
@@ -28,6 +31,8 @@ export class SearchComponent implements OnInit, OnDestroy {
   subscriptionArticles$!: Subscription;
   subscriptionCategories$!: Subscription;
   foundArticles!: IArticle[];
+
+  @ViewChild('searchQueryArea', { read: MatAutocompleteTrigger }) autocomplete!: MatAutocompleteTrigger;
 
   constructor(
     private searchService: SearchService,
@@ -93,6 +98,7 @@ export class SearchComponent implements OnInit, OnDestroy {
     else return true;
   }
 
+
   search() {
     const filterTags = this.filterOptions
       .filter((item) => {
@@ -105,7 +111,8 @@ export class SearchComponent implements OnInit, OnDestroy {
     this.searchService.goToSearchResults(
       this.searchQuery.value.trim(),
       filterTags
-    );
+    );    
+    this.autocomplete.closePanel(); 
   }
 
   goToArticle(id: string) {
