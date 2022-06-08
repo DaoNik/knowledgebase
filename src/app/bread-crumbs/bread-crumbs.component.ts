@@ -50,9 +50,6 @@ export class BreadCrumbsComponent {
             params: routeSnaphot.params,
           });
 
-          // console.log(this.breadcrumbs)
-          // console.log(currentUrlPart)
-
           if (
             this.breadcrumbs[this.breadcrumbs.length - 1].displayName ==
             'Номер статьи'
@@ -77,13 +74,11 @@ export class BreadCrumbsComponent {
         if (this.breadcrumbs[this.breadcrumbs.length - 2]?.displayName ==
           'Результаты поиска' || this.breadcrumbs[this.breadcrumbs.length - 3]?.displayName ==
           'Результаты поиска') {
-            // console.log(this.breadcrumbs)
             this.breadcrumbs = [{
               displayName: 'Поиск',
               url: this.breadcrumbs[this.breadcrumbs.length - 1].url,
               params: this.breadcrumbs[this.breadcrumbs.length - 1].params,
             }]
-            // console.log(this.breadcrumbs)
         }
       }
       this.changeDetectorRef.markForCheck();
@@ -94,10 +89,10 @@ export class BreadCrumbsComponent {
     if (url.includes('CATEGORY')) {
       const category = url.split('/');
       this.router.navigate(['search-result', `${category[1]}`, ``]);
-    } else if (this.breadcrumbs[0].displayName = 'Поиск') {
+    } else if (this.breadcrumbs[0].displayName == 'Поиск') {
       this.router.navigate([url]);
     } else if (this.breadcrumbs.length <= 1) {
-      this.router.navigate(['']);
+      this.router.navigate(['/']);
     } else {
       this.router.navigate([url]);
     }
