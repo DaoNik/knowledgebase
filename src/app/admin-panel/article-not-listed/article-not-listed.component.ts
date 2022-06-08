@@ -2,8 +2,6 @@ import { ChangeDetectionStrategy, Component } from '@angular/core';
 import { first } from 'rxjs';
 import { AdminPanelService } from '../admin-panel.service';
 
-const mockTopics: string[] = ['Склад', 'Базы данных'];
-
 @Component({
   selector: 'app-article-not-listed',
   templateUrl: './article-not-listed.component.html',
@@ -11,16 +9,17 @@ const mockTopics: string[] = ['Склад', 'Базы данных'];
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class ArticleNotListedComponent {
-  topics: string[] = mockTopics;
-  currentTopic: string = localStorage.getItem('categoryNotListed') || 'Склад';
+  topics: string[] = [];
+  currentTopic: string =
+    localStorage.getItem('categoryNotListed') || 'Логистика';
 
   constructor(private adminPanelService: AdminPanelService) {
-    this.adminPanelService.getCategories().pipe(
-      first()
-    ).subscribe(categories => {
-      this.topics = categories;
-      this.currentTopic = this.topics[0];
-    });
+    this.adminPanelService
+      .getCategories()
+      .pipe(first())
+      .subscribe((categories) => {
+        this.topics = categories;
+      });
   }
 
   clickTopic(topic: string): void {

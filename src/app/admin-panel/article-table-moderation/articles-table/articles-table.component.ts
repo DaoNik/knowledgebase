@@ -6,7 +6,15 @@ import {
   OnInit,
 } from '@angular/core';
 import { FormControl } from '@angular/forms';
-import { concatMap, first, map, merge, mergeMap, Subscription, switchMap } from 'rxjs';
+import {
+  concatMap,
+  first,
+  map,
+  merge,
+  mergeMap,
+  Subscription,
+  switchMap,
+} from 'rxjs';
 import { IArticle } from 'src/app/interfaces/article';
 import { AdminPanelService } from '../../admin-panel.service';
 
@@ -44,16 +52,18 @@ export class ArticlesTableComponent implements OnInit, OnDestroy {
     private changeDetectorRef: ChangeDetectorRef
   ) {}
 
-    topic: string = '';
+  topic: string = '';
 
   ngOnInit(): void {
     this.subscriptionCategoryListed$ = this.adminService.categoryListed
-      .pipe(map((topic) => this.topic = topic), concatMap((topic) => this.adminService.getArticles(topic)))
+      .pipe(
+        map((topic) => (this.topic = topic)),
+        concatMap((topic) => this.adminService.getArticles(topic))
+      )
       .subscribe((articles) => {
-        console.log(this.topic);
         this.articles = [];
-        articles.forEach(article => {
-          if(article.category === this.topic) {
+        articles.forEach((article) => {
+          if (article.category === this.topic) {
             this.articles.push(article);
           }
         });
